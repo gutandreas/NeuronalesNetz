@@ -34,6 +34,10 @@ public class Hiddenlayer extends Layer {
         return numberOfNodes;
     }
 
+    public double[] getOutputs() {
+        return outputs;
+    }
+
     public void setNextLayer(Layer nextConnectableLayer) {
         this.nextLayer = nextConnectableLayer;
     }

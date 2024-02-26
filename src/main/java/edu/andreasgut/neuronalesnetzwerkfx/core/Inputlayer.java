@@ -11,16 +11,13 @@ public class Inputlayer extends Layer {
     }
 
 
-
-
-
-    public void setNextLayer(Layer nextConnectableLayer) {
-        this.nextLayer = nextConnectableLayer;
+    public void setNextLayer(Layer nextLayer) {
+        this.nextLayer = nextLayer;
     }
 
     @Override
     public void activate(double[] outputsPreviousLayer) {
-        outputs = outputsPreviousLayer;
+        this.outputs = outputsPreviousLayer;
         nextLayer.activate(outputs);
     }
 

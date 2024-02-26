@@ -7,6 +7,7 @@ public class Outputlayer extends Layer {
     int numberOfNodes;
     Layer previousLayer;
     double[][] weights;
+    double[] outputs;
 
     public Outputlayer(int numberOfNodes, Layer previousLayer) {
         this.previousLayer = previousLayer;
@@ -26,6 +27,10 @@ public class Outputlayer extends Layer {
         return numberOfNodes;
     }
 
+    public double[] getOutputs() {
+        return outputs;
+    }
+
     @Override
     public void setNextLayer(Layer connectableLayer) {
         System.out.print("Outputlayer hat keinen nächsten ConnectableLayer");
@@ -33,7 +38,7 @@ public class Outputlayer extends Layer {
 
     @Override
     public void activate(double[] outputsPreviousLayer) {
-        double[] outputs = Tools.sigmoid(weights, outputsPreviousLayer);
+        outputs = Tools.sigmoid(weights, outputsPreviousLayer);
         double max = 0;
         int maxIndex = 0;
         for (int i = 0; i < outputs.length; i++){

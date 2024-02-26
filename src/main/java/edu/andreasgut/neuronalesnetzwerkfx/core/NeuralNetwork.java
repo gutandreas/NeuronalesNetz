@@ -9,15 +9,14 @@ public class NeuralNetwork {
     Outputlayer outputlayer;
 
     public NeuralNetwork(int numberOfInputNodes, int numberOfHiddenLayers, int numberOfHiddenLayerNodes, int numberOfOutputNodes) {
-        inputlayer = new Inputlayer(numberOfInputNodes);
+        this.inputlayer = new Inputlayer(numberOfInputNodes);
         Layer previousLayer = inputlayer;
         for (int i = 0; i < numberOfHiddenLayers; i++){
             Hiddenlayer tempHiddenLayer = new Hiddenlayer(numberOfHiddenLayerNodes, previousLayer);
             hiddenlayers.add(tempHiddenLayer);
             previousLayer = tempHiddenLayer;
-
         }
-        Outputlayer outputlayer = new Outputlayer(numberOfOutputNodes, previousLayer);
+        this.outputlayer = new Outputlayer(numberOfOutputNodes, previousLayer);
     }
 
     public void activate(double[] inputs){

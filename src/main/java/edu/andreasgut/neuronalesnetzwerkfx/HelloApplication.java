@@ -1,5 +1,6 @@
 package edu.andreasgut.neuronalesnetzwerkfx;
 
+import edu.andreasgut.neuronalesnetzwerkfx.core.Hiddenlayer;
 import edu.andreasgut.neuronalesnetzwerkfx.core.NeuralNetwork;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -15,14 +16,19 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
+        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
         HelloController helloController = fxmlLoader.getController();
         stage.setTitle("Hello!");
 
-        NeuralNetwork neuralNetwork = new NeuralNetwork(5, 2, 5, 2);
+        NeuralNetwork neuralNetwork = new NeuralNetwork(5, 3, 5, 2);
+        for (Hiddenlayer hiddenlayer : neuralNetwork.getHiddenlayers()){
+            System.out.println(hiddenlayer.toString());
+        }
         neuralNetwork.activate(new double[]{0.3, 0.5, 0.2, 0.4, 0.9});
 
-        helloController.generateInputLayer(neuralNetwork);
+        helloController.initializeInputLayer(neuralNetwork);
+        helloController.initializeHiddenLayers(neuralNetwork);
+        helloController.initializeOutputLayer(neuralNetwork);
 
         // Festlegen der Szene für die Bühne und Anzeigen der Bühne
         stage.setScene(scene);
