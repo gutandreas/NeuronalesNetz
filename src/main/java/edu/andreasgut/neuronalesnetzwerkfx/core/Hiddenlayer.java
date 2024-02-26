@@ -4,16 +4,16 @@ import java.util.Random;
 
 public class Hiddenlayer extends Layer {
 
-    int numberOfNodes;
-    double[][] weights;
-    Layer previousLayer;
-    Layer nextLayer;
-    double[] outputs;
+
+    private double[][] weights;
+    private Layer previousLayer;
+    private Layer nextLayer;
+    private double[] outputs;
 
     public Hiddenlayer(int numberOfNodes, Layer previousLayer){
         this.previousLayer = previousLayer;
         previousLayer.setNextLayer(this);
-        this.numberOfNodes = numberOfNodes;
+        super.numberOfNodes = numberOfNodes;
         double[][] weights = new double[numberOfNodes][previousLayer.getNumberOfNodes()];
         Random random = new Random();
         for (int i = 0; i < weights.length; i++){

@@ -4,15 +4,14 @@ import java.util.Random;
 
 public class Outputlayer extends Layer {
 
-    int numberOfNodes;
+
     Layer previousLayer;
     double[][] weights;
-    double[] outputs;
 
     public Outputlayer(int numberOfNodes, Layer previousLayer) {
         this.previousLayer = previousLayer;
         previousLayer.setNextLayer(this);
-        this.numberOfNodes = numberOfNodes;
+        super.numberOfNodes = numberOfNodes;
         double[][] weights = new double[numberOfNodes][previousLayer.getNumberOfNodes()];
         Random random = new Random();
         for (int i = 0; i < weights.length; i++){
@@ -38,7 +37,7 @@ public class Outputlayer extends Layer {
 
     @Override
     public void activate(double[] outputsPreviousLayer) {
-        outputs = Tools.sigmoid(weights, outputsPreviousLayer);
+        super.outputs = Tools.sigmoid(weights, outputsPreviousLayer);
         double max = 0;
         int maxIndex = 0;
         for (int i = 0; i < outputs.length; i++){

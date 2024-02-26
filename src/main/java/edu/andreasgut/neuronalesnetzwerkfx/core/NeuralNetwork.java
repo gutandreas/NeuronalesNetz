@@ -21,7 +21,7 @@ public class NeuralNetwork {
 
     public void activate(double[] inputs){
         int inputLength = inputs.length;
-        int inputNodes = inputlayer.numberOfNodes;
+        int inputNodes = inputlayer.getNumberOfNodes();
         if (inputLength != inputNodes){
             System.out.println("Fehler. Die Anzahl der Inputwerte Stimmen nicht mit der Anzahl Knoten des Inputlayers überein.");
             System.out.println("Die Inputlänge beträgt " + inputLength + " und die Anzahl Knoten im Inputlayer beträgt " + inputNodes + ".");

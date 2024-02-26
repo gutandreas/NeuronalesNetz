@@ -2,12 +2,10 @@ package edu.andreasgut.neuronalesnetzwerkfx.core;
 
 public class Inputlayer extends Layer {
 
-    int numberOfNodes;
-    Layer nextLayer;
-    double[] outputs;
+    private Layer nextLayer;
 
     public Inputlayer(int numberOfNodes) {
-        this.numberOfNodes = numberOfNodes;
+        super.numberOfNodes = numberOfNodes;
     }
 
 
@@ -17,7 +15,7 @@ public class Inputlayer extends Layer {
 
     @Override
     public void activate(double[] outputsPreviousLayer) {
-        this.outputs = outputsPreviousLayer;
+        super.outputs = outputsPreviousLayer;
         nextLayer.activate(outputs);
     }
 

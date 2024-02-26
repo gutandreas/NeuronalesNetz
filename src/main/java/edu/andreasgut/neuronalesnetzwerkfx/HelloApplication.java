@@ -21,9 +21,6 @@ public class HelloApplication extends Application {
         stage.setTitle("Hello!");
 
         NeuralNetwork neuralNetwork = new NeuralNetwork(5, 3, 5, 2);
-        for (Hiddenlayer hiddenlayer : neuralNetwork.getHiddenlayers()){
-            System.out.println(hiddenlayer.toString());
-        }
         neuralNetwork.activate(new double[]{0.3, 0.5, 0.2, 0.4, 0.9});
 
         helloController.initializeInputLayer(neuralNetwork);
