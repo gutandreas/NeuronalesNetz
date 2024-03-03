@@ -46,7 +46,7 @@ public class Outputlayer extends Layer {
                 maxIndex = i;
             }
         }
-        System.out.print("Resultat: " + maxIndex + " mit Wert " + max);
+        System.out.println("Resultat: " + maxIndex + " mit Wert " + max);
     }
 
 

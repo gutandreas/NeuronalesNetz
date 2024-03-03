@@ -23,9 +23,9 @@ public class HelloApplication extends Application {
         NeuralNetwork neuralNetwork = new NeuralNetwork(5, 3, 5, 2);
         neuralNetwork.activate(new double[]{0.3, 0.5, 0.2, 0.4, 0.9});
 
-        helloController.initializeInputLayer(neuralNetwork);
-        helloController.initializeHiddenLayers(neuralNetwork);
-        helloController.initializeOutputLayer(neuralNetwork);
+        helloController.initializeGui(neuralNetwork);
+
+        //helloController.test();
 
         // Festlegen der Szene für die Bühne und Anzeigen der Bühne
         stage.setScene(scene);
