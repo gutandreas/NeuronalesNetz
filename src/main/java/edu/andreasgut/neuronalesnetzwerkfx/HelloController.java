@@ -1,6 +1,7 @@
 package edu.andreasgut.neuronalesnetzwerkfx;
 
 import edu.andreasgut.neuronalesnetzwerkfx.core.Hiddenlayer;
+import edu.andreasgut.neuronalesnetzwerkfx.core.Layer;
 import edu.andreasgut.neuronalesnetzwerkfx.core.NeuralNetwork;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
@@ -42,104 +43,68 @@ public class HelloController {
     @FXML
     private GridPane layerGridPane;
 
+    @FXML
+    private AnchorPane layerAnchorPane;
+
     private final LinkedList<Node> inputNodes = new LinkedList<>();
     private final LinkedList<LinkedList<Node>> hiddenNodesLists = new LinkedList<>();
     private final LinkedList<Node> outputNodes = new LinkedList<>();
+    Node nodes[][] = new Node[100][100];
 
     public void initializeGui(NeuralNetwork neuralNetwork){
-        initializeGridPane(neuralNetwork);
-        initializeInputLayer(neuralNetwork);
-        initializeHiddenLayers(neuralNetwork);
-        initializeOutputLayer(neuralNetwork);
-        initializeLines();
-
+        initializeAnchorPane(neuralNetwork);
     }
 
-    private void initializeGridPane(NeuralNetwork neuralNetwork){
-        //layerGridPane.setGridLinesVisible(true);
-        layerGridPane.setAlignment(Pos.CENTER);
-        layerGridPane.setHgap(30);
-        layerGridPane.setVgap(30);
-        layerGridPane.getColumnConstraints().clear();
-        layerGridPane.getRowConstraints().clear();
-        int numberOfLayers = 1 + neuralNetwork.getHiddenlayers().size() + 1;
+    private void initializeAnchorPane(NeuralNetwork neuralNetwork){
 
-        for (int i = 0; i < numberOfLayers; i++){
-            layerGridPane.getColumnConstraints().add(new ColumnConstraints());
-        }
+        double x = 0;
+        double y = 0;
 
-        int maxNodeNumber = Math.max(Math.max(neuralNetwork.getInputlayer().getNumberOfNodes(),
-                        neuralNetwork.getHiddenlayers().get(0).getNumberOfNodes()),
-                neuralNetwork.getOutputlayer().getNumberOfNodes() );
-
-        for (int i = 0; i < maxNodeNumber; i++){
-            layerGridPane.getRowConstraints().add(new RowConstraints());
-        }
-
-        System.out.println("Gridpane erstellt mit " + layerGridPane.getColumnConstraints().size() + " Spalten und "
-                + layerGridPane.getRowConstraints().size() + " Zeilen");
-    }
-
-
-    public void initializeInputLayer(NeuralNetwork neuralNetwork) {
-
-        inputLayerVBox.setSpacing(20);
+        int column = 0;
         int row = 0;
+        int layerNumber = 0;
 
-        for (double d : neuralNetwork.getInputlayer().getOutputs()) {
-            Label label = new Label(d + "");
-            Rectangle rectangle = new Rectangle(20, 20, Color.rgb(0, 0, 255, d));
-            label.setGraphic(rectangle);
-            layerGridPane.add(label, 0, row);
-            row++;
-        }
-    }
+        initializeLayerinAnchorPane(neuralNetwork.getInputlayer(), layerNumber,0, 0, 255);
+        layerNumber++;
 
-    public void initializeHiddenLayers(NeuralNetwork neuralNetwork){
-        int column = 1;
         for (Hiddenlayer hiddenlayer : neuralNetwork.getHiddenlayers()){
 
-            int row = 0;
-            for (double d : hiddenlayer.getOutputs()){
+            initializeLayerinAnchorPane(hiddenlayer, layerNumber, 255, 0, 0);
+            layerNumber++;
 
-                DecimalFormat df = new DecimalFormat("#.0" + "0".repeat(2 - 1));
-                String roundedValue = df.format(d);
-                Label label = new Label(roundedValue + "");
+        }
 
-                Circle circle = new Circle(5, Color.rgb(255, 0, 0, d));
-                label.setGraphic(circle);
+        initializeLayerinAnchorPane(neuralNetwork.getOutputlayer(), layerNumber, 0, 255, 0);
 
+    }
 
-                layerGridPane.add(label, column, row);
-                row++;
+    private void initializeLayerinAnchorPane(Layer layer,  int layerNumber, int red, int green, int blue){
 
-            }
-            column++;
+        double x = layerNumber * 50;
+        double y = 0;
 
+        for (double d : layer.getOutputs()){
+            DecimalFormat df = new DecimalFormat("#.0" + "0".repeat(2 - 1));
+            String roundedValue = df.format(d);
+            Label label = new Label(roundedValue + "");
+
+            Circle circle = new Circle(5, Color.rgb(red, green, blue, d));
+            label.setGraphic(circle);
+            layerAnchorPane.getChildren().add(label);
+
+            AnchorPane.setTopAnchor(label, y);
+            AnchorPane.setLeftAnchor(label, x);
+
+            y += 50;
 
         }
     }
 
-    public void initializeOutputLayer(NeuralNetwork neuralNetwork){
-
-        int row = 0;
-        int column = neuralNetwork.getHiddenlayers().size() + 1;
-
-        for (double d : neuralNetwork.getOutputlayer().getOutputs()) {
-            Label label = new Label(d + "");
-            Rectangle rectangle = new Rectangle(20, 20, Color.rgb(0, 255, 0, d));
-            label.setGraphic(rectangle);
-            layerGridPane.add(label, column, row);
-            row++;
-        }
-
-
+    private void addToArray(int row, int column, Node node){
+        nodes[row][column] = node;
     }
 
-    public void initializeLines() {
 
-
-    }
 
 
 
