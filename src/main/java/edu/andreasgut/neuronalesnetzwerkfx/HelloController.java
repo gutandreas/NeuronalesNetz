@@ -83,13 +83,13 @@ public class HelloController {
         double x = layerNumber * 50;
         double y = 0;
 
-        for (double d : layer.getOutputs()){
+        for (edu.andreasgut.neuronalesnetzwerkfx.core.Node node : layer.getNodes()){
             DecimalFormat df = new DecimalFormat("#.0" + "0".repeat(2 - 1));
-            String roundedValue = df.format(d);
+            String roundedValue = df.format(node.getOutput());
             Label label = new Label(roundedValue + "");
-
-            Circle circle = new Circle(5, Color.rgb(red, green, blue, d));
+            Circle circle = new Circle(5, Color.rgb(red, green, blue, node.getOutput()));
             label.setGraphic(circle);
+            node.setGraphicElement(circle, label);
             layerAnchorPane.getChildren().add(label);
 
             AnchorPane.setTopAnchor(label, y);

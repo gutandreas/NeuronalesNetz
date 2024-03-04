@@ -1,5 +1,9 @@
 package edu.andreasgut.neuronalesnetzwerkfx.core;
 
+import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+
 import java.util.LinkedList;
 
 public class Node {
@@ -7,7 +11,8 @@ public class Node {
     private double output;
     private LinkedList<Edge> inputEdges = new LinkedList<>();
     private LinkedList<Edge> outputEdges = new LinkedList<>();
-
+    private Circle circle;
+    private Label label;
 
 
     public void addInputEdge(Edge edge){
@@ -40,5 +45,10 @@ public class Node {
 
     public LinkedList<Edge> getOutputEdges() {
         return outputEdges;
+    }
+
+    public void setGraphicElement(Circle circle, Label label){
+        this.circle = circle;
+        this.label = label;
     }
 }

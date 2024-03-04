@@ -1,5 +1,7 @@
 package edu.andreasgut.neuronalesnetzwerkfx.core;
 
+import javafx.scene.paint.Color;
+
 public class Hiddenlayer extends Layer {
 
 
