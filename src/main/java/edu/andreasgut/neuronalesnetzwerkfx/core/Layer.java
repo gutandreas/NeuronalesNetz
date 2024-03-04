@@ -1,21 +1,28 @@
 package edu.andreasgut.neuronalesnetzwerkfx.core;
 
+import java.util.LinkedList;
+
 public abstract class Layer {
 
 
-    int numberOfNodes;
-    double[] outputs;
-    public int getNumberOfNodes() {
-        return numberOfNodes;
-    }
+
+    private LinkedList<Node> nodes = new LinkedList<>();
+    private double[] outputs;
+
 
     public double[] getOutputs() {
         return outputs;
     }
 
-    abstract public void activate(double[] outputsPreviousLayer);
-
     abstract public void setNextLayer(Layer connectableLayer);
 
+    abstract public void activateLayer();
 
+    public LinkedList<Node> getNodes() {
+        return nodes;
+    }
+
+    public int getNumberOfNodes(){
+        return nodes.size();
+    }
 }

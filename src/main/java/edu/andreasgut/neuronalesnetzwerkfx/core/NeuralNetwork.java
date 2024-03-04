@@ -19,14 +19,14 @@ public class NeuralNetwork {
         this.outputlayer = new Outputlayer(numberOfOutputNodes, previousLayer);
     }
 
-    public void activate(double[] inputs){
+    public void startCalculations(double[] inputs){
         int inputLength = inputs.length;
         int inputNodes = inputlayer.getNumberOfNodes();
         if (inputLength != inputNodes){
             System.out.println("Fehler. Die Anzahl der Inputwerte Stimmen nicht mit der Anzahl Knoten des Inputlayers überein.");
             System.out.println("Die Inputlänge beträgt " + inputLength + " und die Anzahl Knoten im Inputlayer beträgt " + inputNodes + ".");
         } else {
-            inputlayer.activate(inputs);
+            inputlayer.feedDataToInputNodes(inputs);
         }
     }
 

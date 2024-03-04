@@ -1,7 +1,5 @@
 package edu.andreasgut.neuronalesnetzwerkfx.core;
 
-import java.util.Random;
-
 public class Hiddenlayer extends Layer {
 
 
@@ -10,29 +8,33 @@ public class Hiddenlayer extends Layer {
     private Layer nextLayer;
     private double[] outputs;
 
+
     public Hiddenlayer(int numberOfNodes, Layer previousLayer){
         this.previousLayer = previousLayer;
         previousLayer.setNextLayer(this);
-        super.numberOfNodes = numberOfNodes;
-        double[][] weights = new double[numberOfNodes][previousLayer.getNumberOfNodes()];
-        Random random = new Random();
-        for (int i = 0; i < weights.length; i++){
-            for (int j = 0; j < weights[0].length; j++){
-                weights[i][j] = random.nextDouble();
+
+
+        for (int i = 0; i < numberOfNodes; i++){
+            Node nodeInThisLayer = new Node();
+            getNodes().add(nodeInThisLayer);
+            for (Node nodeInPreviousLayer : previousLayer.getNodes()){
+                Edge edge = new Edge(nodeInPreviousLayer, nodeInThisLayer);
+                nodeInPreviousLayer.addOutputEdge(edge);
+                nodeInThisLayer.addInputEdge(edge);
             }
         }
-        this.weights = weights;
     }
 
-    public void activate(double[] outputsPreviousLayer){
-        outputs = Tools.sigmoid(weights, outputsPreviousLayer);
-        nextLayer.activate(outputs);
-
+    public void activateLayer(){
+        for (int i = 0; i < getNumberOfNodes(); i++){
+            Node currentNode = getNodes().get(i);
+            double output = Tools.sigmoid(currentNode.getInputEdges());
+            currentNode.calculateOutput();
+        }
+        nextLayer.activateLayer();
     }
 
-    public int getNumberOfNodes() {
-        return numberOfNodes;
-    }
+
 
     public double[] getOutputs() {
         return outputs;
