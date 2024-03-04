@@ -53,35 +53,36 @@ public class HelloController {
 
     public void initializeGui(NeuralNetwork neuralNetwork){
         initializeAnchorPane(neuralNetwork);
+        initializeLines(neuralNetwork);
     }
 
     private void initializeAnchorPane(NeuralNetwork neuralNetwork){
 
-        double x = 0;
-        double y = 0;
-
-        int column = 0;
-        int row = 0;
         int layerNumber = 0;
 
-        initializeLayerinAnchorPane(neuralNetwork.getInputlayer(), layerNumber,0, 0, 255);
+
+        initializeLayerinAnchorPane(neuralNetwork, neuralNetwork.getInputlayer(), layerNumber,0, 0, 255);
         layerNumber++;
 
         for (Hiddenlayer hiddenlayer : neuralNetwork.getHiddenlayers()){
 
-            initializeLayerinAnchorPane(hiddenlayer, layerNumber, 255, 0, 0);
+            initializeLayerinAnchorPane(neuralNetwork, hiddenlayer, layerNumber, 255, 0, 0);
             layerNumber++;
 
         }
 
-        initializeLayerinAnchorPane(neuralNetwork.getOutputlayer(), layerNumber, 0, 255, 0);
+        initializeLayerinAnchorPane(neuralNetwork, neuralNetwork.getOutputlayer(), layerNumber, 0, 255, 0);
 
     }
 
-    private void initializeLayerinAnchorPane(Layer layer,  int layerNumber, int red, int green, int blue){
+    private void initializeLayerinAnchorPane(NeuralNetwork neuralNetwork, Layer layer,  int layerNumber, int red, int green, int blue){
 
-        double x = layerNumber * 50;
-        double y = 0;
+
+        double deltaY = layerAnchorPane.getPrefHeight() / layer.getNumberOfNodes() + 1;
+        double deltaX = layerAnchorPane.getPrefWidth() / neuralNetwork.getHiddenlayers().size() + 2;
+        double x = deltaX * layerNumber;
+        double y = deltaY;
+
 
         for (edu.andreasgut.neuronalesnetzwerkfx.core.Node node : layer.getNodes()){
             DecimalFormat df = new DecimalFormat("#.0" + "0".repeat(2 - 1));
@@ -95,9 +96,21 @@ public class HelloController {
             AnchorPane.setTopAnchor(label, y);
             AnchorPane.setLeftAnchor(label, x);
 
-            y += 50;
-
+            y += deltaY;
         }
+    }
+
+    private void initializeLines(NeuralNetwork neuralNetwork){
+        for (edu.andreasgut.neuronalesnetzwerkfx.core.Node startNode : neuralNetwork.getInputlayer().getNodes()){
+            System.out.println("X: " + AnchorPane.getTopAnchor(startNode.getLabel()));
+            for (edu.andreasgut.neuronalesnetzwerkfx.core.Node endNode : neuralNetwork.getHiddenlayers().get(0).getNodes()){
+                Line line = new Line(AnchorPane.getLeftAnchor(startNode.getLabel()),
+                        AnchorPane.getTopAnchor(startNode.getLabel()),
+                        AnchorPane.getLeftAnchor(endNode.getLabel()),
+                        AnchorPane.getTopAnchor(endNode.getLabel()));
+                layerAnchorPane.getChildren().add(line);
+            }
+        };
     }
 
     private void addToArray(int row, int column, Node node){

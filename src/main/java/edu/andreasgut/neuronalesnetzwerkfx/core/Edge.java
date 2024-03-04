@@ -1,5 +1,9 @@
 package edu.andreasgut.neuronalesnetzwerkfx.core;
 
+import javafx.scene.control.Label;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
+
 import java.util.Random;
 
 public class Edge {
@@ -7,6 +11,8 @@ public class Edge {
     private Node from;
     private Node to;
     private double weight;
+    private Line line;
+    private Label label;
 
 
     public Edge(Node from, Node to) {
@@ -26,5 +32,10 @@ public class Edge {
 
     public double getWeight() {
         return weight;
+    }
+
+    public void setGraphicElement(Line line, Label label){
+        this.line = line;
+        this.label = label;
     }
 }

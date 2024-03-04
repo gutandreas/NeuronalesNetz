@@ -51,4 +51,12 @@ public class Node {
         this.circle = circle;
         this.label = label;
     }
+
+    public Circle getCircle() {
+        return circle;
+    }
+
+    public Label getLabel() {
+        return label;
+    }
 }
