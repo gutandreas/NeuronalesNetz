@@ -1,7 +1,5 @@
 package edu.andreasgut.neuronalesnetzwerkfx.core;
 
-import javafx.scene.paint.Color;
-
 public class Inputlayer extends Layer {
 
     private Layer nextLayer;
@@ -9,14 +7,14 @@ public class Inputlayer extends Layer {
     public Inputlayer(int numberOfNodes) {
 
         for (int i = 0; i < numberOfNodes; i++){
-            Node node = new Node();
+            NetworkNode node = new NetworkNode();
             getNodes().add(node);
         }
     }
 
     public void feedDataToInputNodes(double[] inputdata){
         for (int i = 0; i < getNumberOfNodes(); i++){
-            Node currentNode = getNodes().get(i);
+            NetworkNode currentNode = getNodes().get(i);
             currentNode.setOutput(inputdata[i]);
         }
         nextLayer.activateLayer();

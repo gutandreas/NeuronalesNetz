@@ -2,20 +2,16 @@ package edu.andreasgut.neuronalesnetzwerkfx;
 
 import edu.andreasgut.neuronalesnetzwerkfx.core.Hiddenlayer;
 import edu.andreasgut.neuronalesnetzwerkfx.core.Layer;
+import edu.andreasgut.neuronalesnetzwerkfx.core.NetworkNode;
 import edu.andreasgut.neuronalesnetzwerkfx.core.NeuralNetwork;
 import javafx.fxml.FXML;
-import javafx.geometry.Bounds;
-import javafx.geometry.Insets;
-import javafx.geometry.Point2D;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
+import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.Rectangle;
-import org.controlsfx.control.spreadsheet.Grid;
+import javafx.scene.text.Text;
 
 import java.text.DecimalFormat;
 import java.util.LinkedList;
@@ -46,10 +42,8 @@ public class HelloController {
     @FXML
     private AnchorPane layerAnchorPane;
 
-    private final LinkedList<Node> inputNodes = new LinkedList<>();
-    private final LinkedList<LinkedList<Node>> hiddenNodesLists = new LinkedList<>();
-    private final LinkedList<Node> outputNodes = new LinkedList<>();
-    Node nodes[][] = new Node[100][100];
+    private int circleRadius = 10;
+
 
     public void initializeGui(NeuralNetwork neuralNetwork){
         initializeAnchorPane(neuralNetwork);
@@ -84,38 +78,54 @@ public class HelloController {
         double y = deltaY;
 
 
-        for (edu.andreasgut.neuronalesnetzwerkfx.core.Node node : layer.getNodes()){
+        for (NetworkNode node : layer.getNodes()){
             DecimalFormat df = new DecimalFormat("#.0" + "0".repeat(2 - 1));
             String roundedValue = df.format(node.getOutput());
-            Label label = new Label(roundedValue + "");
-            Circle circle = new Circle(5, Color.rgb(red, green, blue, node.getOutput()));
-            label.setGraphic(circle);
-            node.setGraphicElement(circle, label);
-            layerAnchorPane.getChildren().add(label);
-
-            AnchorPane.setTopAnchor(label, y);
-            AnchorPane.setLeftAnchor(label, x);
+            Circle circle = new Circle(circleRadius, Color.rgb(red, green, blue, node.getOutput()));
+            Text text = new Text(roundedValue);
+            Group group = new Group();
+            group.getChildren().add(circle);
+            group.getChildren().add(text);
+            layerAnchorPane.getChildren().add(group);
+            node.setGraphicGroup(group);
+            AnchorPane.setTopAnchor(group, y);
+            AnchorPane.setLeftAnchor(group, x);
 
             y += deltaY;
         }
     }
 
     private void initializeLines(NeuralNetwork neuralNetwork){
-        for (edu.andreasgut.neuronalesnetzwerkfx.core.Node startNode : neuralNetwork.getInputlayer().getNodes()){
-            System.out.println("X: " + AnchorPane.getTopAnchor(startNode.getLabel()));
-            for (edu.andreasgut.neuronalesnetzwerkfx.core.Node endNode : neuralNetwork.getHiddenlayers().get(0).getNodes()){
-                Line line = new Line(AnchorPane.getLeftAnchor(startNode.getLabel()),
-                        AnchorPane.getTopAnchor(startNode.getLabel()),
-                        AnchorPane.getLeftAnchor(endNode.getLabel()),
-                        AnchorPane.getTopAnchor(endNode.getLabel()));
-                layerAnchorPane.getChildren().add(line);
-            }
-        };
+        double deltaX = 10;
+        double deltaY = 10;
+
+        LinkedList<LinkedList<NetworkNode>> completeList = new LinkedList<>();
+
+        completeList.add(neuralNetwork.getInputlayer().getNodes());
+        for (int i = 0; i < neuralNetwork.getHiddenlayers().size(); i++){
+            completeList.add(neuralNetwork.getHiddenlayers().get(i).getNodes());
+        }
+        completeList.add(neuralNetwork.getOutputlayer().getNodes());
+
+        for (int i = 0; i < completeList.size()-1; i++){
+            for (NetworkNode startNode : completeList.get(i)){
+                for (NetworkNode endNode : completeList.get(i+1)){
+                    double startX = AnchorPane.getLeftAnchor(startNode.getGraphicGroup()) + startNode.getGraphicGroup().getTranslateX() + circleRadius;
+                    double startY = AnchorPane.getTopAnchor(startNode.getGraphicGroup()) + startNode.getGraphicGroup().getTranslateY() + circleRadius;
+                    double endX = AnchorPane.getLeftAnchor(endNode.getGraphicGroup()) + endNode.getGraphicGroup().getTranslateX() + circleRadius;
+                    double endY = AnchorPane.getTopAnchor(endNode.getGraphicGroup()) + endNode.getGraphicGroup().getTranslateY() + circleRadius;
+
+                    Line line = new Line(startX, startY, endX, endY);
+                    line.toBack();
+                    layerAnchorPane.getChildren().add(line);
+                }
+            };
+        }
+
+
+
     }
 
-    private void addToArray(int row, int column, Node node){
-        nodes[row][column] = node;
-    }
 
 
 

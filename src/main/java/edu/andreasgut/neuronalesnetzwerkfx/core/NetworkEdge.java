@@ -1,32 +1,31 @@
 package edu.andreasgut.neuronalesnetzwerkfx.core;
 
 import javafx.scene.control.Label;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 
 import java.util.Random;
 
-public class Edge {
+public class NetworkEdge {
 
-    private Node from;
-    private Node to;
+    private NetworkNode from;
+    private NetworkNode to;
     private double weight;
     private Line line;
     private Label label;
 
 
-    public Edge(Node from, Node to) {
+    public NetworkEdge(NetworkNode from, NetworkNode to) {
         this.from = from;
         this.to = to;
         Random random = new Random();
         this.weight = random.nextDouble();
     }
 
-    public Node getFrom() {
+    public NetworkNode getFrom() {
         return from;
     }
 
-    public Node getTo() {
+    public NetworkNode getTo() {
         return to;
     }
 

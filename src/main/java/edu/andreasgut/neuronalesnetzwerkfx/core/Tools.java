@@ -16,9 +16,9 @@ public class Tools {
         return activations;
     }*/
 
-    public static double sigmoid(LinkedList<Edge> inputEdges){
+    public static double sigmoid(LinkedList<NetworkEdge> inputEdges){
         double sum = 0;
-        for (Edge edge : inputEdges){
+        for (NetworkEdge edge : inputEdges){
             sum += edge.getFrom().getOutput() * edge.getWeight();
         }
         double output = 1 / (1 + Math.exp(-sum));

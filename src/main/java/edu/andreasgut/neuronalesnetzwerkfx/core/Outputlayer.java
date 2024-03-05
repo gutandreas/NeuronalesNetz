@@ -1,7 +1,5 @@
 package edu.andreasgut.neuronalesnetzwerkfx.core;
 
-import javafx.scene.paint.Color;
-
 public class Outputlayer extends Layer {
 
 
@@ -15,10 +13,10 @@ public class Outputlayer extends Layer {
 
 
         for (int i = 0; i < numberOfNodes; i++){
-            Node nodeInThisLayer = new Node();
+            NetworkNode nodeInThisLayer = new NetworkNode();
             getNodes().add(nodeInThisLayer);
-            for (Node nodeInPreviousLayer : previousLayer.getNodes()){
-                Edge edge = new Edge(nodeInPreviousLayer, nodeInThisLayer);
+            for (NetworkNode nodeInPreviousLayer : previousLayer.getNodes()){
+                NetworkEdge edge = new NetworkEdge(nodeInPreviousLayer, nodeInThisLayer);
                 nodeInPreviousLayer.addOutputEdge(edge);
                 nodeInThisLayer.addInputEdge(edge);
             }
@@ -27,7 +25,7 @@ public class Outputlayer extends Layer {
 
     public void activateLayer(){
         for (int i = 0; i < getNumberOfNodes(); i++){
-            Node currentNode = getNodes().get(i);
+            NetworkNode currentNode = getNodes().get(i);
             double output = Tools.sigmoid(currentNode.getInputEdges());
             currentNode.setOutput(output);
             currentNode.calculateOutput();

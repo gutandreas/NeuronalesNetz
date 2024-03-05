@@ -6,7 +6,7 @@ public abstract class Layer {
 
 
 
-    private LinkedList<Node> nodes = new LinkedList<>();
+    private LinkedList<NetworkNode> nodes = new LinkedList<>();
     private double[] outputs;
 
 
@@ -18,7 +18,7 @@ public abstract class Layer {
 
     abstract public void activateLayer();
 
-    public LinkedList<Node> getNodes() {
+    public LinkedList<NetworkNode> getNodes() {
         return nodes;
     }
 
