@@ -1,9 +1,6 @@
 package edu.andreasgut.neuronalesnetzwerkfx;
 
-import edu.andreasgut.neuronalesnetzwerkfx.core.Hiddenlayer;
-import edu.andreasgut.neuronalesnetzwerkfx.core.Layer;
-import edu.andreasgut.neuronalesnetzwerkfx.core.NetworkNode;
-import edu.andreasgut.neuronalesnetzwerkfx.core.NeuralNetwork;
+import edu.andreasgut.neuronalesnetzwerkfx.core.*;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
@@ -96,8 +93,6 @@ public class HelloController {
     }
 
     private void initializeLines(NeuralNetwork neuralNetwork){
-        double deltaX = 10;
-        double deltaY = 10;
 
         LinkedList<LinkedList<NetworkNode>> completeList = new LinkedList<>();
 
@@ -116,7 +111,24 @@ public class HelloController {
                     double endY = AnchorPane.getTopAnchor(endNode.getGraphicGroup()) + endNode.getGraphicGroup().getTranslateY() + circleRadius;
 
                     Line line = new Line(startX, startY, endX, endY);
-                    line.toBack();
+
+                    int indexOfEdge = completeList.get(i+1).indexOf(endNode);
+                    NetworkEdge edge = startNode.getOutputEdges().get(indexOfEdge);
+                    edge.setLine(line);
+                    double weight = edge.getWeight();
+                    line.setStrokeWidth(weight*3);
+                    line.setStroke(Color.rgb((int) (weight*255), (int) (weight*255), (int) (weight*100)));
+
+                    Text textWeight = new Text();
+
+                    line.setOnMouseEntered(event -> {
+                        textWeight.setText(edge.getWeight() + "");
+                        layerAnchorPane.getChildren().add(textWeight);
+                    });
+                    line.setOnMouseExited(event -> {
+                        layerAnchorPane.getChildren().remove(textWeight);
+                    });
+
                     layerAnchorPane.getChildren().add(line);
                 }
             };

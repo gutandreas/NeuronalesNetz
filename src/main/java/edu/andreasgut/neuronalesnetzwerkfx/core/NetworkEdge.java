@@ -1,5 +1,6 @@
 package edu.andreasgut.neuronalesnetzwerkfx.core;
 
+import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.shape.Line;
 
@@ -11,7 +12,6 @@ public class NetworkEdge {
     private NetworkNode to;
     private double weight;
     private Line line;
-    private Label label;
 
 
     public NetworkEdge(NetworkNode from, NetworkNode to) {
@@ -33,8 +33,11 @@ public class NetworkEdge {
         return weight;
     }
 
-    public void setGraphicElement(Line line, Label label){
+    public Line getLine() {
+        return line;
+    }
+
+    public void setLine(Line line) {
         this.line = line;
-        this.label = label;
     }
 }
