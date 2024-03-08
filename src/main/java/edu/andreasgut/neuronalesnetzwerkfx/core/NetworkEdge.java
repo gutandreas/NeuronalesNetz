@@ -9,8 +9,8 @@ import java.util.Random;
 
 public class NetworkEdge {
 
-    private NetworkNode from;
-    private NetworkNode to;
+    private final NetworkNode from;
+    private final NetworkNode to;
     private double weight;
     private Line line;
 

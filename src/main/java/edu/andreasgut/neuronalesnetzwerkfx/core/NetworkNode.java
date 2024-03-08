@@ -3,14 +3,15 @@ package edu.andreasgut.neuronalesnetzwerkfx.core;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Text;
 
 import java.util.LinkedList;
 
 public class NetworkNode {
 
     private double output;
-    private LinkedList<NetworkEdge> inputEdges = new LinkedList<>();
-    private LinkedList<NetworkEdge> outputEdges = new LinkedList<>();
+    private final LinkedList<NetworkEdge> inputEdges = new LinkedList<>();
+    private final LinkedList<NetworkEdge> outputEdges = new LinkedList<>();
     private Group graphicGroup;
 
 
@@ -51,10 +52,14 @@ public class NetworkNode {
         this.graphicGroup = graphicGroup;
     }
 
+
     public Group getGraphicGroup() {
         return graphicGroup;
     }
 
+    public void updateNodeGraphic(Circle circle, Text text){
+        this.graphicGroup = new Group(circle, text);
+    }
     public void learn(double target, double learningRate) {
         for (NetworkEdge edge : getInputEdges()) {
             double correctedWeight = edge.getWeight() - learningRate * (-(target - output) * output * (1 - output) * edge.getFrom().getOutput());

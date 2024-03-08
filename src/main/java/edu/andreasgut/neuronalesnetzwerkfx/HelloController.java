@@ -82,15 +82,15 @@ public class HelloController {
         for (NetworkNode node : layer.getNodes()){
             DecimalFormat df = new DecimalFormat("#.0" + "0".repeat(2 - 1));
             String roundedValue = df.format(node.getOutput());
+            if (node.getGraphicGroup() != null){
+                layerAnchorPane.getChildren().remove(node.getGraphicGroup());
+            }
             Circle circle = new Circle(circleRadius, Color.rgb(red, green, blue, node.getOutput()));
             Text text = new Text(roundedValue);
-            Group group = new Group();
-            group.getChildren().add(circle);
-            group.getChildren().add(text);
-            layerAnchorPane.getChildren().add(group);
-            node.setGraphicGroup(group);
-            AnchorPane.setTopAnchor(group, y);
-            AnchorPane.setLeftAnchor(group, x);
+            node.updateNodeGraphic(circle, text);
+            layerAnchorPane.getChildren().add(node.getGraphicGroup());
+            AnchorPane.setTopAnchor(node.getGraphicGroup(), y);
+            AnchorPane.setLeftAnchor(node.getGraphicGroup(), x);
             if (outputLayer){
                 activateLearningClick(layer, node, 0.1);
             }
