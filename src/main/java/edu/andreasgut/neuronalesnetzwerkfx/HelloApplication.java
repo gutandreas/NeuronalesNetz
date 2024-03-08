@@ -19,7 +19,7 @@ public class HelloApplication extends Application {
         NeuralNetwork neuralNetwork = new NeuralNetwork(5, 3, 10, 2);
         neuralNetwork.startCalculations(new double[]{0.3, 0.5, 0.2, 0.4, 0.9});
 
-        helloController.initializeGui(neuralNetwork);
+        helloController.updateGui(neuralNetwork);
 
         //helloController.test();
 

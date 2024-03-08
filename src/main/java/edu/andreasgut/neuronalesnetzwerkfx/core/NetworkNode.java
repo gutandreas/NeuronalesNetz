@@ -55,13 +55,12 @@ public class NetworkNode {
         return graphicGroup;
     }
 
-    public Circle getFirstCircleOfGroup(){
-        for (Node node : graphicGroup.getChildren()) {
-
-            if (node instanceof Circle) {
-                return (Circle) node;
-            }
+    public void learn(double target, double learningRate) {
+        for (NetworkEdge edge : getInputEdges()) {
+            double correctedWeight = edge.getWeight() - learningRate * (-(target - output) * output * (1 - output) * edge.getFrom().getOutput());
+            edge.setWeight(correctedWeight);
+            edge.updateLineGraphic();
+            edge.getFrom().learn(target, learningRate);
         }
-        return null;
     }
 }

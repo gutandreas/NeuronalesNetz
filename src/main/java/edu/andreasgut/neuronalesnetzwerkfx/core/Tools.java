@@ -21,10 +21,10 @@ public class Tools {
         for (NetworkEdge edge : inputEdges){
             sum += edge.getFrom().getOutput() * edge.getWeight();
         }
-        double avg = sum / inputEdges.size();
-        double output = 1 / (1 + Math.exp(-avg));
+        double output = 1 / (1 + Math.exp(-sum));
         return output;
     }
+
 
 
 

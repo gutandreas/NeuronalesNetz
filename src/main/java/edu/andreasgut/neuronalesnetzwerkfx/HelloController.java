@@ -41,8 +41,12 @@ public class HelloController {
 
     private int circleRadius = 10;
 
+    private NeuralNetwork neuralNetwork;
+    private double[] inputs = new double[]{0.3, 0.5, 0.2, 0.4, 0.9};
 
-    public void initializeGui(NeuralNetwork neuralNetwork){
+
+    public void updateGui(NeuralNetwork neuralNetwork){
+        this.neuralNetwork = neuralNetwork;
         initializeAnchorPane(neuralNetwork);
         initializeLines(neuralNetwork);
     }
@@ -52,21 +56,21 @@ public class HelloController {
         int layerNumber = 0;
 
 
-        initializeLayerinAnchorPane(neuralNetwork, neuralNetwork.getInputlayer(), layerNumber,0, 0, 255);
+        initializeLayerinAnchorPane(neuralNetwork, neuralNetwork.getInputlayer(), layerNumber,0, 0, 255, false);
         layerNumber++;
 
         for (Hiddenlayer hiddenlayer : neuralNetwork.getHiddenlayers()){
 
-            initializeLayerinAnchorPane(neuralNetwork, hiddenlayer, layerNumber, 255, 0, 0);
+            initializeLayerinAnchorPane(neuralNetwork, hiddenlayer, layerNumber, 255, 0, 0, false);
             layerNumber++;
 
         }
 
-        initializeLayerinAnchorPane(neuralNetwork, neuralNetwork.getOutputlayer(), layerNumber, 0, 255, 0);
+        initializeLayerinAnchorPane(neuralNetwork, neuralNetwork.getOutputlayer(), layerNumber, 0, 255, 0, true);
 
     }
 
-    private void initializeLayerinAnchorPane(NeuralNetwork neuralNetwork, Layer layer,  int layerNumber, int red, int green, int blue){
+    private void initializeLayerinAnchorPane(NeuralNetwork neuralNetwork, Layer layer,  int layerNumber, int red, int green, int blue, boolean outputLayer){
 
 
         double deltaY = layerAnchorPane.getPrefHeight() / layer.getNumberOfNodes() + 1;
@@ -87,9 +91,28 @@ public class HelloController {
             node.setGraphicGroup(group);
             AnchorPane.setTopAnchor(group, y);
             AnchorPane.setLeftAnchor(group, x);
+            if (outputLayer){
+                activateLearningClick(layer, node, 0.1);
+            }
 
             y += deltaY;
         }
+    }
+
+    private void activateLearningClick(Layer layer, NetworkNode node, double learningRate){
+        node.getGraphicGroup().setOnMouseClicked(event -> {
+            for (NetworkNode tempNode : layer.getNodes()){
+                if (node == tempNode){
+                    node.learn(1, learningRate);
+                }
+                else {
+                    node.learn(0, learningRate);
+                }
+            }
+
+
+        });
+
     }
 
     private void initializeLines(NeuralNetwork neuralNetwork){
@@ -115,18 +138,20 @@ public class HelloController {
                     int indexOfEdge = completeList.get(i+1).indexOf(endNode);
                     NetworkEdge edge = startNode.getOutputEdges().get(indexOfEdge);
                     edge.setLine(line);
-                    double weight = edge.getWeight();
-                    line.setStrokeWidth(weight*3);
-                    line.setStroke(Color.rgb((int) (weight*255), (int) (weight*255), (int) (weight*100)));
+                    edge.updateLineGraphic();
 
                     Text textWeight = new Text();
 
                     line.setOnMouseEntered(event -> {
+                        line.setStrokeWidth(line.getStrokeWidth()*3);
+                        line.setStroke(Color.rgb(0, 255, 255));
                         textWeight.setText(edge.getWeight() + "");
                         layerAnchorPane.getChildren().add(textWeight);
                     });
                     line.setOnMouseExited(event -> {
+                        edge.updateLineGraphic();
                         layerAnchorPane.getChildren().remove(textWeight);
+
                     });
 
                     layerAnchorPane.getChildren().add(line);
@@ -145,6 +170,7 @@ public class HelloController {
 
     @FXML
     protected void onHelloButtonClick() {
-        welcomeText.setText("Welcome to JavaFX Application!");
+        neuralNetwork.startCalculations(inputs);
+        updateGui(neuralNetwork);
     }
 }

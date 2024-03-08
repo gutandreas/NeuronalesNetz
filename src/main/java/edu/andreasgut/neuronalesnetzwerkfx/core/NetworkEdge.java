@@ -2,6 +2,7 @@ package edu.andreasgut.neuronalesnetzwerkfx.core;
 
 import javafx.scene.Group;
 import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
 import java.util.Random;
@@ -18,7 +19,7 @@ public class NetworkEdge {
         this.from = from;
         this.to = to;
         Random random = new Random();
-        this.weight = random.nextDouble();
+        this.weight = random.nextDouble() - 0.5;
     }
 
     public NetworkNode getFrom() {
@@ -33,11 +34,37 @@ public class NetworkEdge {
         return weight;
     }
 
+    public void setWeight(double weight) {
+        if (weight > 0){
+            this.weight = weight;
+        }
+        else {
+            this.weight = 0;
+        }
+
+    }
+
     public Line getLine() {
         return line;
     }
 
     public void setLine(Line line) {
         this.line = line;
+    }
+
+    public void updateLineGraphic(){
+        line.setStrokeWidth(Math.min(5, weight*3));
+        line.setStroke(Color.rgb(defineColor(weight, 255), defineColor(weight, 255), defineColor(weight, 100)));
+    }
+
+    private int defineColor(double weight, int maxValue) {
+        double percentage = (weight + 10.0) / 20.0;
+
+        double colorValue = percentage * maxValue;
+
+        colorValue = colorValue > 255 ? 255 : colorValue;
+        colorValue = colorValue < 0 ? 0 : colorValue;
+
+        return (int) Math.round(colorValue);
     }
 }
