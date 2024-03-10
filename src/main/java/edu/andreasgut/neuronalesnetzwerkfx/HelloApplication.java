@@ -1,6 +1,7 @@
 package edu.andreasgut.neuronalesnetzwerkfx;
 
 import edu.andreasgut.neuronalesnetzwerkfx.core.NeuralNetwork;
+import edu.andreasgut.neuronalesnetzwerkfx.core.Tools;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -16,10 +17,10 @@ public class HelloApplication extends Application {
         HelloController helloController = fxmlLoader.getController();
         stage.setTitle("Hello!");
 
-        NeuralNetwork neuralNetwork = new NeuralNetwork(5, 3, 10, 2);
-        neuralNetwork.startCalculations(new double[]{0.3, 0.5, 0.2, 0.4, 0.9});
+        NeuralNetwork neuralNetwork = new NeuralNetwork(3, 5, 7, 2);
+        neuralNetwork.startCalculations(Tools.getRandomValues(neuralNetwork.getInputlayer().getNumberOfNodes()));
 
-        helloController.updateGui(neuralNetwork);
+        helloController.initializeGUI(neuralNetwork);
 
         //helloController.test();
 

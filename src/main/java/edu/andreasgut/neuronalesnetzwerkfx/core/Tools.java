@@ -1,6 +1,7 @@
 package edu.andreasgut.neuronalesnetzwerkfx.core;
 
 import java.util.LinkedList;
+import java.util.Random;
 
 public class Tools {
 
@@ -21,8 +22,16 @@ public class Tools {
         for (NetworkEdge edge : inputEdges){
             sum += edge.getFrom().getOutput() * edge.getWeight();
         }
-        double output = 1 / (1 + Math.exp(-sum));
-        return output;
+        return  1 / (1 + Math.exp(-sum));
+    }
+
+    public static double[] getRandomValues(int numberOfValues){
+        Random random = new Random();
+        double[] values = new double[numberOfValues];
+        for (int i = 0; i < numberOfValues; i++){
+            values[i] = random.nextDouble();
+        }
+        return values;
     }
 
 

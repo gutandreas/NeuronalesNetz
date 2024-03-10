@@ -2,7 +2,6 @@ package edu.andreasgut.neuronalesnetzwerkfx;
 
 import edu.andreasgut.neuronalesnetzwerkfx.core.*;
 import javafx.fxml.FXML;
-import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -12,6 +11,7 @@ import javafx.scene.text.Text;
 
 import java.text.DecimalFormat;
 import java.util.LinkedList;
+import java.util.Random;
 
 public class HelloController {
     @FXML
@@ -42,13 +42,16 @@ public class HelloController {
     private int circleRadius = 10;
 
     private NeuralNetwork neuralNetwork;
-    private double[] inputs = new double[]{0.3, 0.5, 0.2, 0.4, 0.9};
 
 
-    public void updateGui(NeuralNetwork neuralNetwork){
+    public void initializeGUI(NeuralNetwork neuralNetwork){
         this.neuralNetwork = neuralNetwork;
         initializeAnchorPane(neuralNetwork);
         initializeLines(neuralNetwork);
+    }
+
+    public void updateGUI(){
+        initializeAnchorPane(neuralNetwork);
     }
 
     private void initializeAnchorPane(NeuralNetwork neuralNetwork){
@@ -72,11 +75,10 @@ public class HelloController {
 
     private void initializeLayerinAnchorPane(NeuralNetwork neuralNetwork, Layer layer,  int layerNumber, int red, int green, int blue, boolean outputLayer){
 
-
-        double deltaY = layerAnchorPane.getPrefHeight() / layer.getNumberOfNodes() + 1;
-        double deltaX = layerAnchorPane.getPrefWidth() / neuralNetwork.getHiddenlayers().size() + 2;
-        double x = deltaX * layerNumber;
-        double y = deltaY;
+        double deltaY = layerAnchorPane.getPrefHeight() / (layer.getNumberOfNodes()+1);
+        double deltaX = layerAnchorPane.getPrefWidth() / neuralNetwork.getNumberOfLayers();
+        double x = deltaX * layerNumber + circleRadius;
+        double y = deltaY + circleRadius;
 
 
         for (NetworkNode node : layer.getNodes()){
@@ -142,24 +144,24 @@ public class HelloController {
 
                     Text textWeight = new Text();
 
-                    line.setOnMouseEntered(event -> {
-                        line.setStrokeWidth(line.getStrokeWidth()*3);
-                        line.setStroke(Color.rgb(0, 255, 255));
-                        textWeight.setText(edge.getWeight() + "");
-                        layerAnchorPane.getChildren().add(textWeight);
-                    });
-                    line.setOnMouseExited(event -> {
-                        edge.updateLineGraphic();
-                        layerAnchorPane.getChildren().remove(textWeight);
+                    if (line.getOnMouseEntered() == null) {
+                        line.setOnMouseEntered(event -> {
+                            line.setStrokeWidth(line.getStrokeWidth() * 3);
+                            line.setStroke(Color.rgb(0, 255, 255));
+                            textWeight.setText(edge.getWeight() + "");
+                            layerAnchorPane.getChildren().add(textWeight);
+                        });
+                        line.setOnMouseExited(event -> {
+                            edge.updateLineGraphic();
+                            layerAnchorPane.getChildren().remove(textWeight);
 
-                    });
+                        });
+                    }
 
                     layerAnchorPane.getChildren().add(line);
                 }
             };
         }
-
-
 
     }
 
@@ -170,7 +172,7 @@ public class HelloController {
 
     @FXML
     protected void onHelloButtonClick() {
-        neuralNetwork.startCalculations(inputs);
-        updateGui(neuralNetwork);
+        neuralNetwork.startCalculations(Tools.getRandomValues(neuralNetwork.getInputlayer().getNumberOfNodes()));
+        updateGUI();
     }
 }

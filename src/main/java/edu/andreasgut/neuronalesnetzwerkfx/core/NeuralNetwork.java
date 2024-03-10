@@ -41,4 +41,12 @@ public class NeuralNetwork {
     public Outputlayer getOutputlayer() {
         return outputlayer;
     }
+
+    public int getNumberOfLayers(){
+        return hiddenlayers.size() + 2;
+    }
+
+    public int getMaxNumberOfNodePerLayer(){
+        return Math.max(Math.max(inputlayer.getNumberOfNodes(), hiddenlayers.get(0).getNumberOfNodes()), outputlayer.getNumberOfNodes());
+    }
 }
