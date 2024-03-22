@@ -2,6 +2,7 @@ package edu.andreasgut.neuronalesnetzwerkfx;
 
 import edu.andreasgut.neuronalesnetzwerkfx.core.*;
 import edu.andreasgut.neuronalesnetzwerkfx.imagetools.SourceImage;
+import edu.andreasgut.neuronalesnetzwerkfx.view.ViewManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -12,27 +13,21 @@ import java.io.IOException;
 public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 600, 800);
-        HelloController helloController = fxmlLoader.getController();
-        stage.setTitle("Hello!");
+
+        //HelloController helloController = ViewManager.addStageWithFXML("Neuronales Netz", "mainStage", "hello-view.fxml").getController();
+        SettingsViewController settingsViewController = ViewManager.addStageWithFXML("Neuronales Netz", "mainStage", "settings-view.fxml").getController();
+
+
+
         SourceImage sourceImage = new SourceImage("/images/numbers/0/","img_69.jpg", 20);
 
         NeuralNetwork neuralNetwork = new NeuralNetwork(sourceImage.getNumberOfPixelForNeuralNetwork(), 2, 4, 10);
         neuralNetwork.startCalculations(sourceImage.getImageAs1DArray());
 
 
-        helloController.initializeGUI(neuralNetwork);
-        helloController.loadNewImage(sourceImage);
+        //helloController.initializeGUI(neuralNetwork);
+        //helloController.loadNewImage(sourceImage);
         //train(neuralNetwork);
-
-
-        //helloController.test();
-
-        // Festlegen der Szene für die Bühne und Anzeigen der Bühne
-        stage.setScene(scene);
-        stage.setTitle("JavaFX Shapes Example");
-        stage.show();
     }
 
     public static void main(String[] args) {

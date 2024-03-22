@@ -5,18 +5,18 @@ import edu.andreasgut.neuronalesnetzwerkfx.core.*;
 import edu.andreasgut.neuronalesnetzwerkfx.imagetools.SourceImage;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
-
-import java.awt.image.BufferedImage;
-import java.net.MalformedURLException;
-import java.net.URL;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import java.io.File;
+import java.net.URISyntaxException;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.LinkedList;
 
@@ -49,6 +49,9 @@ public class HelloController {
     @FXML
     private AnchorPane imageAnchorPane;
 
+    @FXML
+    private Button einzelbildButton;
+
     private int circleRadius = 10;
 
     private NeuralNetwork neuralNetwork;
@@ -67,35 +70,31 @@ public class HelloController {
     }
 
     public void loadNewImage(SourceImage sourceImage){
-        initializeImageAnchorPane(sourceImage);
-
-    }
-
-    private void initializeImageAnchorPane(SourceImage sourceImage) {
         Canvas canvas = sourceImage.getImageAsCanvas();
         imageAnchorPane.getChildren().add(canvas);
     }
+
 
     private void initializeLayerAnchorPane(NeuralNetwork neuralNetwork){
 
         int layerNumber = 0;
 
 
-        initializeLayerinAnchorPane(neuralNetwork, neuralNetwork.getInputlayer(), layerNumber,0, 0, 255, false);
+        initializeLayerInAnchorPane(neuralNetwork, neuralNetwork.getInputlayer(), layerNumber,0, 0, 255, false);
         layerNumber++;
 
         for (Hiddenlayer hiddenlayer : neuralNetwork.getHiddenlayers()){
 
-            initializeLayerinAnchorPane(neuralNetwork, hiddenlayer, layerNumber, 255, 0, 0, false);
+            initializeLayerInAnchorPane(neuralNetwork, hiddenlayer, layerNumber, 255, 0, 0, false);
             layerNumber++;
 
         }
 
-        initializeLayerinAnchorPane(neuralNetwork, neuralNetwork.getOutputlayer(), layerNumber, 0, 255, 0, true);
+        initializeLayerInAnchorPane(neuralNetwork, neuralNetwork.getOutputlayer(), layerNumber, 0, 255, 0, true);
 
     }
 
-    private void initializeLayerinAnchorPane(NeuralNetwork neuralNetwork, Layer layer,  int layerNumber, int red, int green, int blue, boolean outputLayer){
+    private void initializeLayerInAnchorPane(NeuralNetwork neuralNetwork, Layer layer, int layerNumber, int red, int green, int blue, boolean outputLayer){
 
         double deltaY = layerAnchorPane.getPrefHeight() / (layer.getNumberOfNodes()+1);
         double deltaX = layerAnchorPane.getPrefWidth() / neuralNetwork.getNumberOfLayers();
@@ -116,7 +115,7 @@ public class HelloController {
             AnchorPane.setTopAnchor(node.getGraphicGroup(), y);
             AnchorPane.setLeftAnchor(node.getGraphicGroup(), x);
             if (outputLayer){
-                activateLearningClick(node, 0.5);
+                activateLearningClick(node, 0.01);
             }
 
             y += deltaY;
@@ -178,6 +177,27 @@ public class HelloController {
             };
         }
 
+    }
+
+
+
+    public void loadImage(){
+
+        FileChooser fileChooser = new FileChooser();
+        try {
+            String resourcePath = Paths.get(getClass().getResource("/images/numbers").toURI()).toString();
+            fileChooser.setInitialDirectory(new File(resourcePath));
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        File selectedFile = fileChooser.showOpenDialog(new Stage());
+        SourceImage sourceImage = new SourceImage("/images/numbers/0/", selectedFile.getName(), 20);
+        loadNewImage(sourceImage);
+        neuralNetwork.startCalculations(sourceImage.getImageAs1DArray());
+        initializeLayerAnchorPane(neuralNetwork);
+
+
+        System.out.println(selectedFile);
     }
 
 }
