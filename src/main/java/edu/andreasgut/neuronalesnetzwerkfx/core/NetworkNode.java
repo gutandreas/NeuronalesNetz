@@ -1,7 +1,6 @@
 package edu.andreasgut.neuronalesnetzwerkfx.core;
 
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
@@ -10,6 +9,7 @@ import java.util.LinkedList;
 public class NetworkNode {
 
     private double output;
+    private double delta;
     private final LinkedList<NetworkEdge> inputEdges = new LinkedList<>();
     private final LinkedList<NetworkEdge> outputEdges = new LinkedList<>();
     private Group graphicGroup;
@@ -39,6 +39,14 @@ public class NetworkNode {
         return output;
     }
 
+    public double getDelta() {
+        return delta;
+    }
+
+    public void setDelta(double delta) {
+        this.delta = delta;
+    }
+
     public LinkedList<NetworkEdge> getInputEdges() {
         return inputEdges;
     }
@@ -60,12 +68,23 @@ public class NetworkNode {
     public void updateNodeGraphic(Circle circle, Text text){
         this.graphicGroup = new Group(circle, text);
     }
-    public void learn(double target, double learningRate) {
-        for (NetworkEdge edge : getInputEdges()) {
-            double correctedWeight = edge.getWeight() - learningRate * (-(target - output) * output * (1 - output) * edge.getFrom().getOutput());
-            edge.setWeight(correctedWeight);
-            edge.updateLineGraphic();
-            edge.getFrom().learn(target, learningRate);
+    public void learn(double target, double learningRate, boolean outputLayer) {
+        for (NetworkEdge inputEdge : getInputEdges()) {
+            double error = target - output;
+            double sigmoidDerivation = output * (1 - output);
+            double input = inputEdge.getFrom().getOutput();
+            if (outputLayer){
+                delta = error * sigmoidDerivation;
+            } else {
+                delta = 0;
+                for (NetworkEdge outputEdge : getOutputEdges()){
+                    delta += outputEdge.getTo().getDelta() * outputEdge.getWeight();
+                }
+            }
+            double correctedWeight = inputEdge.getWeight() - learningRate * delta * input;
+            inputEdge.setWeight(correctedWeight);
+            inputEdge.updateLineWeightGraphic();
+            inputEdge.getFrom().learn(target, learningRate, false);
         }
     }
 }

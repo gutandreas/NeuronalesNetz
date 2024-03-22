@@ -1,10 +1,13 @@
 package edu.andreasgut.neuronalesnetzwerkfx.core;
 
+import edu.andreasgut.neuronalesnetzwerkfx.imagetools.SourceImage;
+
 public class Inputlayer extends Layer {
 
     private Layer nextLayer;
 
-    public Inputlayer(int numberOfNodes) {
+    public Inputlayer(int numberOfNodes, NeuralNetwork neuralNetwork) {
+        super(neuralNetwork);
 
         for (int i = 0; i < numberOfNodes; i++){
             NetworkNode node = new NetworkNode();

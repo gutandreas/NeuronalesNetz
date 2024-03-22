@@ -1,17 +1,24 @@
 package edu.andreasgut.neuronalesnetzwerkfx;
 
 import edu.andreasgut.neuronalesnetzwerkfx.core.*;
+
+import edu.andreasgut.neuronalesnetzwerkfx.imagetools.SourceImage;
 import javafx.fxml.FXML;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
+import javafx.scene.image.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 
+import java.awt.image.BufferedImage;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.LinkedList;
-import java.util.Random;
 
 public class HelloController {
     @FXML
@@ -39,6 +46,9 @@ public class HelloController {
     @FXML
     private AnchorPane layerAnchorPane;
 
+    @FXML
+    private AnchorPane imageAnchorPane;
+
     private int circleRadius = 10;
 
     private NeuralNetwork neuralNetwork;
@@ -46,15 +56,27 @@ public class HelloController {
 
     public void initializeGUI(NeuralNetwork neuralNetwork){
         this.neuralNetwork = neuralNetwork;
-        initializeAnchorPane(neuralNetwork);
+        initializeLayerAnchorPane(neuralNetwork);
         initializeLines(neuralNetwork);
+        updateGUI();
     }
 
     public void updateGUI(){
-        initializeAnchorPane(neuralNetwork);
+        initializeLayerAnchorPane(neuralNetwork);
+        neuralNetwork.updateLineColorOfAllEdges();
     }
 
-    private void initializeAnchorPane(NeuralNetwork neuralNetwork){
+    public void loadNewImage(SourceImage sourceImage){
+        initializeImageAnchorPane(sourceImage);
+
+    }
+
+    private void initializeImageAnchorPane(SourceImage sourceImage) {
+        Canvas canvas = sourceImage.getImageAsCanvas();
+        imageAnchorPane.getChildren().add(canvas);
+    }
+
+    private void initializeLayerAnchorPane(NeuralNetwork neuralNetwork){
 
         int layerNumber = 0;
 
@@ -94,25 +116,17 @@ public class HelloController {
             AnchorPane.setTopAnchor(node.getGraphicGroup(), y);
             AnchorPane.setLeftAnchor(node.getGraphicGroup(), x);
             if (outputLayer){
-                activateLearningClick(layer, node, 0.1);
+                activateLearningClick(node, 0.5);
             }
 
             y += deltaY;
         }
     }
 
-    private void activateLearningClick(Layer layer, NetworkNode node, double learningRate){
+    private void activateLearningClick(NetworkNode node, double learningRate){
         node.getGraphicGroup().setOnMouseClicked(event -> {
-            for (NetworkNode tempNode : layer.getNodes()){
-                if (node == tempNode){
-                    node.learn(1, learningRate);
-                }
-                else {
-                    node.learn(0, learningRate);
-                }
-            }
 
-
+            neuralNetwork.getOutputlayer().learn(node, learningRate, true);
         });
 
     }
@@ -140,7 +154,7 @@ public class HelloController {
                     int indexOfEdge = completeList.get(i+1).indexOf(endNode);
                     NetworkEdge edge = startNode.getOutputEdges().get(indexOfEdge);
                     edge.setLine(line);
-                    edge.updateLineGraphic();
+                    edge.updateLineWeightGraphic();
 
                     Text textWeight = new Text();
 
@@ -152,7 +166,8 @@ public class HelloController {
                             layerAnchorPane.getChildren().add(textWeight);
                         });
                         line.setOnMouseExited(event -> {
-                            edge.updateLineGraphic();
+                            edge.updateLineWeightGraphic();
+                            edge.updateLineColor();
                             layerAnchorPane.getChildren().remove(textWeight);
 
                         });
@@ -172,7 +187,7 @@ public class HelloController {
 
     @FXML
     protected void onHelloButtonClick() {
-        neuralNetwork.startCalculations(Tools.getRandomValues(neuralNetwork.getInputlayer().getNumberOfNodes()));
+        neuralNetwork.startCalculations(Tools.getRandomValuesWithOnePeak(neuralNetwork.getInputlayer().getNumberOfNodes()));
         updateGUI();
     }
 }

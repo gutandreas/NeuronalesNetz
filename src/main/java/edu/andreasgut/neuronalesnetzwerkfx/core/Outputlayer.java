@@ -7,10 +7,10 @@ public class Outputlayer extends Layer {
 
 
 
-    public Outputlayer(int numberOfNodes, Layer previousLayer){
+    public Outputlayer(int numberOfNodes, Layer previousLayer, NeuralNetwork neuralNetwork){
+        super(neuralNetwork);
         this.previousLayer = previousLayer;
         previousLayer.setNextLayer(this);
-
 
         for (int i = 0; i < numberOfNodes; i++){
             NetworkNode nodeInThisLayer = new NetworkNode();

@@ -34,7 +34,15 @@ public class Tools {
         return values;
     }
 
-
+    public static double[] getRandomValuesWithOnePeak(int numberOfValues){
+        Random random = new Random();
+        double[] values = new double[numberOfValues];
+        for (int i = 0; i < numberOfValues; i++){
+            values[i] = random.nextDouble() * 0.5;
+        }
+        values[random.nextInt(numberOfValues)] = 0.95;
+        return values;
+    }
 
 
 }

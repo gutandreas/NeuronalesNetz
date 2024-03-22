@@ -14,26 +14,28 @@
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
-    <Button onAction="#onHelloButtonClick" text="Hello!" />
-   <AnchorPane fx:id="layerAnchorPane" prefHeight="250.0" prefWidth="400.0" />
-   <GridPane fx:id="layerGridPane" alignment="CENTER">
-     <columnConstraints>
-       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-     </columnConstraints>
-     <rowConstraints>
-       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-     </rowConstraints>
-   </GridPane>
-
-    <Label fx:id="welcomeText" />
-   <HBox id="mainHBox" fx:id="mainHBox" prefHeight="100.0" prefWidth="200.0">
+   <HBox prefHeight="100.0" prefWidth="200.0">
       <children>
-         <VBox id="inputLayerVBox" fx:id="inputLayerVBox" prefHeight="200.0" prefWidth="100.0" />
-         <HBox fx:id="hiddenLayersHBox" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-         <VBox id="outputLayerVBox" fx:id="outputLayerVBox" prefHeight="200.0" prefWidth="100.0" />
+         <AnchorPane fx:id="imageAnchorPane" prefHeight="200.0" prefWidth="200.0" />
+         <VBox prefHeight="200.0" prefWidth="100.0">
+            <children>
+                <Button onAction="#onHelloButtonClick" text="Hello!" />
+               <AnchorPane fx:id="layerAnchorPane" prefHeight="600.0" prefWidth="400.0" />
+               <GridPane fx:id="layerGridPane" alignment="CENTER">
+                 <columnConstraints>
+                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                 </columnConstraints>
+                 <rowConstraints>
+                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                 </rowConstraints>
+               </GridPane>
+            
+                <Label fx:id="welcomeText" />
+            </children>
+         </VBox>
       </children>
    </HBox>
 </VBox>

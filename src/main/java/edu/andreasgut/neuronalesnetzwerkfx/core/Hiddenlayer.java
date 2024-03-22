@@ -9,7 +9,8 @@ public class Hiddenlayer extends Layer {
     private double[] outputs;
 
 
-    public Hiddenlayer(int numberOfNodes, Layer previousLayer){
+    public Hiddenlayer(int numberOfNodes, Layer previousLayer, NeuralNetwork neuralNetwork){
+        super(neuralNetwork);
         this.previousLayer = previousLayer;
         previousLayer.setNextLayer(this);
 
