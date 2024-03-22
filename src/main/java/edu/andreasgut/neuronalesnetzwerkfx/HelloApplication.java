@@ -16,7 +16,7 @@ public class HelloApplication extends Application {
         Scene scene = new Scene(fxmlLoader.load(), 600, 800);
         HelloController helloController = fxmlLoader.getController();
         stage.setTitle("Hello!");
-        SourceImage sourceImage = new SourceImage("2.png", 8);
+        SourceImage sourceImage = new SourceImage("/images/numbers/0/","img_69.jpg", 20);
 
         NeuralNetwork neuralNetwork = new NeuralNetwork(sourceImage.getNumberOfPixelForNeuralNetwork(), 2, 4, 10);
         neuralNetwork.startCalculations(sourceImage.getImageAs1DArray());

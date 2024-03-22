@@ -15,8 +15,8 @@ public class SourceImage {
     int targetWidth;
     int targetHeight;
 
-    public SourceImage(String filename, int targetWidth) {
-        original = new Image(String.valueOf(getClass().getResource("/images/" + filename)), 200, 200, true, false, false);
+    public SourceImage(String folder, String filename, int targetWidth) {
+        original = new Image(String.valueOf(getClass().getResource(folder + filename)), 200, 200, true, false, false);
         ratio = original.getHeight() / original.getWidth();
         this.targetWidth = targetWidth;
         targetHeight = (int) (targetWidth * ratio);
@@ -55,7 +55,7 @@ public class SourceImage {
                 int pixelCount = (endX - startX) * (endY - startY);
                 Color avgColor = Color.color(redSum / pixelCount, greenSum / pixelCount, blueSum / pixelCount);
                 Color grayColor = avgColor.grayscale();
-                imageAsArray[x][y] = 1 - grayColor.getBrightness();
+                imageAsArray[x][y] = grayColor.getBrightness();
                 GraphicsContext gc = imageAsCanvas.getGraphicsContext2D();
                 gc.setFill(grayColor);
                 gc.fillRect(x * zoom, y * zoom, 1 * zoom, 1 * zoom);

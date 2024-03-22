@@ -180,14 +180,4 @@ public class HelloController {
 
     }
 
-
-
-
-
-
-    @FXML
-    protected void onHelloButtonClick() {
-        neuralNetwork.startCalculations(Tools.getRandomValuesWithOnePeak(neuralNetwork.getInputlayer().getNumberOfNodes()));
-        updateGUI();
-    }
 }
