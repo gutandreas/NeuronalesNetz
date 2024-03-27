@@ -60,6 +60,7 @@ public class HelloController {
 
 
     public void initializeGUI(NeuralNetwork neuralNetwork){
+        layerAnchorPane.getChildren().clear();
         this.neuralNetwork = neuralNetwork;
         initializeLayerAnchorPane(neuralNetwork);
         initializeLines(neuralNetwork);
@@ -74,6 +75,10 @@ public class HelloController {
     public void loadNewImage(SourceImage sourceImage){
         Canvas canvas = sourceImage.getImageAsCanvas();
         imageAnchorPane.getChildren().add(canvas);
+        sourceImage.getImageAsCanvas().setOnMouseClicked(event -> {
+            neuralNetwork.startCalculations(sourceImage.getImageAs1DArray());
+            updateGUI();
+        });
     }
 
 
@@ -189,10 +194,14 @@ public class HelloController {
 
         File selectedFile = fileChooser.showOpenDialog(new Stage());
         System.out.println(getPathFromResourceFolder(selectedFile.getAbsolutePath()));
-        SourceImage sourceImage = new SourceImage(getPathFromResourceFolder(selectedFile.getAbsolutePath()), 20);
+        SourceImage sourceImage = new SourceImage(getPathFromResourceFolder(selectedFile.getAbsolutePath()), 7);
         loadNewImage(sourceImage);
         neuralNetwork.startCalculations(sourceImage.getImageAs1DArray());
         initializeLayerAnchorPane(neuralNetwork);
+
+        NeuralNetwork newNeuralNetwork = new NeuralNetwork(sourceImage.getNumberOfPixelForNeuralNetwork(), neuralNetwork.getNumberOfLayers()-2, neuralNetwork.getHiddenlayers().get(0).getNumberOfNodes(), neuralNetwork.getOutputlayer().getNumberOfNodes() );
+        newNeuralNetwork.startCalculations(sourceImage.getImageAs1DArray());
+        initializeGUI(newNeuralNetwork);
 
         System.out.println(selectedFile);
     }
