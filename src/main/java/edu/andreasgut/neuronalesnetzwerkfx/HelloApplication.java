@@ -19,7 +19,7 @@ public class HelloApplication extends Application {
 
 
 
-        SourceImage sourceImage = new SourceImage("/images/numbers/0/","img_69.jpg", 20);
+        SourceImage sourceImage = new SourceImage("/images/numbers/0/img_69.jpg", 20);
 
         NeuralNetwork neuralNetwork = new NeuralNetwork(sourceImage.getNumberOfPixelForNeuralNetwork(), 2, 4, 10);
         neuralNetwork.startCalculations(sourceImage.getImageAs1DArray());

@@ -18,6 +18,7 @@ import java.io.File;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
 import java.text.DecimalFormat;
+import java.util.Arrays;
 import java.util.LinkedList;
 
 public class HelloController {
@@ -55,6 +56,7 @@ public class HelloController {
     private int circleRadius = 10;
 
     private NeuralNetwork neuralNetwork;
+
 
 
     public void initializeGUI(NeuralNetwork neuralNetwork){
@@ -184,20 +186,28 @@ public class HelloController {
     public void loadImage(){
 
         FileChooser fileChooser = new FileChooser();
-        try {
-            String resourcePath = Paths.get(getClass().getResource("/images/numbers").toURI()).toString();
-            fileChooser.setInitialDirectory(new File(resourcePath));
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
+
         File selectedFile = fileChooser.showOpenDialog(new Stage());
-        SourceImage sourceImage = new SourceImage("/images/numbers/0/", selectedFile.getName(), 20);
+        System.out.println(getPathFromResourceFolder(selectedFile.getAbsolutePath()));
+        SourceImage sourceImage = new SourceImage(getPathFromResourceFolder(selectedFile.getAbsolutePath()), 20);
         loadNewImage(sourceImage);
         neuralNetwork.startCalculations(sourceImage.getImageAs1DArray());
         initializeLayerAnchorPane(neuralNetwork);
 
-
         System.out.println(selectedFile);
+    }
+
+    private String getPathFromResourceFolder(String path){
+        String[] ebenen = path.split("/");
+        String[] letzteVierEbenen = Arrays.copyOfRange(ebenen, ebenen.length - 4, ebenen.length);
+        String relativePath = "";
+        for (String s: letzteVierEbenen) {
+
+            relativePath += ("/" + s);
+
+
+        }
+        return relativePath;
     }
 
 }

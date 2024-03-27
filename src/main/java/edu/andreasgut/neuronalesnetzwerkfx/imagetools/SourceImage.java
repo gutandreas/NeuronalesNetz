@@ -15,8 +15,8 @@ public class SourceImage {
     int targetWidth;
     int targetHeight;
 
-    public SourceImage(String folder, String filename, int targetWidth) {
-        original = new Image(String.valueOf(getClass().getResource(folder + filename)), 200, 200, true, false, false);
+    public SourceImage(String path, int targetWidth) {
+        original = new Image(path, 200, 200, true, false, false);
         ratio = original.getHeight() / original.getWidth();
         this.targetWidth = targetWidth;
         targetHeight = (int) (targetWidth * ratio);
