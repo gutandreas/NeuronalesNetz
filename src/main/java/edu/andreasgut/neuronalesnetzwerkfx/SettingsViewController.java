@@ -33,7 +33,7 @@ public class SettingsViewController {
 
         HelloController helloController = ViewManager.changeSceneInCurrentStageWithFXML("hello-view.fxml").getController();
         SourceImage sourceImage = new SourceImage("/images/numbers/0/img_69.jpg", targetWidth);
-        helloController.loadNewImage(sourceImage);
+        helloController.showImageInAnchorPane(sourceImage);
         NeuralNetwork neuralNetwork = new NeuralNetwork(sourceImage.getNumberOfPixelForNeuralNetwork(), 4, 6, 10);
         neuralNetwork.startCalculations(sourceImage.getImageAs1DArray());
         helloController.initializeGUI(neuralNetwork);

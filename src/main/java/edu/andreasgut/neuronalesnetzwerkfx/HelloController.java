@@ -5,8 +5,7 @@ import edu.andreasgut.neuronalesnetzwerkfx.core.*;
 import edu.andreasgut.neuronalesnetzwerkfx.imagetools.SourceImage;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -15,8 +14,6 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import java.io.File;
-import java.net.URISyntaxException;
-import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -28,6 +25,9 @@ public class HelloController {
     @FXML
     private VBox windowVBox;
 
+
+    @FXML
+    private Label fileNameLabel;
 
     @FXML
     private HBox mainHBox;
@@ -51,11 +51,22 @@ public class HelloController {
     private AnchorPane imageAnchorPane;
 
     @FXML
+    private GridPane newNetworkSettingGridPane;
+
+    @FXML
+    private ToggleGroup newNetworkGroup;
+
+    @FXML
+    private RadioButton newNetworkRadio;
+
+    @FXML
     private Button einzelbildButton;
 
     private int circleRadius = 10;
 
     private NeuralNetwork neuralNetwork;
+
+    private File currentSelectedFile;
 
 
 
@@ -72,7 +83,7 @@ public class HelloController {
         neuralNetwork.updateLineColorOfAllEdges();
     }
 
-    public void loadNewImage(SourceImage sourceImage){
+    public void showImageInAnchorPane(SourceImage sourceImage){
         Canvas canvas = sourceImage.getImageAsCanvas();
         imageAnchorPane.getChildren().add(canvas);
         sourceImage.getImageAsCanvas().setOnMouseClicked(event -> {
@@ -188,22 +199,51 @@ public class HelloController {
 
 
 
-    public void loadImage(){
+    public void selectFile(){
 
         FileChooser fileChooser = new FileChooser();
 
-        File selectedFile = fileChooser.showOpenDialog(new Stage());
-        System.out.println(getPathFromResourceFolder(selectedFile.getAbsolutePath()));
-        SourceImage sourceImage = new SourceImage(getPathFromResourceFolder(selectedFile.getAbsolutePath()), 7);
-        loadNewImage(sourceImage);
-        neuralNetwork.startCalculations(sourceImage.getImageAs1DArray());
-        initializeLayerAnchorPane(neuralNetwork);
+        currentSelectedFile = fileChooser.showOpenDialog(new Stage());
+        System.out.println(getPathFromResourceFolder(currentSelectedFile.getAbsolutePath()));
+        fileNameLabel.setText(currentSelectedFile.getName());
 
-        NeuralNetwork newNeuralNetwork = new NeuralNetwork(sourceImage.getNumberOfPixelForNeuralNetwork(), neuralNetwork.getNumberOfLayers()-2, neuralNetwork.getHiddenlayers().get(0).getNumberOfNodes(), neuralNetwork.getOutputlayer().getNumberOfNodes() );
-        newNeuralNetwork.startCalculations(sourceImage.getImageAs1DArray());
-        initializeGUI(newNeuralNetwork);
 
-        System.out.println(selectedFile);
+    }
+
+    public void loadImage(){
+
+        if (currentSelectedFile != null){
+            SourceImage sourceImage = new SourceImage(getPathFromResourceFolder(currentSelectedFile.getAbsolutePath()), 5);
+            showImageInAnchorPane(sourceImage);
+            neuralNetwork.startCalculations(sourceImage.getImageAs1DArray());
+            initializeLayerAnchorPane(neuralNetwork);
+
+            if (newNetworkGroup.getSelectedToggle().equals(newNetworkRadio)){
+                neuralNetwork = new NeuralNetwork(sourceImage.getNumberOfPixelForNeuralNetwork(), neuralNetwork.getNumberOfLayers()-2, neuralNetwork.getHiddenlayers().get(0).getNumberOfNodes(), neuralNetwork.getOutputlayer().getNumberOfNodes() );
+
+            }
+            neuralNetwork.startCalculations(sourceImage.getImageAs1DArray());
+            initializeGUI(neuralNetwork);
+        }
+        else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Keine Datei ausgewählt!");
+            alert.setHeaderText("Keine Datei ausgewählt!");
+            alert.setContentText("Wählen Sie zuerst eine Datei aus und laden Sie das Bild erneut.");
+            alert.showAndWait();
+
+        }
+
+
+
+    }
+
+    public void showNewNetworkSettings(){
+        newNetworkSettingGridPane.setVisible(true);
+    }
+
+    public void hideNewNetworkSettings(){
+        newNetworkSettingGridPane.setVisible(false);
     }
 
     private String getPathFromResourceFolder(String path){
