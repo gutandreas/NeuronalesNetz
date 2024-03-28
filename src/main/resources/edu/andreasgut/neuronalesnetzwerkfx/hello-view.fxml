@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="windowVBox" alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.andreasgut.neuronalesnetzwerkfx.HelloController">
+<VBox fx:id="windowVBox" alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.andreasgut.neuronalesnetzwerkfx.HelloController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
@@ -53,14 +53,14 @@
                                    </rowConstraints>
                                     <children>
                                        <Label text="Bildbreite:" />
-                                       <Slider GridPane.columnIndex="1" />
-                                       <Label text="Label" GridPane.columnIndex="2" />
+                                       <Slider fx:id="widthSlider" blockIncrement="1.0" majorTickUnit="1.0" max="10.0" min="3.0" minorTickCount="0" showTickLabels="true" showTickMarks="true" snapToTicks="true" GridPane.columnIndex="1" />
+                                       <Label fx:id="widthLabel" text="Label" GridPane.columnIndex="2" />
                                        <Label text="Layers:" GridPane.rowIndex="1" />
-                                       <Slider GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                       <Label text="Label" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                       <Slider fx:id="layerSlider" majorTickUnit="1.0" max="6.0" min="3.0" minorTickCount="0" showTickLabels="true" showTickMarks="true" snapToTicks="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                       <Label fx:id="layerLabel" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                                        <Label text="Neuronen in HL:" GridPane.rowIndex="2" />
-                                       <Slider GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                       <Label text="Label" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                       <Slider fx:id="neuronsSlider" majorTickUnit="1.0" max="10.0" min="2.0" minorTickCount="0" showTickLabels="true" showTickMarks="true" snapToTicks="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                       <Label fx:id="neuronsLabel" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                                     </children>
                                  </GridPane>
                                  <HBox prefHeight="100.0" prefWidth="200.0">

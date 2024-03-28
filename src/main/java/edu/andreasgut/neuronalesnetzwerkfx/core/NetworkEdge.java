@@ -17,7 +17,7 @@ public class NetworkEdge {
         this.from = from;
         this.to = to;
         Random random = new Random();
-        this.weight = random.nextDouble() * 0.7;
+        this.weight = random.nextDouble() * 0.5;
     }
 
     public NetworkNode getFrom() {

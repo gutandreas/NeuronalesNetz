@@ -3,6 +3,8 @@ package edu.andreasgut.neuronalesnetzwerkfx;
 import edu.andreasgut.neuronalesnetzwerkfx.core.*;
 
 import edu.andreasgut.neuronalesnetzwerkfx.imagetools.SourceImage;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
@@ -16,6 +18,7 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.Arrays;
+import java.util.EventListener;
 import java.util.LinkedList;
 
 public class HelloController {
@@ -28,6 +31,9 @@ public class HelloController {
 
     @FXML
     private Label fileNameLabel;
+
+    @FXML
+    private Label widthLabel;
 
     @FXML
     private HBox mainHBox;
@@ -68,6 +74,14 @@ public class HelloController {
 
     private File currentSelectedFile;
 
+    @FXML
+    private Slider widthSlider;
+
+    @FXML
+    private Slider layerSlider;
+
+    @FXML
+    private Slider neuronsSlider;
 
 
     public void initializeGUI(NeuralNetwork neuralNetwork){
@@ -213,15 +227,23 @@ public class HelloController {
     public void loadImage(){
 
         if (currentSelectedFile != null){
-            SourceImage sourceImage = new SourceImage(getPathFromResourceFolder(currentSelectedFile.getAbsolutePath()), 5);
+            SourceImage sourceImage;
+
+            if (newNetworkGroup.getSelectedToggle().equals(newNetworkRadio)){
+
+                int width = (int) widthSlider.getValue();
+                int hiddenLayers = (int) layerSlider.getValue() - 2;
+                int nodesInHiddenLayer = (int) neuronsSlider.getValue();
+                sourceImage  = new SourceImage(getPathFromResourceFolder(currentSelectedFile.getAbsolutePath()), width);
+                neuralNetwork = new NeuralNetwork(sourceImage.getNumberOfPixelForNeuralNetwork(), hiddenLayers, nodesInHiddenLayer, neuralNetwork.getOutputlayer().getNumberOfNodes() );
+
+            } else {
+                int width = (int) Math.sqrt(neuralNetwork.getInputlayer().getNumberOfNodes());
+                sourceImage  = new SourceImage(getPathFromResourceFolder(currentSelectedFile.getAbsolutePath()), width);
+            }
             showImageInAnchorPane(sourceImage);
             neuralNetwork.startCalculations(sourceImage.getImageAs1DArray());
             initializeLayerAnchorPane(neuralNetwork);
-
-            if (newNetworkGroup.getSelectedToggle().equals(newNetworkRadio)){
-                neuralNetwork = new NeuralNetwork(sourceImage.getNumberOfPixelForNeuralNetwork(), neuralNetwork.getNumberOfLayers()-2, neuralNetwork.getHiddenlayers().get(0).getNumberOfNodes(), neuralNetwork.getOutputlayer().getNumberOfNodes() );
-
-            }
             neuralNetwork.startCalculations(sourceImage.getImageAs1DArray());
             initializeGUI(neuralNetwork);
         }
@@ -237,6 +259,7 @@ public class HelloController {
 
 
     }
+
 
     public void showNewNetworkSettings(){
         newNetworkSettingGridPane.setVisible(true);
