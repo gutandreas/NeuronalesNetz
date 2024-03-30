@@ -79,9 +79,22 @@
                         </children></AnchorPane>
                </content>
              </Tab>
-             <Tab text="Bild anzeigen">
+             <Tab text="Trainieren">
                <content>
-                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <children>
+                           <HBox prefHeight="100.0" prefWidth="200.0">
+                              <children>
+                                 <VBox prefHeight="200.0" prefWidth="100.0">
+                                    <children>
+                                       <Button mnemonicParsing="false" onAction="#selectDirectory" text="Ordner laden" />
+                                       <Label fx:id="directoryLabel" text="Label" />
+                                    </children>
+                                 </VBox>
+                                 <Button mnemonicParsing="false" onAction="#loadDirectoryForTraining" text="Trainieren" />
+                              </children>
+                           </HBox>
+                        </children></AnchorPane>
                </content>
              </Tab>
            </tabs>

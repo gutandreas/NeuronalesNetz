@@ -3,8 +3,6 @@ package edu.andreasgut.neuronalesnetzwerkfx;
 import edu.andreasgut.neuronalesnetzwerkfx.core.*;
 
 import edu.andreasgut.neuronalesnetzwerkfx.imagetools.SourceImage;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
@@ -13,12 +11,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.Arrays;
-import java.util.EventListener;
 import java.util.LinkedList;
 
 public class HelloController {
@@ -31,6 +29,9 @@ public class HelloController {
 
     @FXML
     private Label fileNameLabel;
+
+    @FXML
+    private Label directoryLabel;
 
     @FXML
     private Label widthLabel;
@@ -73,6 +74,9 @@ public class HelloController {
     private NeuralNetwork neuralNetwork;
 
     private File currentSelectedFile;
+
+    private File selectedDirectory;
+
 
     @FXML
     private Slider widthSlider;
@@ -256,7 +260,40 @@ public class HelloController {
 
         }
 
+    }
 
+    public void selectDirectory(){
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle("Select Folder");
+
+        selectedDirectory = directoryChooser.showDialog(new Stage());
+
+        System.out.println(getPathFromResourceFolder(selectedDirectory.getAbsolutePath()));
+        directoryLabel.setText(selectedDirectory.getName());
+
+    }
+
+    public void loadDirectoryForTraining(){
+
+        if (selectedDirectory != null && selectedDirectory.isDirectory()) {
+            int indexOfCorrectNode = Integer.parseInt(selectedDirectory.getName());
+            double learningRate = 0.001;
+            NetworkNode correctNode = neuralNetwork.getOutputlayer().getNodes().get(indexOfCorrectNode);
+            File[] files = selectedDirectory.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    if (file.isDirectory()) {
+                        System.out.println("Verzeichnis: " + file.getName());
+
+                    } else {
+                        System.out.println("Datei: " + file.getName());
+                        neuralNetwork.getOutputlayer().learn(correctNode, learningRate, true);
+                        System.out.println("Training durchgeführt");
+                    }
+                }
+            }
+            updateGUI();
+        }
 
     }
 
