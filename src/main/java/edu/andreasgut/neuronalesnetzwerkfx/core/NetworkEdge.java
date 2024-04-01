@@ -17,7 +17,7 @@ public class NetworkEdge {
         this.from = from;
         this.to = to;
         Random random = new Random();
-        this.weight = random.nextDouble() * 0.5;
+        this.weight = random.nextDouble() * 2 - 1;
     }
 
     public NetworkNode getFrom() {
@@ -51,7 +51,7 @@ public class NetworkEdge {
     }
 
     public void updateLineWeightGraphic(){
-        line.setStrokeWidth(Math.min(5, weight*3));
+        line.setStrokeWidth(Math.min(5, Math.abs(weight*3)));
     }
 
     public void updateLineColor(){

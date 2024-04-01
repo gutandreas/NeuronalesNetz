@@ -161,7 +161,7 @@ public class HelloController {
     private void activateLearningClick(NetworkNode node, double learningRate){
         node.getGraphicGroup().setOnMouseClicked(event -> {
 
-            neuralNetwork.getOutputlayer().learn(node, learningRate, true);
+            neuralNetwork.getOutputlayer().adjustWeigths(node, learningRate, true);
         });
 
     }
@@ -286,8 +286,11 @@ public class HelloController {
                         System.out.println("Verzeichnis: " + file.getName());
 
                     } else {
+                        int width = (int) Math.sqrt(neuralNetwork.getInputlayer().getNumberOfNodes());
+                        SourceImage sourceImage = new SourceImage(getPathFromResourceFolder(file.getAbsolutePath()), width);
                         System.out.println("Datei: " + file.getName());
-                        neuralNetwork.getOutputlayer().learn(correctNode, learningRate, true);
+                        neuralNetwork.startCalculations(sourceImage.getImageAs1DArray());
+                        neuralNetwork.getOutputlayer().adjustWeigths(correctNode, learningRate, true);
                         System.out.println("Training durchgeführt");
                     }
                 }

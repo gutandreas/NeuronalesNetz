@@ -4,8 +4,6 @@ import edu.andreasgut.neuronalesnetzwerkfx.core.*;
 import edu.andreasgut.neuronalesnetzwerkfx.imagetools.SourceImage;
 import edu.andreasgut.neuronalesnetzwerkfx.view.ViewManager;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -46,7 +44,7 @@ public class HelloApplication extends Application {
         for (TrainingObject trainingObject : trainingObjects){
             int maxIndex = trainingObject.getMaxIndex();
             NetworkNode node = outputlayer.getNodes().get(maxIndex);
-            outputlayer.learn(node, 0.01, true);
+            outputlayer.adjustWeigths(node, 0.01, true);
         }
     }
 }

@@ -30,7 +30,7 @@ public abstract class Layer {
         return nodes.size();
     }
 
-    public void learn(NetworkNode correctNode, double learningRate, boolean outputLayer) {
+    public void adjustWeigths(NetworkNode correctNode, double learningRate, boolean outputLayer) {
 
         for (NetworkNode node : getNodes()) {
             for (NetworkEdge inputEdge : node.getInputEdges()) {
@@ -41,16 +41,14 @@ public abstract class Layer {
                 //                = sigmoid(input) * (1 - sigmoid(input)) * (target - output)
                 //                = output * (1 - output) * (target - output)
 
-
-
                 if (outputLayer) {
                     double target;
                     double sigmoidDerivation = node.getOutput() * (1 - node.getOutput());
                     if (node == correctNode){
-                        target = 5;
+                        target = 0.9;
                     }
                     else {
-                        target = 0.2;
+                        target = 0.1;
                     }
                     double error = target - node.getOutput();
                     node.setDelta(sigmoidDerivation * error);
