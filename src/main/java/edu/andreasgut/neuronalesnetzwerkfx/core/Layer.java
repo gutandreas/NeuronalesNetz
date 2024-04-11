@@ -45,10 +45,10 @@ public abstract class Layer {
                     double target;
                     double sigmoidDerivation = node.getOutput() * (1 - node.getOutput());
                     if (node == correctNode){
-                        target = 0.9;
+                        target = 1;
                     }
                     else {
-                        target = 0.1;
+                        target = 0.2;
                     }
                     double error = target - node.getOutput();
                     node.setDelta(sigmoidDerivation * error);

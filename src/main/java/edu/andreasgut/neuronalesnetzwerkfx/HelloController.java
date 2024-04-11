@@ -69,6 +69,9 @@ public class HelloController {
     @FXML
     private Button einzelbildButton;
 
+    @FXML
+    private MenuButton correctOutputMenu;
+
     private int circleRadius = 10;
 
     private NeuralNetwork neuralNetwork;
@@ -76,6 +79,8 @@ public class HelloController {
     private File currentSelectedFile;
 
     private File selectedDirectory;
+
+    private int selectedCorrectOutput;
 
 
     @FXML
@@ -86,6 +91,12 @@ public class HelloController {
 
     @FXML
     private Slider neuronsSlider;
+
+    @FXML
+    private Slider outputSlider;
+
+    @FXML
+    private Slider learningRateSlider;
 
 
     public void initializeGUI(NeuralNetwork neuralNetwork){
@@ -99,6 +110,23 @@ public class HelloController {
     public void updateGUI(){
         initializeLayerAnchorPane(neuralNetwork);
         neuralNetwork.updateLineColorOfAllEdges();
+        updateCorrectOutputMenu();
+
+    }
+
+    private void updateCorrectOutputMenu(){
+        correctOutputMenu.getItems().clear();
+        for (int i = 0; i < neuralNetwork.getOutputlayer().getNumberOfNodes(); i++){
+            MenuItem menuItem = new MenuItem(i+"");
+            int finalI = i;
+            menuItem.setOnAction(event -> {
+                selectedCorrectOutput = finalI;
+                correctOutputMenu.setText(finalI+"");
+            });
+
+            correctOutputMenu.getItems().add(menuItem);
+        }
+
     }
 
     public void showImageInAnchorPane(SourceImage sourceImage){
@@ -151,7 +179,7 @@ public class HelloController {
             AnchorPane.setTopAnchor(node.getGraphicGroup(), y);
             AnchorPane.setLeftAnchor(node.getGraphicGroup(), x);
             if (outputLayer){
-                activateLearningClick(node, 0.01);
+                activateLearningClick(node, learningRateSlider.getValue());
             }
 
             y += deltaY;
@@ -233,18 +261,9 @@ public class HelloController {
         if (currentSelectedFile != null){
             SourceImage sourceImage;
 
-            if (newNetworkGroup.getSelectedToggle().equals(newNetworkRadio)){
 
-                int width = (int) widthSlider.getValue();
-                int hiddenLayers = (int) layerSlider.getValue() - 2;
-                int nodesInHiddenLayer = (int) neuronsSlider.getValue();
-                sourceImage  = new SourceImage(getPathFromResourceFolder(currentSelectedFile.getAbsolutePath()), width);
-                neuralNetwork = new NeuralNetwork(sourceImage.getNumberOfPixelForNeuralNetwork(), hiddenLayers, nodesInHiddenLayer, neuralNetwork.getOutputlayer().getNumberOfNodes() );
-
-            } else {
-                int width = (int) Math.sqrt(neuralNetwork.getInputlayer().getNumberOfNodes());
-                sourceImage  = new SourceImage(getPathFromResourceFolder(currentSelectedFile.getAbsolutePath()), width);
-            }
+            int width = (int) Math.sqrt(neuralNetwork.getInputlayer().getNumberOfNodes());
+            sourceImage  = new SourceImage(getPathFromResourceFolder(currentSelectedFile.getAbsolutePath()), width);
             showImageInAnchorPane(sourceImage);
             neuralNetwork.startCalculations(sourceImage.getImageAs1DArray());
             initializeLayerAnchorPane(neuralNetwork);
@@ -262,6 +281,19 @@ public class HelloController {
 
     }
 
+    public void loadNetwork(){
+
+        int width = (int) widthSlider.getValue();
+        int hiddenLayers = (int) layerSlider.getValue() - 2;
+        int nodesInHiddenLayer = (int) neuronsSlider.getValue();
+        int numberOfOutputs = (int) outputSlider.getValue();
+        neuralNetwork = new NeuralNetwork(width*width, hiddenLayers, nodesInHiddenLayer, numberOfOutputs);
+        SourceImage sourceImage = new SourceImage("/images/default/default1.png", width);
+        showImageInAnchorPane(sourceImage);
+        neuralNetwork.startCalculations(sourceImage.getImageAs1DArray());
+        initializeGUI(neuralNetwork);
+    }
+
     public void selectDirectory(){
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Select Folder");
@@ -276,9 +308,9 @@ public class HelloController {
     public void loadDirectoryForTraining(){
 
         if (selectedDirectory != null && selectedDirectory.isDirectory()) {
-            int indexOfCorrectNode = Integer.parseInt(selectedDirectory.getName());
             double learningRate = 0.001;
-            NetworkNode correctNode = neuralNetwork.getOutputlayer().getNodes().get(indexOfCorrectNode);
+            System.out.println(selectedCorrectOutput);
+            NetworkNode correctNode = neuralNetwork.getOutputlayer().getNodes().get(selectedCorrectOutput);
             File[] files = selectedDirectory.listFiles();
             if (files != null) {
                 for (File file : files) {
@@ -299,6 +331,8 @@ public class HelloController {
         }
 
     }
+
+
 
 
     public void showNewNetworkSettings(){

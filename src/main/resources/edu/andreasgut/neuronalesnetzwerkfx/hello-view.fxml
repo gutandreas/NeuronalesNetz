@@ -3,11 +3,10 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -23,6 +22,41 @@
       <children>
          <TabPane prefHeight="500.0" prefWidth="500.0" tabClosingPolicy="UNAVAILABLE">
            <tabs>
+               <Tab text="Neues Netz laden">
+                 <content>
+                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <children>
+                           <GridPane fx:id="newNetworkSettingGridPane">
+                             <columnConstraints>
+                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                             </columnConstraints>
+                             <rowConstraints>
+                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                             </rowConstraints>
+                              <children>
+                                 <Label text="Bildbreite:" />
+                                 <Slider fx:id="widthSlider" blockIncrement="1.0" majorTickUnit="1.0" max="10.0" min="3.0" minorTickCount="0" showTickLabels="true" showTickMarks="true" snapToTicks="true" GridPane.columnIndex="1" />
+                                 <Label fx:id="widthLabel" text="Label" GridPane.columnIndex="2" />
+                                 <Label text="Layers:" GridPane.rowIndex="1" />
+                                 <Slider fx:id="layerSlider" majorTickUnit="1.0" max="6.0" min="3.0" minorTickCount="0" showTickLabels="true" showTickMarks="true" snapToTicks="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                 <Label fx:id="layerLabel" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                 <Label text="Neuronen in HL:" GridPane.rowIndex="2" />
+                                 <Slider fx:id="neuronsSlider" majorTickUnit="1.0" max="10.0" min="2.0" minorTickCount="0" showTickLabels="true" showTickMarks="true" snapToTicks="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                 <Label fx:id="neuronsLabel" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                 <Label text="Neuronen in OL:" GridPane.rowIndex="3" />
+                                 <Slider fx:id="outputSlider" majorTickUnit="1.0" max="10.0" min="2.0" minorTickCount="0" showTickLabels="true" showTickMarks="true" snapToTicks="true" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                 <Button mnemonicParsing="false" onAction="#loadNetwork" text="Netz erstellen" GridPane.rowIndex="4" />
+                              </children>
+                           </GridPane>
+                        </children></AnchorPane>
+                 </content>
+               </Tab>
              <Tab text="Bild laden">
                <content>
                  <AnchorPane minHeight="0.0" minWidth="0.0">
@@ -30,39 +64,6 @@
                            <VBox>
                               <children>
                                  <AnchorPane fx:id="imageAnchorPane" prefHeight="200.0" prefWidth="600.0" />
-                                 <HBox prefHeight="100.0" prefWidth="200.0">
-                                    <children>
-                                       <RadioButton fx:id="currentNetworkRadio" mnemonicParsing="false" onAction="#hideNewNetworkSettings" selected="true" text="Aktuelles Netz beha">
-                                          <toggleGroup>
-                                             <ToggleGroup fx:id="newNetworkGroup" />
-                                          </toggleGroup></RadioButton>
-                                       <RadioButton fx:id="newNetworkRadio" mnemonicParsing="false" onAction="#showNewNetworkSettings" text="Neues Netz laden" toggleGroup="$newNetworkGroup" />
-                                    </children>
-                                 </HBox>
-                                 <GridPane fx:id="newNetworkSettingGridPane" visible="false">
-                                   <columnConstraints>
-                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                   </columnConstraints>
-                                   <rowConstraints>
-                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                   </rowConstraints>
-                                    <children>
-                                       <Label text="Bildbreite:" />
-                                       <Slider fx:id="widthSlider" blockIncrement="1.0" majorTickUnit="1.0" max="10.0" min="3.0" minorTickCount="0" showTickLabels="true" showTickMarks="true" snapToTicks="true" GridPane.columnIndex="1" />
-                                       <Label fx:id="widthLabel" text="Label" GridPane.columnIndex="2" />
-                                       <Label text="Layers:" GridPane.rowIndex="1" />
-                                       <Slider fx:id="layerSlider" majorTickUnit="1.0" max="6.0" min="3.0" minorTickCount="0" showTickLabels="true" showTickMarks="true" snapToTicks="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                       <Label fx:id="layerLabel" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                                       <Label text="Neuronen in HL:" GridPane.rowIndex="2" />
-                                       <Slider fx:id="neuronsSlider" majorTickUnit="1.0" max="10.0" min="2.0" minorTickCount="0" showTickLabels="true" showTickMarks="true" snapToTicks="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                       <Label fx:id="neuronsLabel" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                                    </children>
-                                 </GridPane>
                                  <HBox prefHeight="100.0" prefWidth="200.0">
                                     <children>
                                        <VBox prefHeight="200.0" prefWidth="100.0">
@@ -81,16 +82,18 @@
              </Tab>
              <Tab text="Trainieren">
                <content>
-                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                 <AnchorPane minHeight="0.0" minWidth="0.0">
                         <children>
-                           <HBox prefHeight="100.0" prefWidth="200.0">
+                           <HBox>
                               <children>
-                                 <VBox prefHeight="200.0" prefWidth="100.0">
+                                 <VBox prefHeight="200.0">
                                     <children>
                                        <Button mnemonicParsing="false" onAction="#selectDirectory" text="Ordner laden" />
                                        <Label fx:id="directoryLabel" text="Label" />
                                     </children>
                                  </VBox>
+                                 <MenuButton fx:id="correctOutputMenu" mnemonicParsing="false" text="Korrekter Output" />
+                                 <Slider fx:id="learningRateSlider" blockIncrement="9.0" majorTickUnit="0.01" max="0.5" min="0.01" minorTickCount="0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="0.1" />
                                  <Button mnemonicParsing="false" onAction="#loadDirectoryForTraining" text="Trainieren" />
                               </children>
                            </HBox>

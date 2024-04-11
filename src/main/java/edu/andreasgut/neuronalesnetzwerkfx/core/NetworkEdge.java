@@ -56,10 +56,10 @@ public class NetworkEdge {
 
     public void updateLineColor(){
         if (getWeight() > 0){
-            line.setStroke(Color.rgb(defineColor( 255), defineColor(255), defineColor(100)));
+            line.setStroke(Color.rgb(defineColor( 255), defineColor(255), defineColor(0)));
         }
         else {
-            line.setStroke(Color.rgb(defineColor( 255), defineColor(0), defineColor(100)));
+            line.setStroke(Color.rgb(defineColor( 255), defineColor(0), defineColor(0)));
         }
     }
 
