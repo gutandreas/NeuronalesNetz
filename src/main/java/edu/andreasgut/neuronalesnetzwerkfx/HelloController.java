@@ -160,6 +160,16 @@ public class HelloController {
 
     private void initializeLayerInAnchorPane(NeuralNetwork neuralNetwork, Layer layer, int layerNumber, int red, int green, int blue, boolean outputLayer){
 
+        double circleRadius;
+
+        if (layer.getNumberOfNodes() > 40){
+            circleRadius = 3;
+        } else if (layer.getNumberOfNodes() > 30) {
+            circleRadius = 5;
+        } else {
+            circleRadius = 10;
+        }
+
         double deltaY = layerAnchorPane.getPrefHeight() / (layer.getNumberOfNodes()+1);
         double deltaX = layerAnchorPane.getPrefWidth() / neuralNetwork.getNumberOfLayers();
         double x = deltaX * layerNumber + circleRadius;
