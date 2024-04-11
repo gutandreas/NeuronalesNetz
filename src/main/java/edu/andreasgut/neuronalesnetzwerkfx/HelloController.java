@@ -183,6 +183,19 @@ public class HelloController {
                 layerAnchorPane.getChildren().remove(node.getGraphicGroup());
             }
             Circle circle = new Circle(circleRadius, Color.rgb(red, green, blue, node.getOutput()));
+
+            Text textNode = new Text();
+            circle.setOnMouseEntered(event -> {
+                textNode.setText("Output: " + node.getOutput());
+                layerAnchorPane.getChildren().add(textNode);
+                circle.setStroke(Color.YELLOW);
+                circle.setStrokeWidth(2);
+            });
+
+            circle.setOnMouseExited(event -> {
+                layerAnchorPane.getChildren().remove(textNode);
+                circle.setStrokeWidth(0);
+            });
             Text text = new Text(roundedValue);
             node.updateNodeGraphic(circle, text);
             layerAnchorPane.getChildren().add(node.getGraphicGroup());
