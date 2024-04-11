@@ -197,7 +197,7 @@ public class HelloController {
                         line.setOnMouseEntered(event -> {
                             line.setStrokeWidth(line.getStrokeWidth() * 3);
                             line.setStroke(Color.rgb(0, 255, 255));
-                            textWeight.setText(edge.getWeight() + "");
+                            textWeight.setText("Gewicht:" + edge.getWeight() + "\nOutput: " + edge.getFrom().getOutput());
                             layerAnchorPane.getChildren().add(textWeight);
                         });
                         line.setOnMouseExited(event -> {

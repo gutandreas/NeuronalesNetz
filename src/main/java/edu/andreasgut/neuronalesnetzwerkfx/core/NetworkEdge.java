@@ -55,16 +55,20 @@ public class NetworkEdge {
     }
 
     public void updateLineColor(){
-        line.setStroke(Color.rgb(defineColor( 255), defineColor(255), defineColor(100)));
+        if (getWeight() > 0){
+            line.setStroke(Color.rgb(defineColor( 255), defineColor(255), defineColor(100)));
+        }
+        else {
+            line.setStroke(Color.rgb(defineColor( 255), defineColor(0), defineColor(100)));
+        }
     }
 
     private int defineColor(int maxValue) {
-        double percentage = getFrom().getOutput();
+        double percentage = Math.abs(getFrom().getOutput());
 
         double colorValue = percentage * maxValue;
 
         colorValue = colorValue > 255 ? 255 : colorValue;
-        colorValue = colorValue < 0 ? 0 : colorValue;
 
         return (int) Math.round(colorValue);
     }
