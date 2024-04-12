@@ -7,7 +7,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 public class ViewManager {
@@ -36,6 +35,7 @@ public class ViewManager {
         stageMap.put(stageName, stage);
         try {
             Scene scene = new Scene(fxmlLoader.load(), 1000, 800);
+            scene.getStylesheets().add(ViewManager.class.getResource("/styles/style.css").toExternalForm());
             stage.setScene(scene);
             sceneFXMLLoaderMap.put(scene, fxmlLoader);
         } catch (IOException e) {
@@ -54,6 +54,7 @@ public class ViewManager {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource(fxmlFileName));
         try {
             Scene scene = new Scene(fxmlLoader.load(), 1000, 800);
+            scene.getStylesheets().add(ViewManager.class.getResource("/styles/style.css").toExternalForm());
             currentStage.setScene(scene);
             sceneFXMLLoaderMap.put(scene, fxmlLoader);
         } catch (IOException e) {

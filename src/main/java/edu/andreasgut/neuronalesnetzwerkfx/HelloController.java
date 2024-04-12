@@ -183,18 +183,20 @@ public class HelloController {
                 layerAnchorPane.getChildren().remove(node.getGraphicGroup());
             }
             Circle circle = new Circle(circleRadius, Color.rgb(red, green, blue, node.getOutput()));
+            circle.setStroke(Color.GRAY);
+            circle.setStrokeWidth(2);
 
             Text textNode = new Text();
+            textNode.getStyleClass().add("node-number");
             circle.setOnMouseEntered(event -> {
-                textNode.setText("Output: " + node.getOutput());
+                textNode.setText("Neuron\nOutput: " + node.getOutput());
                 layerAnchorPane.getChildren().add(textNode);
-                circle.setStroke(Color.YELLOW);
-                circle.setStrokeWidth(2);
+                circle.setStroke(Color.WHITE);
             });
 
             circle.setOnMouseExited(event -> {
                 layerAnchorPane.getChildren().remove(textNode);
-                circle.setStrokeWidth(0);
+                circle.setStroke(Color.GRAY);
             });
             Text text = new Text(roundedValue);
             node.updateNodeGraphic(circle, text);
@@ -243,6 +245,7 @@ public class HelloController {
                     edge.updateLineWeightGraphic();
 
                     Text textWeight = new Text();
+                    textWeight.getStyleClass().add("node-number");
 
                     if (line.getOnMouseEntered() == null) {
                         line.setOnMouseEntered(event -> {

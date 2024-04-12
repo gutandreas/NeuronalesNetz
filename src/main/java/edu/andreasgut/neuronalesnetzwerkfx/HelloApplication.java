@@ -12,8 +12,9 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
 
+
         //HelloController helloController = ViewManager.addStageWithFXML("Neuronales Netz", "mainStage", "hello-view.fxml").getController();
-        SettingsViewController settingsViewController = ViewManager.addStageWithFXML("Neuronales Netz", "mainStage", "settings-view.fxml").getController();
+        SettingsViewController settingsViewController = ViewManager.addStageWithFXML("Neuronales Netz", "mainStage", "hello-view.fxml").getController();
 
 
 

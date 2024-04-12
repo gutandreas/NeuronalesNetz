@@ -18,7 +18,7 @@
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
-   <HBox>
+   <HBox fx:id="mainHBox">
       <children>
          <TabPane prefHeight="500.0" prefWidth="500.0" tabClosingPolicy="UNAVAILABLE">
            <tabs>
@@ -26,7 +26,7 @@
                  <content>
                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                         <children>
-                           <GridPane fx:id="newNetworkSettingGridPane">
+                           <GridPane fx:id="newNetworkSettingGridPane" hgap="10.0" vgap="10.0">
                              <columnConstraints>
                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -40,7 +40,10 @@
                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                              </rowConstraints>
                               <children>
-                                 <Label text="Bildbreite:" />
+                                 <Label text="Bildbreite:">
+                                    <GridPane.margin>
+                                       <Insets />
+                                    </GridPane.margin></Label>
                                  <Slider fx:id="widthSlider" blockIncrement="1.0" majorTickUnit="1.0" max="10.0" min="3.0" minorTickCount="0" showTickLabels="true" showTickMarks="true" snapToTicks="true" GridPane.columnIndex="1" />
                                  <Label fx:id="widthLabel" text="Label" GridPane.columnIndex="2" />
                                  <Label text="Layers:" GridPane.rowIndex="1" />
@@ -53,6 +56,9 @@
                                  <Slider fx:id="outputSlider" majorTickUnit="1.0" max="10.0" min="2.0" minorTickCount="0" showTickLabels="true" showTickMarks="true" snapToTicks="true" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                  <Button mnemonicParsing="false" onAction="#loadNetwork" text="Netz erstellen" GridPane.rowIndex="4" />
                               </children>
+                              <padding>
+                                 <Insets top="10.0" />
+                              </padding>
                            </GridPane>
                         </children></AnchorPane>
                  </content>
