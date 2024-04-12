@@ -45,10 +45,10 @@ public abstract class Layer {
                     double target;
                     double sigmoidDerivation = node.getOutput() * (1 - node.getOutput());
                     if (node == correctNode){
-                        target = 1;
+                        target = 0.9;
                     }
                     else {
-                        target = 0.2;
+                        target = 0.1;
                     }
                     double error = target - node.getOutput();
                     node.setDelta(sigmoidDerivation * error);
@@ -62,9 +62,9 @@ public abstract class Layer {
                 double correctedWeight = inputEdge.getWeight() + learningRate * node.getDelta() * inputEdge.getFrom().getOutput();
                 inputEdge.setWeight(correctedWeight);
                 inputEdge.updateLineWeightGraphic();
-               /* if (neuralNetwork.getPreviousLayer(this) != null){
-                    neuralNetwork.getPreviousLayer(this).learn(node, learningRate, false);
-                };*/
+                if (neuralNetwork.getPreviousLayer(this) != null){
+                    neuralNetwork.getPreviousLayer(this).adjustWeigths(node, learningRate, false);
+                }
 
             }
         }
