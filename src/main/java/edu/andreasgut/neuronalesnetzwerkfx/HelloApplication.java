@@ -14,14 +14,15 @@ public class HelloApplication extends Application {
 
 
         //HelloController helloController = ViewManager.addStageWithFXML("Neuronales Netz", "mainStage", "hello-view.fxml").getController();
-        SettingsViewController settingsViewController = ViewManager.addStageWithFXML("Neuronales Netz", "mainStage", "hello-view.fxml").getController();
+        HelloController controller = ViewManager.addStageWithFXML("Neuronales Netz", "mainStage", "hello-view.fxml").getController();
 
-
-
-        SourceImage sourceImage = new SourceImage("/images/numbers/0/img_69.jpg", 20);
-
-        NeuralNetwork neuralNetwork = new NeuralNetwork(sourceImage.getNumberOfPixelForNeuralNetwork(), 2, 4, 10);
+        SourceImage sourceImage = new SourceImage("/images/default/default1.png", 6);
+        controller.showImageInAnchorPane(sourceImage);
+        NeuralNetwork neuralNetwork = new NeuralNetwork(sourceImage.getNumberOfPixelForNeuralNetwork(), 4, 6, 10);
         neuralNetwork.startCalculations(sourceImage.getImageAs1DArray());
+        controller.initializeGUI(neuralNetwork);
+
+
 
 
         //helloController.initializeGUI(neuralNetwork);
