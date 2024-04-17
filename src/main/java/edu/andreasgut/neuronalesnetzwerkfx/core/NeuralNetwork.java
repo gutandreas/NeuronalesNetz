@@ -1,12 +1,15 @@
 package edu.andreasgut.neuronalesnetzwerkfx.core;
 
 import java.util.LinkedList;
+import java.util.Random;
 
 public class NeuralNetwork {
 
     Inputlayer inputlayer;
     LinkedList<Hiddenlayer> hiddenlayers = new LinkedList<>();
     Outputlayer outputlayer;
+    LinkedList<NetworkEdge> selectedEdges = new LinkedList<>();
+    double error;
 
     public NeuralNetwork(int numberOfInputNodes, int numberOfHiddenLayers, int numberOfHiddenLayerNodes, int numberOfOutputNodes) {
         this.inputlayer = new Inputlayer(numberOfInputNodes, this);
@@ -59,6 +62,10 @@ public class NeuralNetwork {
         return Math.max(Math.max(inputlayer.getNumberOfNodes(), hiddenlayers.get(0).getNumberOfNodes()), outputlayer.getNumberOfNodes());
     }
 
+    public LinkedList<NetworkEdge> getSelectedEdges() {
+        return selectedEdges;
+    }
+
     public void updateLineColorOfAllEdges(){
         for (NetworkEdge edge : getAllEdges()){
             edge.updateLineColor();
@@ -77,6 +84,27 @@ public class NeuralNetwork {
         return listOfEdges;
     }
 
+    public void adjustWeightsOfSelectedEdgesRandomly(){
+        System.out.println("Anzahl angepasster Gewichte: " + selectedEdges.size());
+        Random random = new Random();
+        for (NetworkEdge edge : selectedEdges){
+            edge.setWeight(random.nextDouble() * 2 - 1);
+        }
+    }
+
+    public void selectRandomEdges(double percentage){
+        selectedEdges.clear();
+        int numberOfEdgesToSelect = (int) Math.round(getAllEdges().size() * percentage / 100);
+        System.out.println("Anzahl ausgewählter Kanten: " + numberOfEdgesToSelect);
+        Random random = new Random();
+        while (selectedEdges.size() < numberOfEdgesToSelect){
+            NetworkEdge randomEdge = getAllEdges().get(random.nextInt(getAllEdges().size()));
+            if (!selectedEdges.contains(randomEdge)){
+                selectedEdges.add(randomEdge);
+            }
+        }
+    }
+
     public LinkedList<Layer> getAllLayers(){
         LinkedList<Layer> layers = new LinkedList<>();
         layers.add(inputlayer);
@@ -86,5 +114,32 @@ public class NeuralNetwork {
         layers.add(outputlayer);
 
         return layers;
+    }
+
+    public void train(double[][] inputs, int[] indexOfCorrectOutput){
+
+        if (inputs.length != indexOfCorrectOutput.length){
+            System.out.println("Anzahl Objekte stimmt nicht mit der Anzahl Indizes überein");
+        }
+        else {
+            for (int i = 0; i < inputs.length; i++) {
+                startCalculations(inputs[i]);
+                double error = 0;
+                for (int j = 0; j < getOutputlayer().getNumberOfNodes(); j++){
+                    double target;
+                    if (j == indexOfCorrectOutput[i]){
+                        target = 1;
+                    }
+                    else {
+                        target = 0;
+                    }
+                    error += Math.sqrt(target-getOutputlayer().getNodes().get(j).getOutput());
+                }
+
+            }
+
+        }
+
+
     }
 }

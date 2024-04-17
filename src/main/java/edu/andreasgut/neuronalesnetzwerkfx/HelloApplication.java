@@ -23,8 +23,6 @@ public class HelloApplication extends Application {
         controller.initializeGUI(neuralNetwork);
 
 
-
-
         //helloController.initializeGUI(neuralNetwork);
         //helloController.loadNewImage(sourceImage);
         //train(neuralNetwork);

@@ -1,6 +1,7 @@
 package edu.andreasgut.neuronalesnetzwerkfx.core;
 
 import java.util.LinkedList;
+import java.util.Random;
 
 public abstract class Layer {
 
@@ -29,6 +30,8 @@ public abstract class Layer {
     public int getNumberOfNodes(){
         return nodes.size();
     }
+
+
 
     public void adjustWeigths(NetworkNode correctNode, double learningRate, boolean outputLayer) {
 

@@ -108,25 +108,40 @@
                <content>
                  <AnchorPane minHeight="0.0" minWidth="0.0">
                         <children>
-                           <HBox spacing="10.0">
+                           <VBox>
                               <children>
-                                 <VBox prefHeight="200.0" spacing="10.0">
+                                 <HBox>
                                     <children>
-                                       <Button mnemonicParsing="false" onAction="#selectDirectory" text="Ordner laden" />
-                                       <Label fx:id="directoryLabel" text="Label" />
+                                       <HBox prefHeight="100.0" prefWidth="200.0">
+                                          <children>
+                                             <Label text="Prozentualer Anteil der Kanten: " />
+                                             <Slider fx:id="percentSlider" majorTickUnit="10.0" minorTickCount="5" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="20.0" />
+                                          </children>
+                                       </HBox>
+                                       <Button fx:id="randomlyChangeButton" mnemonicParsing="false" onAction="#randomlyChange" text="Gewichte zufällig ändern" />
                                     </children>
-                                    <HBox.margin>
-                                       <Insets />
-                                    </HBox.margin>
-                                 </VBox>
-                                 <MenuButton fx:id="correctOutputMenu" minWidth="100.0" mnemonicParsing="false" text="Korrekter Output" />
-                                 <Slider fx:id="learningRateSlider" blockIncrement="9.0" majorTickUnit="0.01" max="0.5" min="0.01" minorTickCount="0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="0.1" />
-                                 <Button mnemonicParsing="false" onAction="#loadDirectoryForTraining" text="Trainieren" />
+                                 </HBox>
+                                 <HBox disable="true" spacing="10.0">
+                                    <children>
+                                       <VBox prefHeight="200.0" spacing="10.0">
+                                          <children>
+                                             <Button mnemonicParsing="false" onAction="#selectDirectory" text="Ordner laden" />
+                                             <Label fx:id="directoryLabel" text="Label" />
+                                          </children>
+                                          <HBox.margin>
+                                             <Insets />
+                                          </HBox.margin>
+                                       </VBox>
+                                       <MenuButton fx:id="correctOutputMenu" minWidth="100.0" mnemonicParsing="false" text="Korrekter Output" />
+                                       <Slider fx:id="learningRateSlider" blockIncrement="9.0" majorTickUnit="0.01" max="0.5" min="0.01" minorTickCount="0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="0.1" />
+                                       <Button mnemonicParsing="false" onAction="#loadDirectoryForTraining" text="Trainieren" />
+                                    </children>
+                                    <padding>
+                                       <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                    </padding>
+                                 </HBox>
                               </children>
-                              <padding>
-                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                              </padding>
-                           </HBox>
+                           </VBox>
                         </children></AnchorPane>
                </content>
              </Tab>

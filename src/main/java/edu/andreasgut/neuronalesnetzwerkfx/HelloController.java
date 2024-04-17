@@ -98,6 +98,25 @@ public class HelloController {
     @FXML
     private Slider learningRateSlider;
 
+    @FXML
+    private Slider percentSlider;
+
+    @FXML
+    private Button randomlyChangeButton;
+
+
+    public void initialize() {
+
+        percentSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+
+            updateGUI();
+            neuralNetwork.selectRandomEdges(percentSlider.getValue());
+            highlightSelectedEdges();
+
+
+        });
+
+    }
 
     public void initializeGUI(NeuralNetwork neuralNetwork){
         layerAnchorPane.getChildren().clear();
@@ -105,6 +124,14 @@ public class HelloController {
         initializeLayerAnchorPane(neuralNetwork);
         initializeLines(neuralNetwork);
         updateGUI();
+    }
+
+    public void highlightSelectedEdges(){
+        for (NetworkEdge edge : neuralNetwork.getSelectedEdges()) {
+
+            edge.getLine().setStroke(Color.BLUE);
+
+        }
     }
 
     public void updateGUI(){
@@ -355,6 +382,17 @@ public class HelloController {
             }
             updateGUI();
         }
+
+    }
+
+    public void randomlyChange(){
+        neuralNetwork.adjustWeightsOfSelectedEdgesRandomly();
+        updateGUI();
+    }
+
+    public void selectRandomEdges(){
+        neuralNetwork.selectRandomEdges(percentSlider.getValue());
+        updateGUI();
 
     }
 

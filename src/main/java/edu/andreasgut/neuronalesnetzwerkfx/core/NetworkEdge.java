@@ -72,4 +72,14 @@ public class NetworkEdge {
 
         return (int) Math.round(colorValue);
     }
+
+    @Override
+    public String toString() {
+        return "NetworkEdge{" +
+                "from=" + from +
+                ", to=" + to +
+                ", weight=" + weight +
+                ", line=" + line +
+                '}';
+    }
 }
