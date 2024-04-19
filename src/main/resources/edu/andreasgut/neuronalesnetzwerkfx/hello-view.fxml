@@ -121,7 +121,7 @@
                                        <Button fx:id="randomlyChangeButton" mnemonicParsing="false" onAction="#randomlyChange" text="Gewichte zufällig ändern" />
                                     </children>
                                  </HBox>
-                                 <HBox disable="true" spacing="10.0">
+                                 <HBox spacing="10.0">
                                     <children>
                                        <VBox prefHeight="200.0" spacing="10.0">
                                           <children>

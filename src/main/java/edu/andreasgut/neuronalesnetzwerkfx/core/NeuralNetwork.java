@@ -1,6 +1,11 @@
 package edu.andreasgut.neuronalesnetzwerkfx.core;
 
+import edu.andreasgut.neuronalesnetzwerkfx.imagetools.SourceImage;
+
+import java.io.File;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 public class NeuralNetwork {
@@ -115,6 +120,40 @@ public class NeuralNetwork {
 
         return layers;
     }
+
+    public void calculateError(File directory){
+        List<File> files = new ArrayList<>();
+
+        // Überprüfen, ob der Pfad ein Verzeichnis ist
+        if (directory.isDirectory()) {
+            // Alle Dateien im Verzeichnis hinzufügen
+            File[] fileList = directory.listFiles();
+            if (fileList != null) {
+                for (File file : fileList) {
+                    if (file.isFile()) {
+                        files.add(file);
+                    }
+                }
+                System.out.println(files.size());
+            }
+        } else {
+            System.out.println("Der angegebene Pfad ist kein Verzeichnis.");
+        }
+
+        for (File file : files) {
+            char firstSymbol = file.getName().charAt(0);
+            if (Character.isDigit(firstSymbol)){
+                int indexOfCorrectOutput = firstSymbol - '0';
+                System.out.println(indexOfCorrectOutput);
+                SourceImage sourceImage = new SourceImage(file.toURI().toString(), (int) Math.sqrt(getInputlayer().getNumberOfNodes()));
+                startCalculations(sourceImage.getImageAs1DArray());
+
+            }
+
+        }
+
+    }
+
 
     public void train(double[][] inputs, int[] indexOfCorrectOutput){
 

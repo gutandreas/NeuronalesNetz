@@ -5,6 +5,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.*;
 import javafx.scene.paint.Color;
 
+import java.util.Arrays;
+
 public class SourceImage {
 
     Image original;
@@ -111,6 +113,8 @@ public class SourceImage {
     public int getNumberOfPixelForNeuralNetwork() {
         return targetHeight * targetWidth;
     }
+
+
 }
 
 

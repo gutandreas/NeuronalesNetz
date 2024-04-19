@@ -112,8 +112,6 @@ public class HelloController {
             updateGUI();
             neuralNetwork.selectRandomEdges(percentSlider.getValue());
             highlightSelectedEdges();
-
-
         });
 
     }
@@ -303,7 +301,8 @@ public class HelloController {
         FileChooser fileChooser = new FileChooser();
 
         currentSelectedFile = fileChooser.showOpenDialog(new Stage());
-        System.out.println(getPathFromResourceFolder(currentSelectedFile.getAbsolutePath()));
+        System.out.println(currentSelectedFile.getAbsolutePath());
+        //System.out.println(SourceImage.getPathFromResourceFolder(currentSelectedFile.getAbsolutePath()));
         fileNameLabel.setText(currentSelectedFile.getName());
 
 
@@ -316,7 +315,7 @@ public class HelloController {
 
 
             int width = (int) Math.sqrt(neuralNetwork.getInputlayer().getNumberOfNodes());
-            sourceImage  = new SourceImage(getPathFromResourceFolder(currentSelectedFile.getAbsolutePath()), width);
+            sourceImage  = new SourceImage(currentSelectedFile.toURI().toString(), width);
             showImageInAnchorPane(sourceImage);
             neuralNetwork.startCalculations(sourceImage.getImageAs1DArray());
             initializeLayerAnchorPane(neuralNetwork);
@@ -352,8 +351,9 @@ public class HelloController {
         directoryChooser.setTitle("Select Folder");
 
         selectedDirectory = directoryChooser.showDialog(new Stage());
+        neuralNetwork.calculateError(selectedDirectory);
 
-        System.out.println(getPathFromResourceFolder(selectedDirectory.getAbsolutePath()));
+        System.out.println(selectedDirectory.toURI());
         directoryLabel.setText(selectedDirectory.getName());
 
     }
@@ -372,7 +372,7 @@ public class HelloController {
 
                     } else {
                         int width = (int) Math.sqrt(neuralNetwork.getInputlayer().getNumberOfNodes());
-                        SourceImage sourceImage = new SourceImage(getPathFromResourceFolder(file.getAbsolutePath()), width);
+                        SourceImage sourceImage = new SourceImage(file.toURI().toString(), width);
                         System.out.println("Datei: " + file.getName());
                         neuralNetwork.startCalculations(sourceImage.getImageAs1DArray());
                         neuralNetwork.getOutputlayer().adjustWeigths(correctNode, learningRate, true);
@@ -407,17 +407,6 @@ public class HelloController {
         newNetworkSettingGridPane.setVisible(false);
     }
 
-    private String getPathFromResourceFolder(String path){
-        String[] ebenen = path.split("/");
-        String[] letzteVierEbenen = Arrays.copyOfRange(ebenen, ebenen.length - 4, ebenen.length);
-        String relativePath = "";
-        for (String s: letzteVierEbenen) {
 
-            relativePath += ("/" + s);
-
-
-        }
-        return relativePath;
-    }
 
 }
