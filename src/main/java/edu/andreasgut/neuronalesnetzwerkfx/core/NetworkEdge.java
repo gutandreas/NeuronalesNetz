@@ -9,6 +9,7 @@ public class NetworkEdge {
 
     private final NetworkNode from;
     private final NetworkNode to;
+    private double backUpWeight;
     private double weight;
     private Line line;
 
@@ -33,13 +34,13 @@ public class NetworkEdge {
     }
 
     public void setWeight(double weight) {
-        if (weight > 0){
-            this.weight = weight;
-        }
-        else {
-            this.weight = 0;
-        }
+        this.backUpWeight = this.weight;
+        this.weight = weight;
+    }
 
+    public void backUpWeight(){
+        this.weight = backUpWeight;
+        updateLineWeightGraphic();
     }
 
     public Line getLine() {

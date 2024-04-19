@@ -135,7 +135,6 @@ public class HelloController {
     public void updateGUI(){
         initializeLayerAnchorPane(neuralNetwork);
         neuralNetwork.updateLineColorOfAllEdges();
-        updateCorrectOutputMenu();
 
     }
 
@@ -228,9 +227,6 @@ public class HelloController {
             layerAnchorPane.getChildren().add(node.getGraphicGroup());
             AnchorPane.setTopAnchor(node.getGraphicGroup(), y);
             AnchorPane.setLeftAnchor(node.getGraphicGroup(), x);
-            if (outputLayer){
-                activateLearningClick(node, learningRateSlider.getValue());
-            }
 
             y += deltaY;
         }
@@ -351,7 +347,7 @@ public class HelloController {
         directoryChooser.setTitle("Select Folder");
 
         selectedDirectory = directoryChooser.showDialog(new Stage());
-        neuralNetwork.calculateError(selectedDirectory);
+        neuralNetwork.train(selectedDirectory);
 
         System.out.println(selectedDirectory.toURI());
         directoryLabel.setText(selectedDirectory.getName());

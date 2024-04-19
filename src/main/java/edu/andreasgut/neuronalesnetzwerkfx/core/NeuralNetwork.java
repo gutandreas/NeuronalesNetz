@@ -89,6 +89,7 @@ public class NeuralNetwork {
         return listOfEdges;
     }
 
+
     public void adjustWeightsOfSelectedEdgesRandomly(){
         System.out.println("Anzahl angepasster Gewichte: " + selectedEdges.size());
         Random random = new Random();
@@ -121,7 +122,7 @@ public class NeuralNetwork {
         return layers;
     }
 
-    public void calculateError(File directory){
+    public double calculateError(File directory){
         List<File> files = new ArrayList<>();
 
         // Überprüfen, ob der Pfad ein Verzeichnis ist
@@ -140,6 +141,8 @@ public class NeuralNetwork {
             System.out.println("Der angegebene Pfad ist kein Verzeichnis.");
         }
 
+        double error = 0;
+
         for (File file : files) {
             char firstSymbol = file.getName().charAt(0);
             if (Character.isDigit(firstSymbol)){
@@ -147,36 +150,38 @@ public class NeuralNetwork {
                 System.out.println(indexOfCorrectOutput);
                 SourceImage sourceImage = new SourceImage(file.toURI().toString(), (int) Math.sqrt(getInputlayer().getNumberOfNodes()));
                 startCalculations(sourceImage.getImageAs1DArray());
-
-            }
-
-        }
-
-    }
-
-
-    public void train(double[][] inputs, int[] indexOfCorrectOutput){
-
-        if (inputs.length != indexOfCorrectOutput.length){
-            System.out.println("Anzahl Objekte stimmt nicht mit der Anzahl Indizes überein");
-        }
-        else {
-            for (int i = 0; i < inputs.length; i++) {
-                startCalculations(inputs[i]);
-                double error = 0;
-                for (int j = 0; j < getOutputlayer().getNumberOfNodes(); j++){
+                for (int i = 0; i < getOutputlayer().getNumberOfNodes(); i++){
                     double target;
-                    if (j == indexOfCorrectOutput[i]){
+                    if (i == indexOfCorrectOutput){
                         target = 1;
                     }
                     else {
                         target = 0;
                     }
-                    error += Math.sqrt(target-getOutputlayer().getNodes().get(j).getOutput());
+                    error += Math.pow(getOutputlayer().getNodes().get(i).getOutput() - target, 2);
+                    System.out.println(error);
                 }
-
             }
+        }
 
+        error /= files.size();
+        System.out.println("Fehler: " + error);
+
+        return error;
+
+    }
+
+
+    public void train(File directory){
+
+        double errorBefore = calculateError(directory);
+        adjustWeightsOfSelectedEdgesRandomly();
+        double errorAfter = calculateError(directory);
+
+        if (errorAfter > errorBefore) {
+            for (NetworkEdge edge : getAllEdges()) {
+                edge.backUpWeight();
+            }
         }
 
 
