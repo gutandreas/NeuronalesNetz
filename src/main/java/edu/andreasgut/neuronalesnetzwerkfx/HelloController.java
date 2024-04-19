@@ -96,7 +96,7 @@ public class HelloController {
     private Slider outputSlider;
 
     @FXML
-    private Slider learningRateSlider;
+    private Slider repetitionsSlider;
 
     @FXML
     private Slider percentSlider;
@@ -347,10 +347,17 @@ public class HelloController {
         directoryChooser.setTitle("Select Folder");
 
         selectedDirectory = directoryChooser.showDialog(new Stage());
-        neuralNetwork.train(selectedDirectory);
 
         System.out.println(selectedDirectory.toURI());
         directoryLabel.setText(selectedDirectory.getName());
+
+    }
+
+    public void startTrainingMultipleTimes(){
+        int repetitions = (int) repetitionsSlider.getValue();
+        for (int i = 0; i < repetitions; i++){
+            neuralNetwork.train(selectedDirectory);
+        }
 
     }
 

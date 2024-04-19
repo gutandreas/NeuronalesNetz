@@ -182,6 +182,10 @@ public class NeuralNetwork {
             for (NetworkEdge edge : getAllEdges()) {
                 edge.backUpWeight();
             }
+            System.out.println("Aktueller Fehler: " + errorBefore);
+        }
+        else {
+            System.out.println("Aktueller Fehler: " + errorAfter);
         }
 
 
