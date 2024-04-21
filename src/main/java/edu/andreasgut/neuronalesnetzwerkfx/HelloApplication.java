@@ -32,19 +32,5 @@ public class HelloApplication extends Application {
         launch();
     }
 
-    public static void train(NeuralNetwork neuralNetwork){
-        TrainingObject[] trainingObjects = new TrainingObject[10000];
 
-        for (int i = 0; i < trainingObjects.length; i++){
-            trainingObjects[i] = new TrainingObject(neuralNetwork.getInputlayer().getNumberOfNodes());
-        }
-
-        Outputlayer outputlayer = neuralNetwork.getOutputlayer();
-
-        for (TrainingObject trainingObject : trainingObjects){
-            int maxIndex = trainingObject.getMaxIndex();
-            NetworkNode node = outputlayer.getNodes().get(maxIndex);
-            outputlayer.adjustWeigths(node, 0.01, true);
-        }
-    }
 }

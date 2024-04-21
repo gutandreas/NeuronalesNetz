@@ -16,7 +16,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import java.io.File;
 import java.text.DecimalFormat;
-import java.util.Arrays;
 import java.util.LinkedList;
 
 public class HelloController {
@@ -108,7 +107,6 @@ public class HelloController {
     public void initialize() {
 
         percentSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
-
             updateGUI();
             neuralNetwork.selectRandomEdges(percentSlider.getValue());
             highlightSelectedEdges();
@@ -134,22 +132,8 @@ public class HelloController {
 
     public void updateGUI(){
         initializeLayerAnchorPane(neuralNetwork);
-        neuralNetwork.updateLineColorOfAllEdges();
+        neuralNetwork.updateLineGraphicOfAllEdges();
 
-    }
-
-    private void updateCorrectOutputMenu(){
-        correctOutputMenu.getItems().clear();
-        for (int i = 0; i < neuralNetwork.getOutputlayer().getNumberOfNodes(); i++){
-            MenuItem menuItem = new MenuItem(i+"");
-            int finalI = i;
-            menuItem.setOnAction(event -> {
-                selectedCorrectOutput = finalI;
-                correctOutputMenu.setText(finalI+"");
-            });
-
-            correctOutputMenu.getItems().add(menuItem);
-        }
 
     }
 
@@ -232,13 +216,6 @@ public class HelloController {
         }
     }
 
-    private void activateLearningClick(NetworkNode node, double learningRate){
-        node.getGraphicGroup().setOnMouseClicked(event -> {
-
-            neuralNetwork.getOutputlayer().adjustWeigths(node, learningRate, true);
-        });
-
-    }
 
     private void initializeLines(NeuralNetwork neuralNetwork){
 
@@ -356,37 +333,14 @@ public class HelloController {
     public void startTrainingMultipleTimes(){
         int repetitions = (int) repetitionsSlider.getValue();
         for (int i = 0; i < repetitions; i++){
+            selectRandomEdges();
             neuralNetwork.train(selectedDirectory);
         }
+        updateGUI();
 
     }
 
-    public void loadDirectoryForTraining(){
 
-        if (selectedDirectory != null && selectedDirectory.isDirectory()) {
-            double learningRate = 0.001;
-            System.out.println(selectedCorrectOutput);
-            NetworkNode correctNode = neuralNetwork.getOutputlayer().getNodes().get(selectedCorrectOutput);
-            File[] files = selectedDirectory.listFiles();
-            if (files != null) {
-                for (File file : files) {
-                    if (file.isDirectory()) {
-                        System.out.println("Verzeichnis: " + file.getName());
-
-                    } else {
-                        int width = (int) Math.sqrt(neuralNetwork.getInputlayer().getNumberOfNodes());
-                        SourceImage sourceImage = new SourceImage(file.toURI().toString(), width);
-                        System.out.println("Datei: " + file.getName());
-                        neuralNetwork.startCalculations(sourceImage.getImageAs1DArray());
-                        neuralNetwork.getOutputlayer().adjustWeigths(correctNode, learningRate, true);
-                        System.out.println("Training durchgeführt");
-                    }
-                }
-            }
-            updateGUI();
-        }
-
-    }
 
     public void randomlyChange(){
         neuralNetwork.adjustWeightsOfSelectedEdgesRandomly();

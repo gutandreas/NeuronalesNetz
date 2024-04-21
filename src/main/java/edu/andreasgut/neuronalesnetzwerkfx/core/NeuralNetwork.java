@@ -3,10 +3,7 @@ package edu.andreasgut.neuronalesnetzwerkfx.core;
 import edu.andreasgut.neuronalesnetzwerkfx.imagetools.SourceImage;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class NeuralNetwork {
 
@@ -71,9 +68,10 @@ public class NeuralNetwork {
         return selectedEdges;
     }
 
-    public void updateLineColorOfAllEdges(){
+    public void updateLineGraphicOfAllEdges(){
         for (NetworkEdge edge : getAllEdges()){
             edge.updateLineColor();
+            edge.updateLineWeightGraphic();
         }
     }
 
@@ -137,6 +135,8 @@ public class NeuralNetwork {
                 }
                 System.out.println(files.size());
             }
+            Arrays.sort(fileList, Comparator.comparing(File::getName));
+
         } else {
             System.out.println("Der angegebene Pfad ist kein Verzeichnis.");
         }
@@ -147,7 +147,7 @@ public class NeuralNetwork {
             char firstSymbol = file.getName().charAt(0);
             if (Character.isDigit(firstSymbol)){
                 int indexOfCorrectOutput = firstSymbol - '0';
-                System.out.println(indexOfCorrectOutput);
+                System.out.println(indexOfCorrectOutput + " bei Datei " + file.getName());
                 SourceImage sourceImage = new SourceImage(file.toURI().toString(), (int) Math.sqrt(getInputlayer().getNumberOfNodes()));
                 startCalculations(sourceImage.getImageAs1DArray());
                 for (int i = 0; i < getOutputlayer().getNumberOfNodes(); i++){
@@ -156,15 +156,14 @@ public class NeuralNetwork {
                         target = 1;
                     }
                     else {
-                        target = 0;
+                        target = 0.2;
                     }
                     error += Math.pow(getOutputlayer().getNodes().get(i).getOutput() - target, 2);
-                    System.out.println(error);
                 }
             }
         }
 
-        error /= files.size();
+        error /= files.size() * getOutputlayer().getNumberOfNodes();
         System.out.println("Fehler: " + error);
 
         return error;
@@ -174,19 +173,25 @@ public class NeuralNetwork {
 
     public void train(File directory){
 
+
         double errorBefore = calculateError(directory);
         adjustWeightsOfSelectedEdgesRandomly();
         double errorAfter = calculateError(directory);
 
         if (errorAfter > errorBefore) {
-            for (NetworkEdge edge : getAllEdges()) {
+            for (NetworkEdge edge : selectedEdges) {
+                System.out.println("Backupweight: " + edge.getBackUpWeight() + ", Weight: " + edge.getWeight());
                 edge.backUpWeight();
+                System.out.println("Backupweight: " + edge.getBackUpWeight() + ", Weight: " + edge.getWeight());
             }
-            System.out.println("Aktueller Fehler: " + errorBefore);
+
+            System.out.println("Netz wurde nicht verbessert und wurde zurückgesetzt. Aktueller Fehler: " + errorBefore);
         }
         else {
-            System.out.println("Aktueller Fehler: " + errorAfter);
+            System.out.println("Netz wurde verbessert. Aktueller Fehler: " + errorAfter);
         }
+
+
 
 
     }
