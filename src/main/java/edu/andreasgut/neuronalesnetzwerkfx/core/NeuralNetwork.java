@@ -11,7 +11,6 @@ public class NeuralNetwork {
     LinkedList<Hiddenlayer> hiddenlayers = new LinkedList<>();
     Outputlayer outputlayer;
     LinkedList<NetworkEdge> selectedEdges = new LinkedList<>();
-    double error;
 
     public NeuralNetwork(int numberOfInputNodes, int numberOfHiddenLayers, int numberOfHiddenLayerNodes, int numberOfOutputNodes) {
         this.inputlayer = new Inputlayer(numberOfInputNodes, this);
@@ -156,14 +155,14 @@ public class NeuralNetwork {
                         target = 1;
                     }
                     else {
-                        target = 0.2;
+                        target = 0;
                     }
                     error += Math.pow(getOutputlayer().getNodes().get(i).getOutput() - target, 2);
                 }
             }
         }
 
-        error /= files.size() * getOutputlayer().getNumberOfNodes();
+        error /= files.size();
         System.out.println("Fehler: " + error);
 
         return error;

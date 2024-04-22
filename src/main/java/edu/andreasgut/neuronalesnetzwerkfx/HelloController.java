@@ -291,9 +291,7 @@ public class HelloController {
             sourceImage  = new SourceImage(currentSelectedFile.toURI().toString(), width);
             showImageInAnchorPane(sourceImage);
             neuralNetwork.startCalculations(sourceImage.getImageAs1DArray());
-            initializeLayerAnchorPane(neuralNetwork);
-            neuralNetwork.startCalculations(sourceImage.getImageAs1DArray());
-            initializeGUI(neuralNetwork);
+            updateGUI();
         }
         else {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);

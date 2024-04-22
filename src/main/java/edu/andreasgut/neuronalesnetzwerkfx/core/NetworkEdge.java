@@ -36,12 +36,10 @@ public class NetworkEdge {
     public void setWeight(double weight) {
         this.backUpWeight = this.weight;
         this.weight = weight;
-        updateLineWeightGraphic();
     }
 
     public void backUpWeight(){
         this.weight = backUpWeight;
-        updateLineWeightGraphic();
     }
 
     public double getBackUpWeight() {
