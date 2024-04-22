@@ -24,8 +24,6 @@ import javafx.util.Duration;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.LinkedList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class HelloController {
     @FXML
@@ -43,6 +41,9 @@ public class HelloController {
 
     @FXML
     private Label resultLabel;
+
+    @FXML
+    private GridPane trainingGridPane;
 
     @FXML
     private HBox mainHBox;
@@ -343,8 +344,6 @@ public class HelloController {
 
         if (currentSelectedFile != null){
             SourceImage sourceImage;
-
-
             int width = (int) Math.sqrt(neuralNetwork.getInputlayer().getNumberOfNodes());
             sourceImage  = new SourceImage(currentSelectedFile.toURI().toString(), width);
             showImageInAnchorPane(sourceImage);
@@ -388,14 +387,49 @@ public class HelloController {
 
     public void startTrainingMultipleTimes(){
         int repetitions = (int) repetitionsSlider.getValue();
+        trainingGridPane.getChildren().clear();
         for (int i = 0; i < repetitions; i++){
-            neuralNetwork.train(selectedDirectory);
+            double error = neuralNetwork.trainAndGetError(selectedDirectory);
+            addErrorToTrainingGridPane(error, i);
             selectRandomEdges();
         }
         SourceImage sourceImage = new SourceImage("/images/default/default1.png", (int) Math.sqrt(neuralNetwork.getInputlayer().getNumberOfNodes()));
         showImageInAnchorPane(sourceImage);
         neuralNetwork.startCalculations(sourceImage.getImageAs1DArray());
         updateGUI();
+
+    }
+
+    private void addErrorToTrainingGridPane(double error, int row){
+        Label numberLabel = new Label(row + "\t");
+        trainingGridPane.add(numberLabel, 0, row);
+        Label errorLabel =  new Label(String.format("%.20f", error));
+        trainingGridPane.add(errorLabel, 1, row);
+
+        if (row != 0){
+            Label oldErrorLabel = (Label) trainingGridPane.getChildren().get(row*2-2);
+            double oldError = Double.parseDouble(oldErrorLabel.getText());
+            double newError = Double.parseDouble(errorLabel.getText());
+
+            System.out.println("OldError: " + oldError);
+            System.out.println("NewError: " + error);
+            if (newError < oldError){
+                trainingGridPane.setStyle("-fx-background-color: green; -fx-grid-cell-column-index: " + 0 + "; -fx-grid-cell-row-index: " + row + ";");
+                trainingGridPane.setStyle("-fx-background-color: green; -fx-grid-cell-column-index: " + 1 + "; -fx-grid-cell-row-index: " + row + ";");
+
+            }
+            else {
+                trainingGridPane.setStyle("-fx-background-color: red; -fx-grid-cell-column-index: " + 0 + "; -fx-grid-cell-row-index: " + row + ";");
+                trainingGridPane.setStyle("-fx-background-color: red; -fx-grid-cell-column-index: " + 1 + "; -fx-grid-cell-row-index: " + row + ";");
+            }
+        } else {
+            trainingGridPane.setStyle("-fx-background-color: gray; -fx-grid-cell-column-index: " + 0 + "; -fx-grid-cell-row-index: " + row + ";");
+            trainingGridPane.setStyle("-fx-background-color: gray; -fx-grid-cell-column-index: " + 1 + "; -fx-grid-cell-row-index: " + row + ";");
+        }
+
+
+
+
 
     }
 

@@ -78,3 +78,20 @@
 .node-number {
     -fx-fill: lightgrey;
 }
+
+
+
+.error-label-green{
+    -fx-font-size: 14px;
+    -fx-background-color: green;
+}
+
+.error-label-red{
+    -fx-font-size: 14px;
+    -fx-background-color: red;
+}
+
+.error-label-gray{
+    -fx-font-size: 14px;
+    -fx-background-color: darkgray;
+}

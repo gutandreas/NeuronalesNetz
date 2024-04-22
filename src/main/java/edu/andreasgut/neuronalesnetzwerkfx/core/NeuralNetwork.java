@@ -171,7 +171,7 @@ public class NeuralNetwork {
     }
 
 
-    public void train(File directory){
+    public double trainAndGetError(File directory){
 
 
         double errorBefore = calculateError(directory);
@@ -184,10 +184,14 @@ public class NeuralNetwork {
             }
 
             System.out.println("Netz wurde nicht verbessert und wurde zurückgesetzt. Aktueller Fehler: " + errorBefore);
+            return errorBefore;
         }
         else {
             System.out.println("Netz wurde verbessert. Aktueller Fehler: " + errorAfter);
+            return errorAfter;
         }
+
+
 
     }
 
