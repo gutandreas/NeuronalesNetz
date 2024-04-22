@@ -74,25 +74,31 @@
                                  <AnchorPane fx:id="imageAnchorPane" prefHeight="200.0" prefWidth="600.0" />
                                  <HBox prefHeight="100.0" prefWidth="200.0">
                                     <children>
-                                       <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+                                       <VBox prefHeight="200.0" spacing="10.0">
                                           <children>
-                                           <Button fx:id="einzelbildButton" mnemonicParsing="false" onAction="#selectFile" text="Einzelbild">
+                                             <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                                                <children>
+                                                 <Button fx:id="einzelbildButton" mnemonicParsing="false" onAction="#selectFile" text="Einzelbild">
+                                                      <padding>
+                                                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                      </padding>
+                                                   </Button>
+                                                   <Label fx:id="fileNameLabel" text="Geladene Datei..." textAlignment="CENTER" />
+                                                </children>
+                                             </HBox>
+                                             <Button mnemonicParsing="false" onAction="#loadImage" text="Laden">
                                                 <padding>
                                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                                 </padding>
-                                                <VBox.margin>
-                                                   <Insets />
-                                                </VBox.margin></Button>
-                                             <Label fx:id="fileNameLabel" text="Geladene Datei..." />
+                                             </Button>
+                                             <HBox prefHeight="100.0" prefWidth="200.0">
+                                                <children>
+                                                   <Label text="Vermutetes Resultat: " />
+                                                   <Label fx:id="resultLabel" text="---" />
+                                                </children>
+                                             </HBox>
                                           </children>
                                        </VBox>
-                                       <Button mnemonicParsing="false" onAction="#loadImage" text="Laden">
-                                          <padding>
-                                             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                          </padding>
-                                          <HBox.margin>
-                                             <Insets />
-                                          </HBox.margin></Button>
                                     </children>
                                  </HBox>
                               </children>
@@ -147,7 +153,7 @@
          </TabPane>
          <VBox prefHeight="200.0" prefWidth="100.0">
             <children>
-               <AnchorPane fx:id="layerAnchorPane" prefHeight="600.0" prefWidth="400.0" />
+               <AnchorPane fx:id="layerAnchorPane" onMouseEntered="#highlightMaxOutput" onMouseExited="#stopHilghlitingMaxOutput" prefHeight="600.0" prefWidth="400.0" />
                <GridPane fx:id="layerGridPane" alignment="CENTER">
                  <columnConstraints>
                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />

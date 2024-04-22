@@ -8,6 +8,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -41,7 +42,7 @@ public class HelloController {
     private Label directoryLabel;
 
     @FXML
-    private Label widthLabel;
+    private Label resultLabel;
 
     @FXML
     private HBox mainHBox;
@@ -175,8 +176,32 @@ public class HelloController {
         imageAnchorPane.getChildren().add(canvas);
         sourceImage.getImageAsCanvas().setOnMouseClicked(event -> {
             neuralNetwork.startCalculations(sourceImage.getImageAs1DArray());
+            resultLabel.setText(neuralNetwork.getIndexOfHighestOutputNode() + "");
             updateGUI();
         });
+    }
+
+    public void highlightMaxOutput(){
+        NetworkNode highestNode = neuralNetwork.getOutputlayer().getNodes().get(neuralNetwork.getIndexOfHighestOutputNode());
+        for (Node node : highestNode.getGraphicGroup().getChildren()) {
+            if (node instanceof Circle) {
+                Circle circle = (Circle) node;
+                circle.setFill(Color.WHITE);
+            }
+        }
+    }
+
+    public void stopHilghlitingMaxOutput(){
+        for (NetworkNode networkNode : neuralNetwork.getOutputlayer().getNodes()){
+            networkNode.getGraphicGroup();
+            for (Node node : networkNode.getGraphicGroup().getChildren()) {
+                if (node instanceof Circle) {
+                    Circle circle = (Circle) node;
+                    circle.setFill(Color.rgb(0, 255, 0, networkNode.getOutput()));
+                }
+            }
+        }
+
     }
 
 
@@ -324,6 +349,7 @@ public class HelloController {
             sourceImage  = new SourceImage(currentSelectedFile.toURI().toString(), width);
             showImageInAnchorPane(sourceImage);
             neuralNetwork.startCalculations(sourceImage.getImageAs1DArray());
+            resultLabel.setText(neuralNetwork.getIndexOfHighestOutputNode() + "");
             updateGUI();
         }
         else {

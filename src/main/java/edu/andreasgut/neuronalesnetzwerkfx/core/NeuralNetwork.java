@@ -63,6 +63,8 @@ public class NeuralNetwork {
         return Math.max(Math.max(inputlayer.getNumberOfNodes(), hiddenlayers.get(0).getNumberOfNodes()), outputlayer.getNumberOfNodes());
     }
 
+
+
     public LinkedList<NetworkEdge> getSelectedEdges() {
         return selectedEdges;
     }
@@ -187,5 +189,20 @@ public class NeuralNetwork {
             System.out.println("Netz wurde verbessert. Aktueller Fehler: " + errorAfter);
         }
 
+    }
+
+    public int getIndexOfHighestOutputNode(){
+
+        int maxIndex = 0;
+        double maxOutput = 0;
+
+        for (int i = 0; i < getOutputlayer().getNumberOfNodes(); i++){
+            if (getOutputlayer().getNodes().get(i).getOutput() > maxOutput){
+                maxOutput = getOutputlayer().getNodes().get(i).getOutput();
+                maxIndex = i;
+            }
+        }
+
+        return maxIndex;
     }
 }
