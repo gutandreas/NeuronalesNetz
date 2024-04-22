@@ -121,23 +121,17 @@ public class NeuralNetwork {
 
     public double calculateError(File directory){
         List<File> files = new ArrayList<>();
+        File[] fileArray = directory.listFiles();
 
-        // Überprüfen, ob der Pfad ein Verzeichnis ist
-        if (directory.isDirectory()) {
-            // Alle Dateien im Verzeichnis hinzufügen
-            File[] fileList = directory.listFiles();
-            if (fileList != null) {
-                for (File file : fileList) {
-                    if (file.isFile()) {
-                        files.add(file);
-                    }
+        if (fileArray != null) {
+            Arrays.sort(fileArray, Comparator.comparing(File::getName));
+            for (File file : fileArray) {
+                if (file.isFile()) {
+                    files.add(file);
                 }
-                System.out.println(files.size());
             }
-            Arrays.sort(fileList, Comparator.comparing(File::getName));
-
-        } else {
-            System.out.println("Der angegebene Pfad ist kein Verzeichnis.");
+            System.out.println(files.size());
+            Arrays.sort(fileArray, Comparator.comparing(File::getName));
         }
 
         double error = 0;
@@ -155,15 +149,20 @@ public class NeuralNetwork {
                         target = 1;
                     }
                     else {
-                        target = 0;
+                        target = 0.1;
                     }
-                    error += Math.pow(getOutputlayer().getNodes().get(i).getOutput() - target, 2);
+                    double output = getOutputlayer().getNodes().get(i).getOutput();
+                    double errorForThisOutput = Math.abs(output - target);
+                    System.out.println("Error für diesen Output: " + errorForThisOutput);
+                    double squaredErrorForThisOutput = Math.pow(errorForThisOutput, 2);
+                    error += squaredErrorForThisOutput;
                 }
             }
         }
 
         error /= files.size();
         System.out.println("Fehler: " + error);
+        System.out.println("Letztes File:" + files.get(files.size()-1));
 
         return error;
 
@@ -179,9 +178,7 @@ public class NeuralNetwork {
 
         if (errorAfter > errorBefore) {
             for (NetworkEdge edge : selectedEdges) {
-                System.out.println("Backupweight: " + edge.getBackUpWeight() + ", Weight: " + edge.getWeight());
                 edge.backUpWeight();
-                System.out.println("Backupweight: " + edge.getBackUpWeight() + ", Weight: " + edge.getWeight());
             }
 
             System.out.println("Netz wurde nicht verbessert und wurde zurückgesetzt. Aktueller Fehler: " + errorBefore);
@@ -189,9 +186,6 @@ public class NeuralNetwork {
         else {
             System.out.println("Netz wurde verbessert. Aktueller Fehler: " + errorAfter);
         }
-
-
-
 
     }
 }

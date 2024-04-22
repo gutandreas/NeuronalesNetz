@@ -325,15 +325,17 @@ public class HelloController {
 
         System.out.println(selectedDirectory.toURI());
         directoryLabel.setText(selectedDirectory.getName());
-
     }
 
     public void startTrainingMultipleTimes(){
         int repetitions = (int) repetitionsSlider.getValue();
         for (int i = 0; i < repetitions; i++){
-            selectRandomEdges();
             neuralNetwork.train(selectedDirectory);
+            selectRandomEdges();
         }
+        SourceImage sourceImage = new SourceImage("/images/default/default1.png", (int) Math.sqrt(neuralNetwork.getInputlayer().getNumberOfNodes()));
+        showImageInAnchorPane(sourceImage);
+        neuralNetwork.startCalculations(sourceImage.getImageAs1DArray());
         updateGUI();
 
     }
@@ -350,8 +352,6 @@ public class HelloController {
         updateGUI();
 
     }
-
-
 
 
     public void showNewNetworkSettings(){
