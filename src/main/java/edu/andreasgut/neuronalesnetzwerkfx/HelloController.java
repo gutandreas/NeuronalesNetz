@@ -3,6 +3,10 @@ package edu.andreasgut.neuronalesnetzwerkfx;
 import edu.andreasgut.neuronalesnetzwerkfx.core.*;
 
 import edu.andreasgut.neuronalesnetzwerkfx.imagetools.SourceImage;
+import edu.andreasgut.neuronalesnetzwerkfx.view.TimelineManager;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
@@ -14,9 +18,13 @@ import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.LinkedList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class HelloController {
     @FXML
@@ -123,12 +131,37 @@ public class HelloController {
     }
 
     public void highlightSelectedEdges(){
-        for (NetworkEdge edge : neuralNetwork.getSelectedEdges()) {
 
-            edge.getLine().setStroke(Color.BLUE);
+        Platform.runLater(()->{
 
-        }
+            TimelineManager.stopAllTimelines();
+            for (NetworkEdge edge : neuralNetwork.getSelectedEdges()) {
+
+                edge.getLine().setStroke(Color.BLUE);
+                Timeline timeline = new Timeline(
+                        new KeyFrame(Duration.ZERO, e -> edge.getLine().setStroke(Color.WHITE)),
+                        new KeyFrame(Duration.seconds(0.3), e -> edge.resetLineColor()),
+                        new KeyFrame(Duration.seconds(0.6), e -> edge.getLine().setStroke(Color.WHITE))
+
+                );
+                timeline.setCycleCount(Timeline.INDEFINITE); // Wiederholen der Animation unendlich oft
+                timeline.play();
+                TimelineManager.addTimeline(timeline);
+
+            }
+
+        });
     }
+
+    public void stopHighlightingSelectedEdges(){
+        TimelineManager.stopAllTimelines();
+        for (NetworkEdge edge : neuralNetwork.getSelectedEdges()) {
+            edge.resetLineColor();
+        }
+
+    }
+
+
 
     public void updateGUI(){
         initializeLayerAnchorPane(neuralNetwork);
@@ -254,7 +287,7 @@ public class HelloController {
                         });
                         line.setOnMouseExited(event -> {
                             edge.updateLineWeightGraphic();
-                            edge.updateLineColor();
+                            edge.resetLineColor();
                             layerAnchorPane.getChildren().remove(textWeight);
 
                         });

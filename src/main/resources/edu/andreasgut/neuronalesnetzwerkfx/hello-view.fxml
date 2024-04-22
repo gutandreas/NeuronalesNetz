@@ -114,7 +114,7 @@
                                        <HBox prefHeight="100.0" prefWidth="200.0">
                                           <children>
                                              <Label text="Prozentualer Anteil der Kanten: " />
-                                             <Slider fx:id="percentSlider" majorTickUnit="10.0" minorTickCount="5" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="20.0" />
+                                             <Slider fx:id="percentSlider" majorTickUnit="10.0" minorTickCount="5" onMouseEntered="#highlightSelectedEdges" onMouseExited="#stopHighlightingSelectedEdges" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="20.0" />
                                           </children>
                                        </HBox>
                                        <Button fx:id="randomlyChangeButton" mnemonicParsing="false" onAction="#randomlyChange" text="Gewichte zufällig ändern" />
@@ -161,6 +161,16 @@
                </GridPane>
             
                 <Label fx:id="welcomeText" />
+            </children>
+         </VBox>
+         <VBox prefHeight="200.0" prefWidth="100.0">
+            <children>
+               <HBox prefHeight="100.0" prefWidth="200.0">
+                  <children>
+                     <Label text="Vermutetes Resultat:" />
+                     <Label />
+                  </children>
+               </HBox>
             </children>
          </VBox>
       </children>

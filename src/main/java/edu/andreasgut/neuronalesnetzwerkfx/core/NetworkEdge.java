@@ -58,7 +58,7 @@ public class NetworkEdge {
         line.setStrokeWidth(Math.min(5, Math.abs(weight*3)));
     }
 
-    public void updateLineColor(){
+    public void resetLineColor(){
         if (getWeight() > 0){
             line.setStroke(Color.rgb(defineColor( 255), defineColor(255), defineColor(0)));
         }

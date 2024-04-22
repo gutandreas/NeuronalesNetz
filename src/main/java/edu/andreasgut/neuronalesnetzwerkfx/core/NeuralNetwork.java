@@ -69,7 +69,7 @@ public class NeuralNetwork {
 
     public void updateLineGraphicOfAllEdges(){
         for (NetworkEdge edge : getAllEdges()){
-            edge.updateLineColor();
+            edge.resetLineColor();
             edge.updateLineWeightGraphic();
         }
     }
