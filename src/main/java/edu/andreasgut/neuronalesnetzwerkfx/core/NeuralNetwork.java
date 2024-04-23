@@ -172,6 +172,7 @@ public class NeuralNetwork {
 
     }
 
+
     private void addErrorToErrorHistory(double error){
         realErrorHistoryList.add(error);
         int limit = 200;
@@ -219,6 +220,42 @@ public class NeuralNetwork {
             System.out.println("Netz wurde verbessert. Aktueller Fehler: " + errorAfter);
         }
 
+    }
+
+    public double getPercentageOfCorrectGuesses(File directory){
+        List<File> files = new ArrayList<>();
+        File[] fileArray = directory.listFiles();
+
+        if (fileArray != null) {
+            Arrays.sort(fileArray, Comparator.comparing(File::getName));
+            for (File file : fileArray) {
+                if (file.isFile()) {
+                    files.add(file);
+                }
+            }
+            System.out.println(files.size());
+            Arrays.sort(fileArray, Comparator.comparing(File::getName));
+        }
+
+        int correctAnswers = 0;
+
+        for (File file : files) {
+            char firstSymbol = file.getName().charAt(0);
+            if (Character.isDigit(firstSymbol)){
+                int indexOfCorrectOutput = firstSymbol - '0';
+                System.out.println(indexOfCorrectOutput + " bei Datei " + file.getName());
+                SourceImage sourceImage = new SourceImage(file.toURI().toString(), (int) Math.sqrt(getInputlayer().getNumberOfNodes()));
+                startCalculations(sourceImage.getImageAs1DArray());
+                int indexOfGuess = getIndexOfHighestOutputNode();
+                System.out.println("Getippter Output: " + indexOfGuess);
+
+                if (indexOfCorrectOutput == indexOfGuess){
+                    correctAnswers++;
+                }
+            }
+        }
+
+        return correctAnswers / (double) files.size();
     }
 
     public int getIndexOfHighestOutputNode(){

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
@@ -122,8 +121,8 @@
                                     <children>
                                        <VBox prefHeight="200.0" prefWidth="100.0">
                                           <children>
-                                             <Button mnemonicParsing="false" onAction="#selectDirectory" text="Ordner laden" />
-                                             <Label fx:id="directoryLabel" text="Geladener Ordner..." />
+                                             <Button mnemonicParsing="false" onAction="#selectDirectoryForTraining" text="Ordner laden" />
+                                             <Label fx:id="directoryLabelTraining" text="Geladener Ordner..." />
                                           </children>
                                        </VBox>
                                        <VBox>
@@ -204,6 +203,28 @@
                         </children></AnchorPane>
                </content>
              </Tab>
+               <Tab text="Testen">
+                 <content>
+                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <children>
+                           <HBox prefHeight="75.0" prefWidth="500.0" spacing="10.0">
+                              <children>
+                                 <VBox prefHeight="200.0" prefWidth="100.0">
+                                    <children>
+                                       <Button mnemonicParsing="false" onAction="#selectDirectoryForTesting" text="Ordner laden" />
+                                       <Label fx:id="directoryLabelTesting" text="Geladener Ordner..." />
+                                    </children>
+                                 </VBox>
+                                 <Button mnemonicParsing="false" onAction="#testNetworkWithSelectedDirectory" text="Testen" />
+                              </children>
+                              <padding>
+                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                              </padding>
+                           </HBox>
+                        </children>
+                     </AnchorPane>
+                 </content>
+               </Tab>
            </tabs>
          </TabPane>
          <VBox prefHeight="200.0" prefWidth="100.0">

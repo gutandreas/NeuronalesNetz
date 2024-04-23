@@ -40,7 +40,10 @@ public class HelloController {
     private Label fileNameLabel;
 
     @FXML
-    private Label directoryLabel;
+    private Label directoryLabelTraining;
+
+    @FXML
+    private Label directoryLabelTesting;
 
     @FXML
     private Label resultLabel;
@@ -90,7 +93,9 @@ public class HelloController {
 
     private File currentSelectedFile;
 
-    private File selectedDirectory;
+    private File selectedDirectoryForTraining;
+
+    private File selectedDirectoryForTesting;
 
     private int selectedCorrectOutput;
 
@@ -384,21 +389,31 @@ public class HelloController {
         initializeGUI(neuralNetwork);
     }
 
-    public void selectDirectory(){
+    public void selectDirectoryForTraining(){
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Select Folder");
 
-        selectedDirectory = directoryChooser.showDialog(new Stage());
+        selectedDirectoryForTraining = directoryChooser.showDialog(new Stage());
 
-        System.out.println(selectedDirectory.toURI());
-        directoryLabel.setText(selectedDirectory.getName());
+        System.out.println(selectedDirectoryForTraining.toURI());
+        directoryLabelTraining.setText(selectedDirectoryForTraining.getName());
+    }
+
+    public void selectDirectoryForTesting(){
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle("Select Folder");
+
+        selectedDirectoryForTesting = directoryChooser.showDialog(new Stage());
+
+        System.out.println(selectedDirectoryForTesting.toURI());
+        directoryLabelTesting.setText(selectedDirectoryForTesting.getName());
     }
 
     public void startTrainingMultipleTimes(){
         int repetitions = (int) repetitionsSlider.getValue();
         trainingGridPane.getChildren().clear();
         for (int i = 0; i < repetitions; i++){
-            neuralNetwork.train(selectedDirectory);
+            neuralNetwork.train(selectedDirectoryForTraining);
             selectRandomEdges();
         }
         addErrorToTrainingGridPane(repetitions);
@@ -452,40 +467,12 @@ public class HelloController {
         Platform.runLater(() -> errorChartAll.getData().add(dataSeriesRealAll));
         Platform.runLater(() -> errorChartAll.getData().add(dataSeriesSmallestAll));
 
+    }
 
+    public void testNetworkWithSelectedDirectory(){
 
-
-
-
-        /*Label numberLabel = new Label(row + "\t");
-        trainingGridPane.add(numberLabel, 0, row);
-        Label errorLabel =  new Label(String.format("%.20f", error));
-        trainingGridPane.add(errorLabel, 1, row);
-
-        if (row != 0){
-            Label oldErrorLabel = (Label) trainingGridPane.getChildren().get(row*2-2);
-            double oldError = Double.parseDouble(oldErrorLabel.getText());
-            double newError = Double.parseDouble(errorLabel.getText());
-
-            System.out.println("OldError: " + oldError);
-            System.out.println("NewError: " + error);
-            if (newError < oldError){
-                trainingGridPane.setStyle("-fx-background-color: green; -fx-grid-cell-column-index: " + 0 + "; -fx-grid-cell-row-index: " + row + ";");
-                trainingGridPane.setStyle("-fx-background-color: green; -fx-grid-cell-column-index: " + 1 + "; -fx-grid-cell-row-index: " + row + ";");
-
-            }
-            else {
-                trainingGridPane.setStyle("-fx-background-color: red; -fx-grid-cell-column-index: " + 0 + "; -fx-grid-cell-row-index: " + row + ";");
-                trainingGridPane.setStyle("-fx-background-color: red; -fx-grid-cell-column-index: " + 1 + "; -fx-grid-cell-row-index: " + row + ";");
-            }
-        } else {
-            trainingGridPane.setStyle("-fx-background-color: gray; -fx-grid-cell-column-index: " + 0 + "; -fx-grid-cell-row-index: " + row + ";");
-            trainingGridPane.setStyle("-fx-background-color: gray; -fx-grid-cell-column-index: " + 1 + "; -fx-grid-cell-row-index: " + row + ";");
-        }*/
-
-
-
-
+        double percentageOfCorrectAnswers = neuralNetwork.getPercentageOfCorrectGuesses(selectedDirectoryForTesting);
+        System.out.println("Anteil korrekter Antworten: " + percentageOfCorrectAnswers);
 
     }
 
