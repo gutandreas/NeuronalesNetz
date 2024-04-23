@@ -10,6 +10,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -23,6 +24,8 @@ import javafx.util.Duration;
 
 import java.io.File;
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 
 public class HelloController {
@@ -90,6 +93,9 @@ public class HelloController {
     private File selectedDirectory;
 
     private int selectedCorrectOutput;
+
+    @FXML
+    private XYChart errorChart;
 
 
     @FXML
@@ -389,10 +395,10 @@ public class HelloController {
         int repetitions = (int) repetitionsSlider.getValue();
         trainingGridPane.getChildren().clear();
         for (int i = 0; i < repetitions; i++){
-            double error = neuralNetwork.trainAndGetError(selectedDirectory);
-            addErrorToTrainingGridPane(error, i);
+            neuralNetwork.train(selectedDirectory);
             selectRandomEdges();
         }
+        addErrorToTrainingGridPane(repetitions);
         SourceImage sourceImage = new SourceImage("/images/default/default1.png", (int) Math.sqrt(neuralNetwork.getInputlayer().getNumberOfNodes()));
         showImageInAnchorPane(sourceImage);
         neuralNetwork.startCalculations(sourceImage.getImageAs1DArray());
@@ -400,8 +406,27 @@ public class HelloController {
 
     }
 
-    private void addErrorToTrainingGridPane(double error, int row){
-        Label numberLabel = new Label(row + "\t");
+    private void addErrorToTrainingGridPane(int repetitions){
+
+
+        errorChart.setTitle("Training von " + LocalDateTime.now().format(DateTimeFormatter.ISO_TIME));
+        XYChart.Series<Number, Double> dataSeries = new XYChart.Series<>();
+
+        dataSeries.setName("Datensatz 1");
+
+        for (int i = 0; i < repetitions; i++) {
+            LinkedList<Double> errorList = neuralNetwork.getErrorHistoryList();
+
+            dataSeries.getData().add(new XYChart.Data<>(i, errorList.get(errorList.size()-i-1)));
+        }
+
+
+        Platform.runLater(() -> errorChart.getData().add(dataSeries));
+
+
+
+
+        /*Label numberLabel = new Label(row + "\t");
         trainingGridPane.add(numberLabel, 0, row);
         Label errorLabel =  new Label(String.format("%.20f", error));
         trainingGridPane.add(errorLabel, 1, row);
@@ -425,7 +450,7 @@ public class HelloController {
         } else {
             trainingGridPane.setStyle("-fx-background-color: gray; -fx-grid-cell-column-index: " + 0 + "; -fx-grid-cell-row-index: " + row + ";");
             trainingGridPane.setStyle("-fx-background-color: gray; -fx-grid-cell-column-index: " + 1 + "; -fx-grid-cell-row-index: " + row + ";");
-        }
+        }*/
 
 
 

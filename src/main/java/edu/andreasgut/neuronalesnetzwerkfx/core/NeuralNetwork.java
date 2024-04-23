@@ -11,6 +11,7 @@ public class NeuralNetwork {
     LinkedList<Hiddenlayer> hiddenlayers = new LinkedList<>();
     Outputlayer outputlayer;
     LinkedList<NetworkEdge> selectedEdges = new LinkedList<>();
+    LinkedList<Double> errorHistoryList = new LinkedList<>();
 
     public NeuralNetwork(int numberOfInputNodes, int numberOfHiddenLayers, int numberOfHiddenLayerNodes, int numberOfOutputNodes) {
         this.inputlayer = new Inputlayer(numberOfInputNodes, this);
@@ -121,7 +122,7 @@ public class NeuralNetwork {
         return layers;
     }
 
-    public double calculateError(File directory){
+    public void calculateError(File directory){
         List<File> files = new ArrayList<>();
         File[] fileArray = directory.listFiles();
 
@@ -166,32 +167,39 @@ public class NeuralNetwork {
         System.out.println("Fehler: " + error);
         System.out.println("Letztes File:" + files.get(files.size()-1));
 
-        return error;
+        addErrorToFileHistory(error);
 
     }
 
+    private void addErrorToFileHistory(double error){
+        errorHistoryList.add(error);
+        int limit = 200;
+        if (errorHistoryList.size() > limit){
+            for (int i = limit; i < errorHistoryList.size(); i++){
+                errorHistoryList.remove(i);
+            }
+        }
+    }
 
-    public double trainAndGetError(File directory){
 
-
-        double errorBefore = calculateError(directory);
+    public void train(File directory){
+        if (errorHistoryList.size() == 0){
+            calculateError(directory);
+        }
+        double errorBefore = errorHistoryList.get(errorHistoryList.size()-1);
         adjustWeightsOfSelectedEdgesRandomly();
-        double errorAfter = calculateError(directory);
+        calculateError(directory);
+        double errorAfter = errorHistoryList.get(errorHistoryList.size()-1);
 
         if (errorAfter > errorBefore) {
             for (NetworkEdge edge : selectedEdges) {
                 edge.backUpWeight();
             }
-
             System.out.println("Netz wurde nicht verbessert und wurde zurückgesetzt. Aktueller Fehler: " + errorBefore);
-            return errorBefore;
         }
         else {
             System.out.println("Netz wurde verbessert. Aktueller Fehler: " + errorAfter);
-            return errorAfter;
         }
-
-
 
     }
 
@@ -209,4 +217,10 @@ public class NeuralNetwork {
 
         return maxIndex;
     }
+
+    public LinkedList<Double> getErrorHistoryList() {
+        return errorHistoryList;
+    }
 }
+
+
