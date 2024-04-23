@@ -408,20 +408,31 @@ public class HelloController {
 
     private void addErrorToTrainingGridPane(int repetitions){
 
-
         errorChart.setTitle("Training von " + LocalDateTime.now().format(DateTimeFormatter.ISO_TIME));
-        XYChart.Series<Number, Double> dataSeries = new XYChart.Series<>();
+        errorChart.getData().clear();
+        XYChart.Series<Number, Double> dataSeriesReal = new XYChart.Series<>();
+        XYChart.Series<Number, Double> dataSeriesSmallest = new XYChart.Series<>();
 
-        dataSeries.setName("Datensatz 1");
+        dataSeriesReal.setName("Aktueller Fehler");
+        dataSeriesSmallest.setName("Kleinster bisheriger Fehler");
 
         for (int i = 0; i < repetitions; i++) {
-            LinkedList<Double> errorList = neuralNetwork.getErrorHistoryList();
+            LinkedList<Double> realErrorList = neuralNetwork.getRealErrorHistoryList();
+            LinkedList<Double> smallestErrorList = neuralNetwork.getSmallestErrorHistoryList();
 
-            dataSeries.getData().add(new XYChart.Data<>(i, errorList.get(errorList.size()-i-1)));
+
+            dataSeriesReal.getData().add(new XYChart.Data<>(repetitions-i, realErrorList.get(realErrorList.size()-i-1)));
+            dataSeriesSmallest.getData().add(new XYChart.Data<>(repetitions-i, smallestErrorList.get(smallestErrorList.size()-i-1)));
+
+            for (Double d : smallestErrorList){
+                System.out.println(d);
+            }
         }
 
+        Platform.runLater(() -> errorChart.getData().add(dataSeriesReal));
+        Platform.runLater(() -> errorChart.getData().add(dataSeriesSmallest));
 
-        Platform.runLater(() -> errorChart.getData().add(dataSeries));
+
 
 
 

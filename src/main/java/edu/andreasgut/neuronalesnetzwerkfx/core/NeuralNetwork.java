@@ -11,7 +11,8 @@ public class NeuralNetwork {
     LinkedList<Hiddenlayer> hiddenlayers = new LinkedList<>();
     Outputlayer outputlayer;
     LinkedList<NetworkEdge> selectedEdges = new LinkedList<>();
-    LinkedList<Double> errorHistoryList = new LinkedList<>();
+    LinkedList<Double> realErrorHistoryList = new LinkedList<>();
+    LinkedList<Double> smallestErrorHistoryList = new LinkedList<>();
 
     public NeuralNetwork(int numberOfInputNodes, int numberOfHiddenLayers, int numberOfHiddenLayerNodes, int numberOfOutputNodes) {
         this.inputlayer = new Inputlayer(numberOfInputNodes, this);
@@ -167,29 +168,46 @@ public class NeuralNetwork {
         System.out.println("Fehler: " + error);
         System.out.println("Letztes File:" + files.get(files.size()-1));
 
-        addErrorToFileHistory(error);
+        addErrorToErrorHistory(error);
 
     }
 
-    private void addErrorToFileHistory(double error){
-        errorHistoryList.add(error);
+    private void addErrorToErrorHistory(double error){
+        realErrorHistoryList.add(error);
         int limit = 200;
-        if (errorHistoryList.size() > limit){
-            for (int i = limit; i < errorHistoryList.size(); i++){
-                errorHistoryList.remove(i);
+        if (realErrorHistoryList.size() > limit){
+            for (int i = limit; i < realErrorHistoryList.size(); i++){
+                realErrorHistoryList.remove(i);
+            }
+        }
+
+        if (smallestErrorHistoryList.size() == 0){
+            smallestErrorHistoryList.add(error);}
+        else {
+            double lastError = smallestErrorHistoryList.get(smallestErrorHistoryList.size() - 1);
+            if (lastError > error) {
+                smallestErrorHistoryList.add(error);
+            } else {
+                smallestErrorHistoryList.add(lastError);
+            }
+        }
+
+        if (smallestErrorHistoryList.size() > limit){
+            for (int i = limit; i < smallestErrorHistoryList.size(); i++){
+                smallestErrorHistoryList.remove(i);
             }
         }
     }
 
 
     public void train(File directory){
-        if (errorHistoryList.size() == 0){
+        if (realErrorHistoryList.size() == 0){
             calculateError(directory);
         }
-        double errorBefore = errorHistoryList.get(errorHistoryList.size()-1);
+        double errorBefore = realErrorHistoryList.get(realErrorHistoryList.size()-1);
         adjustWeightsOfSelectedEdgesRandomly();
         calculateError(directory);
-        double errorAfter = errorHistoryList.get(errorHistoryList.size()-1);
+        double errorAfter = realErrorHistoryList.get(realErrorHistoryList.size()-1);
 
         if (errorAfter > errorBefore) {
             for (NetworkEdge edge : selectedEdges) {
@@ -218,8 +236,12 @@ public class NeuralNetwork {
         return maxIndex;
     }
 
-    public LinkedList<Double> getErrorHistoryList() {
-        return errorHistoryList;
+    public LinkedList<Double> getRealErrorHistoryList() {
+        return realErrorHistoryList;
+    }
+
+    public LinkedList<Double> getSmallestErrorHistoryList() {
+        return smallestErrorHistoryList;
     }
 }
 
