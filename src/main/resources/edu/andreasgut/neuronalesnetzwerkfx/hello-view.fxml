@@ -118,7 +118,7 @@
                         <children>
                            <VBox>
                               <children>
-                                 <HBox spacing="10.0">
+                                 <HBox prefHeight="75.0" prefWidth="500.0" spacing="10.0">
                                     <children>
                                        <VBox prefHeight="200.0" prefWidth="100.0">
                                           <children>
@@ -126,18 +126,18 @@
                                              <Label fx:id="directoryLabel" text="Geladener Ordner..." />
                                           </children>
                                        </VBox>
-                                       <VBox prefHeight="200.0" prefWidth="100.0">
+                                       <VBox>
                                           <children>
-                                             <Label text="Prozentualer Anteil der Kanten: " />
+                                             <Label prefHeight="17.0" prefWidth="169.0" text="Prozentualer Anteil der Kanten: " />
                                              <Slider fx:id="percentSlider" majorTickUnit="10.0" minorTickCount="5" onMouseEntered="#highlightSelectedEdges" onMouseExited="#stopHighlightingSelectedEdges" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="20.0" />
                                           </children>
                                        </VBox>
                                        <VBox prefHeight="200.0" spacing="10.0">
                                           <children>
-                                             <VBox prefHeight="200.0" prefWidth="100.0">
+                                             <VBox>
                                                 <children>
                                                    <Label text="Durchgänge" />
-                                                   <Slider fx:id="repetitionsSlider" blockIncrement="1.0" majorTickUnit="4.0" max="20.0" min="1.0" minorTickCount="0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="10.0" />
+                                                   <Slider fx:id="repetitionsSlider" blockIncrement="1.0" majorTickUnit="4.0" max="20.0" min="1.0" minorTickCount="0" prefHeight="38.0" prefWidth="76.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="10.0" />
                                                 </children>
                                              </VBox>
                                           </children>
@@ -151,6 +151,22 @@
                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                     </padding>
                                  </HBox>
+                                 <LineChart fx:id="errorChart" prefHeight="162.0" prefWidth="500.0">
+                                   <xAxis>
+                                     <NumberAxis side="BOTTOM" />
+                                   </xAxis>
+                                   <yAxis>
+                                     <NumberAxis side="LEFT" />
+                                   </yAxis>
+                                 </LineChart>
+                                 <LineChart fx:id="errorChartAll" prefHeight="180.0" prefWidth="500.0">
+                                   <xAxis>
+                                     <NumberAxis side="BOTTOM" />
+                                   </xAxis>
+                                   <yAxis>
+                                     <NumberAxis side="LEFT" />
+                                   </yAxis>
+                                 </LineChart>
                                  <HBox>
                                     <children>
                                        <GridPane fx:id="trainingGridPane">
@@ -181,14 +197,6 @@
                                              <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
                                          </rowConstraints>
                                        </GridPane>
-                                       <LineChart fx:id="errorChart" prefHeight="200.0">
-                                         <xAxis>
-                                           <NumberAxis side="BOTTOM" />
-                                         </xAxis>
-                                         <yAxis>
-                                           <NumberAxis side="LEFT" />
-                                         </yAxis>
-                                       </LineChart>
                                     </children>
                                  </HBox>
                               </children>

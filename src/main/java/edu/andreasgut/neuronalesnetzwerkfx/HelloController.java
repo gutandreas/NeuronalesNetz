@@ -97,6 +97,9 @@ public class HelloController {
     @FXML
     private XYChart errorChart;
 
+    @FXML
+    private XYChart errorChartAll;
+
 
     @FXML
     private Slider widthSlider;
@@ -408,7 +411,7 @@ public class HelloController {
 
     private void addErrorToTrainingGridPane(int repetitions){
 
-        errorChart.setTitle("Training von " + LocalDateTime.now().format(DateTimeFormatter.ISO_TIME));
+        errorChart.setTitle("Trainingsdurchgang von " + LocalDateTime.now().format(DateTimeFormatter.ISO_TIME));
         errorChart.getData().clear();
         XYChart.Series<Number, Double> dataSeriesReal = new XYChart.Series<>();
         XYChart.Series<Number, Double> dataSeriesSmallest = new XYChart.Series<>();
@@ -423,14 +426,31 @@ public class HelloController {
 
             dataSeriesReal.getData().add(new XYChart.Data<>(repetitions-i, realErrorList.get(realErrorList.size()-i-1)));
             dataSeriesSmallest.getData().add(new XYChart.Data<>(repetitions-i, smallestErrorList.get(smallestErrorList.size()-i-1)));
-
-            for (Double d : smallestErrorList){
-                System.out.println(d);
-            }
         }
 
         Platform.runLater(() -> errorChart.getData().add(dataSeriesReal));
         Platform.runLater(() -> errorChart.getData().add(dataSeriesSmallest));
+
+        errorChartAll.setTitle("Gesamtverlauf von " + LocalDateTime.now().format(DateTimeFormatter.ISO_TIME));
+        errorChartAll.getData().clear();
+        XYChart.Series<Number, Double> dataSeriesRealAll = new XYChart.Series<>();
+        XYChart.Series<Number, Double> dataSeriesSmallestAll = new XYChart.Series<>();
+
+        dataSeriesRealAll.setName("Aktueller Fehler");
+        dataSeriesSmallestAll.setName("Kleinster bisheriger Fehler");
+
+        int numberOfAllErrors = Math.min(neuralNetwork.getRealErrorHistoryList().size(), neuralNetwork.getSmallestErrorHistoryList().size());
+        for (int i = 0; i < numberOfAllErrors; i++) {
+            LinkedList<Double> realErrorList = neuralNetwork.getRealErrorHistoryList();
+            LinkedList<Double> smallestErrorList = neuralNetwork.getSmallestErrorHistoryList();
+
+
+            dataSeriesRealAll.getData().add(new XYChart.Data<>(numberOfAllErrors-i, realErrorList.get(realErrorList.size()-i-1)));
+            dataSeriesSmallestAll.getData().add(new XYChart.Data<>(numberOfAllErrors-i, smallestErrorList.get(smallestErrorList.size()-i-1)));
+        }
+
+        Platform.runLater(() -> errorChartAll.getData().add(dataSeriesRealAll));
+        Platform.runLater(() -> errorChartAll.getData().add(dataSeriesSmallestAll));
 
 
 
