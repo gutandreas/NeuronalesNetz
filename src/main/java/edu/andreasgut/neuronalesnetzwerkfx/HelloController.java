@@ -10,6 +10,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -104,6 +105,9 @@ public class HelloController {
 
     @FXML
     private XYChart errorChartAll;
+
+    @FXML
+    private PieChart correctnessChart;
 
 
     @FXML
@@ -472,7 +476,11 @@ public class HelloController {
     public void testNetworkWithSelectedDirectory(){
 
         double percentageOfCorrectAnswers = neuralNetwork.getPercentageOfCorrectGuesses(selectedDirectoryForTesting);
+        correctnessChart.getData().clear();
         System.out.println("Anteil korrekter Antworten: " + percentageOfCorrectAnswers);
+        PieChart.Data dataTrue = new PieChart.Data("Korrekt", percentageOfCorrectAnswers);
+        PieChart.Data dataFalse = new PieChart.Data("Falsch", 1-percentageOfCorrectAnswers);
+        correctnessChart.getData().addAll(dataTrue, dataFalse);
 
     }
 
