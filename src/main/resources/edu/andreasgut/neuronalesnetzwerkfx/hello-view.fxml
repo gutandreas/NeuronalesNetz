@@ -52,7 +52,7 @@
                                  <Slider fx:id="layerSlider" majorTickUnit="1.0" max="6.0" min="3.0" minorTickCount="0" showTickLabels="true" showTickMarks="true" snapToTicks="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                  <Label fx:id="layerLabel" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                                  <Label text="Neuronen in HL:" GridPane.rowIndex="2" />
-                                 <Slider fx:id="neuronsSlider" majorTickUnit="1.0" max="40.0" min="2.0" minorTickCount="0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="20.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                 <Slider fx:id="neuronsSlider" majorTickUnit="1.0" max="60.0" min="2.0" minorTickCount="0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="20.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                  <Label fx:id="neuronsLabel" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                                  <Label text="Neuronen in OL:" GridPane.rowIndex="3" />
                                  <Slider fx:id="outputSlider" majorTickUnit="1.0" max="10.0" min="2.0" minorTickCount="0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="3.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
