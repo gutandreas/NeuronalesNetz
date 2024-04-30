@@ -22,8 +22,13 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -82,6 +87,7 @@ public class HelloController {
     @FXML
     private RadioButton newNetworkRadio;
 
+
     @FXML
     private Button einzelbildButton;
 
@@ -130,6 +136,12 @@ public class HelloController {
 
     @FXML
     private Button randomlyChangeButton;
+
+    @FXML
+    private Button exportButton;
+
+    @FXML
+    private Button importButton;
 
 
     public void initialize() {
@@ -504,6 +516,51 @@ public class HelloController {
 
     public void hideNewNetworkSettings(){
         newNetworkSettingGridPane.setVisible(false);
+    }
+
+    public void exportNetwork(){
+        neuralNetwork.saveNetworkAsJsonInFile();
+
+    }
+
+    public void importNetwork(){
+
+        FileChooser fileChooser = new FileChooser();
+
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("JSON-Dateien (*.json)", "*.json");
+        fileChooser.getExtensionFilters().add(extFilter);
+
+        File selectedFile = fileChooser.showOpenDialog(new Stage());
+
+
+        if (selectedFile != null && selectedFile.getName().endsWith(".json")) {
+            // Hier kannst du den ausgewählten JSON-Dateipfad verwenden
+            System.out.println("Ausgewählte JSON-Datei: " + selectedFile.getAbsolutePath());
+        } else {
+            System.out.println("Keine JSON-Datei ausgewählt oder ungültiges Format.");
+        }
+
+        try (FileReader reader = new FileReader(selectedFile)) {
+            // JSONTokener zum Lesen der JSON-Daten aus der Datei erstellen
+            JSONTokener tokener = new JSONTokener(reader);
+
+            // JSONObject oder JSONArray aus dem Tokener parsen
+            Object obj = tokener.nextValue();
+
+           if (obj instanceof JSONArray) {
+                // Wenn das oberste JSON-Element ein Array ist
+                JSONArray jsonArray = (JSONArray) obj;
+                // Hier kannst du das JSONArray weiterverarbeiten
+                System.out.println("JSONArray: " + jsonArray.toString());
+                neuralNetwork = new NeuralNetwork(jsonArray);
+            } else {
+                System.out.println("Ungültiges JSON-Format.");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
 

@@ -1,8 +1,12 @@
 package edu.andreasgut.neuronalesnetzwerkfx.core;
 
 import edu.andreasgut.neuronalesnetzwerkfx.imagetools.SourceImage;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 
 public class NeuralNetwork {
@@ -23,6 +27,10 @@ public class NeuralNetwork {
             previousLayer = tempHiddenLayer;
         }
         this.outputlayer = new Outputlayer(numberOfOutputNodes, previousLayer, this);
+    }
+
+    public NeuralNetwork(JSONArray jsonNetwork){
+        System.out.println("Anzahl Layers: " + jsonNetwork.length());
     }
 
     public void startCalculations(double[] inputs){
@@ -280,6 +288,38 @@ public class NeuralNetwork {
     public LinkedList<Double> getSmallestErrorHistoryList() {
         return smallestErrorHistoryList;
     }
+
+    public void saveNetworkAsJsonInFile() {
+        JSONArray jsonNeuralNetwork = new JSONArray();
+
+        for (int layer = 0; layer < getAllLayers().size(); layer++){
+
+            JSONArray jsonLayer = new JSONArray();
+
+            for (int node = 0; node < getAllLayers().get(layer).getNumberOfNodes(); node++){
+                JSONArray jsonNode = new JSONArray();
+                JSONArray jsonWeights = new JSONArray();
+
+                for (NetworkEdge edge : getAllLayers().get(layer).getNodes().get(node).getOutputEdges()) {
+                    jsonWeights.put(edge.getWeight());
+                }
+
+                jsonNode.put(jsonWeights);
+                jsonLayer.put(jsonNode);
+
+            }
+
+            jsonNeuralNetwork.put(jsonLayer);
+        }
+
+        // Schreibe das JSON-Objekt in eine Datei
+        try (FileWriter file = new FileWriter("neural_net_settings.json")) {
+            file.write(jsonNeuralNetwork.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
 
 

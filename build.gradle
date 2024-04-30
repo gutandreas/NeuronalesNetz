@@ -34,7 +34,7 @@ javafx {
 }
 
 dependencies {
-
+    implementation 'org.json:json:20210307' // Dies ist das neueste Artefakt für JSON.org per Januar 2022
     implementation('org.controlsfx:controlsfx:11.1.1')
     implementation('com.dlsc.formsfx:formsfx-core:11.3.2') {
         exclude(group: 'org.openjfx')

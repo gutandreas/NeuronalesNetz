@@ -9,6 +9,7 @@
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -227,6 +228,30 @@
                                  <PieChart fx:id="correctnessChart" title="Anteil korrekter Antworten" />
                               </children>
                            </VBox>
+                        </children>
+                     </AnchorPane>
+                 </content>
+               </Tab>
+               <Tab text="Import/Export">
+                 <content>
+                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <children>
+                           <HBox prefHeight="100.0">
+                              <children>
+                                 <HBox prefHeight="100.0" prefWidth="200.0">
+                                    <children>
+                                       <Button fx:id="importButton" mnemonicParsing="false" onAction="#importNetwork" text="Importieren" />
+                                    </children>
+                                 </HBox>
+                                 <HBox prefHeight="100.0">
+                                    <children>
+                                       <Label text="Dateiname:" />
+                                       <TextField />
+                                       <Button fx:id="exportButton" mnemonicParsing="false" onAction="#exportNetwork" text="Exportieren" />
+                                    </children>
+                                 </HBox>
+                              </children>
+                           </HBox>
                         </children>
                      </AnchorPane>
                  </content>
