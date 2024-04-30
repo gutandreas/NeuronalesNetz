@@ -31,6 +31,27 @@ public class NeuralNetwork {
 
     public NeuralNetwork(JSONArray jsonNetwork){
         System.out.println("Anzahl Layers: " + jsonNetwork.length());
+        int numberOfInputNodes = ((JSONArray) jsonNetwork.get(0)).length();
+        int numberOfHiddenLayers = jsonNetwork.length() - 2;
+        int numberOfHiddenLayerNodes = ((JSONArray) jsonNetwork.get(1)).length();
+        int numberOfOutputNodes = jsonNetwork.getInt(jsonNetwork.length()-1);
+
+        this.inputlayer = new Inputlayer(numberOfInputNodes, this);
+        Layer previousLayer = inputlayer;
+        for (int i = 0; i < numberOfHiddenLayers; i++){
+            Hiddenlayer tempHiddenLayer = new Hiddenlayer(numberOfHiddenLayerNodes, previousLayer, this);
+            hiddenlayers.add(tempHiddenLayer);
+            previousLayer = tempHiddenLayer;
+        }
+        this.outputlayer = new Outputlayer(numberOfOutputNodes, previousLayer, this);
+
+        for (Layer layer : getAllLayers()){
+            for (NetworkNode node : layer.getNodes()){
+                for (NetworkEdge edge : node.getOutputEdges()){
+                    edge.setWeight(0);
+                }
+            }
+        }
     }
 
     public void startCalculations(double[] inputs){
@@ -161,7 +182,7 @@ public class NeuralNetwork {
                         target = 1;
                     }
                     else {
-                        target = 0.1;
+                        target = 0;
                     }
                     double output = getOutputlayer().getNodes().get(i).getOutput();
                     double errorForThisOutput = Math.abs(output - target);
@@ -213,19 +234,19 @@ public class NeuralNetwork {
         if (realErrorHistoryList.size() == 0){
             calculateError(directory);
         }
-        double errorBefore = realErrorHistoryList.get(realErrorHistoryList.size()-1);
+        double minError = smallestErrorHistoryList.get(smallestErrorHistoryList.size()-1);
         adjustWeightsOfSelectedEdgesRandomly();
         calculateError(directory);
-        double errorAfter = realErrorHistoryList.get(realErrorHistoryList.size()-1);
+        double currentError = realErrorHistoryList.get(realErrorHistoryList.size()-1);
 
-        if (errorAfter > errorBefore) {
+        if (currentError > minError) {
             for (NetworkEdge edge : selectedEdges) {
                 edge.backUpWeight();
             }
-            System.out.println("Netz wurde nicht verbessert und wurde zurückgesetzt. Aktueller Fehler: " + errorBefore);
+            System.out.println("Netz wurde nicht verbessert und wurde zurückgesetzt. Aktueller Fehler: " + minError);
         }
         else {
-            System.out.println("Netz wurde verbessert. Aktueller Fehler: " + errorAfter);
+            System.out.println("Netz wurde verbessert. Aktueller Fehler: " + currentError);
         }
 
     }
