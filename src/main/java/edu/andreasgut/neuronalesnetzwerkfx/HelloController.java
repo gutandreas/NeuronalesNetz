@@ -553,6 +553,8 @@ public class HelloController {
                 // Hier kannst du das JSONArray weiterverarbeiten
                 System.out.println("JSONArray: " + jsonArray.toString());
                 neuralNetwork = new NeuralNetwork(jsonArray);
+                initializeGUI(neuralNetwork);
+
             } else {
                 System.out.println("Ungültiges JSON-Format.");
             }

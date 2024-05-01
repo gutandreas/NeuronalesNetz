@@ -34,7 +34,7 @@ public class NeuralNetwork {
         int numberOfInputNodes = ((JSONArray) jsonNetwork.get(0)).length();
         int numberOfHiddenLayers = jsonNetwork.length() - 2;
         int numberOfHiddenLayerNodes = ((JSONArray) jsonNetwork.get(1)).length();
-        int numberOfOutputNodes = jsonNetwork.getInt(jsonNetwork.length()-1);
+        int numberOfOutputNodes = ((JSONArray) jsonNetwork.get(jsonNetwork.length()-1)).length();;
 
         this.inputlayer = new Inputlayer(numberOfInputNodes, this);
         Layer previousLayer = inputlayer;
@@ -48,7 +48,10 @@ public class NeuralNetwork {
         for (Layer layer : getAllLayers()){
             for (NetworkNode node : layer.getNodes()){
                 for (NetworkEdge edge : node.getOutputEdges()){
-                    edge.setWeight(0);
+                    JSONArray layerArray = (JSONArray) jsonNetwork.get(getAllLayers().indexOf(layer));
+                    JSONArray nodeArray = (JSONArray) layerArray.get(layer.getNodes().indexOf(node));
+                    double weight = Double.parseDouble(nodeArray.get(node.getOutputEdges().indexOf(edge)).toString());
+                    edge.setWeight(weight);
                 }
             }
         }
@@ -319,13 +322,12 @@ public class NeuralNetwork {
 
             for (int node = 0; node < getAllLayers().get(layer).getNumberOfNodes(); node++){
                 JSONArray jsonNode = new JSONArray();
-                JSONArray jsonWeights = new JSONArray();
+
 
                 for (NetworkEdge edge : getAllLayers().get(layer).getNodes().get(node).getOutputEdges()) {
-                    jsonWeights.put(edge.getWeight());
+                    jsonNode.put(edge.getWeight());
                 }
 
-                jsonNode.put(jsonWeights);
                 jsonLayer.put(jsonNode);
 
             }
