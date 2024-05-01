@@ -182,7 +182,7 @@ public class NeuralNetwork {
                 }
             }
             System.out.println(files.size());
-            Arrays.sort(fileArray, Comparator.comparing(File::getName));
+            //Arrays.sort(fileArray, Comparator.comparing(File::getName));
         }
 
         double error = 0;
@@ -203,10 +203,13 @@ public class NeuralNetwork {
                         target = 0;
                     }
                     double output = getOutputlayer().getNodes().get(i).getOutput();
+
+
                     double errorForThisOutput = Math.abs(output - target);
                     System.out.println("Error für diesen Output: " + errorForThisOutput);
                     double squaredErrorForThisOutput = Math.pow(errorForThisOutput, 2);
                     error += squaredErrorForThisOutput;
+
                 }
             }
         }

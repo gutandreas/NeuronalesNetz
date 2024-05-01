@@ -47,7 +47,7 @@
                                     <GridPane.margin>
                                        <Insets />
                                     </GridPane.margin></Label>
-                                 <Slider fx:id="widthSlider" blockIncrement="1.0" majorTickUnit="1.0" max="10.0" min="3.0" minorTickCount="0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="8.0" GridPane.columnIndex="1" />
+                                 <Slider fx:id="widthSlider" blockIncrement="1.0" majorTickUnit="1.0" max="15.0" min="3.0" minorTickCount="0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="8.0" GridPane.columnIndex="1" />
                                  <Label fx:id="widthLabel" text="Label" GridPane.columnIndex="2" />
                                  <Label text="Layers:" GridPane.rowIndex="1" />
                                  <Slider fx:id="layerSlider" majorTickUnit="1.0" max="6.0" min="3.0" minorTickCount="0" showTickLabels="true" showTickMarks="true" snapToTicks="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
