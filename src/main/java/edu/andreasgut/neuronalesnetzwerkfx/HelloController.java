@@ -28,6 +28,7 @@ import org.json.JSONTokener;
 
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
@@ -105,6 +106,9 @@ public class HelloController {
     private File selectedDirectoryForTesting;
 
     private int selectedCorrectOutput;
+
+    @FXML
+    private TextField exportNameTextfield;
 
     @FXML
     private XYChart errorChart;
@@ -362,6 +366,9 @@ public class HelloController {
 
         FileChooser fileChooser = new FileChooser();
 
+        File currentDirectory = new File("src/main/resources/images/numbers");
+        fileChooser.setInitialDirectory(currentDirectory);
+
         currentSelectedFile = fileChooser.showOpenDialog(new Stage());
         System.out.println(currentSelectedFile.getAbsolutePath());
         //System.out.println(SourceImage.getPathFromResourceFolder(currentSelectedFile.getAbsolutePath()));
@@ -519,40 +526,45 @@ public class HelloController {
     }
 
     public void exportNetwork(){
-        neuralNetwork.saveNetworkAsJsonInFile();
+        JSONObject jsonNeuralNetwork = neuralNetwork.getNetWorkAsJSONObject();
+
+        // Schreibe das JSON-Objekt in eine Datei
+        String fileName = exportNameTextfield.getText();
+        try (FileWriter file = new FileWriter("templates/" + fileName + ".json")) {
+            file.write(jsonNeuralNetwork.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
     public void importNetwork(){
 
+
+
         FileChooser fileChooser = new FileChooser();
+
+        File currentDirectory = new File("templates");
+        fileChooser.setInitialDirectory(currentDirectory);
 
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("JSON-Dateien (*.json)", "*.json");
         fileChooser.getExtensionFilters().add(extFilter);
 
         File selectedFile = fileChooser.showOpenDialog(new Stage());
 
-
         if (selectedFile != null && selectedFile.getName().endsWith(".json")) {
-            // Hier kannst du den ausgewählten JSON-Dateipfad verwenden
             System.out.println("Ausgewählte JSON-Datei: " + selectedFile.getAbsolutePath());
         } else {
             System.out.println("Keine JSON-Datei ausgewählt oder ungültiges Format.");
         }
 
         try (FileReader reader = new FileReader(selectedFile)) {
-            // JSONTokener zum Lesen der JSON-Daten aus der Datei erstellen
             JSONTokener tokener = new JSONTokener(reader);
-
-            // JSONObject oder JSONArray aus dem Tokener parsen
             Object obj = tokener.nextValue();
 
-           if (obj instanceof JSONArray) {
-                // Wenn das oberste JSON-Element ein Array ist
-                JSONArray jsonArray = (JSONArray) obj;
-                // Hier kannst du das JSONArray weiterverarbeiten
-                System.out.println("JSONArray: " + jsonArray.toString());
-                neuralNetwork = new NeuralNetwork(jsonArray);
+           if (obj instanceof JSONObject) {
+                JSONObject jsonObject = (JSONObject) obj;
+                neuralNetwork = new NeuralNetwork(jsonObject);
                 initializeGUI(neuralNetwork);
 
             } else {
@@ -561,6 +573,8 @@ public class HelloController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        loadImage();
 
 
     }

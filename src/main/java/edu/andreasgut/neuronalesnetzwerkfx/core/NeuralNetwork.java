@@ -5,8 +5,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.*;
 
 public class NeuralNetwork {
@@ -29,12 +27,22 @@ public class NeuralNetwork {
         this.outputlayer = new Outputlayer(numberOfOutputNodes, previousLayer, this);
     }
 
-    public NeuralNetwork(JSONArray jsonNetwork){
-        System.out.println("Anzahl Layers: " + jsonNetwork.length());
-        int numberOfInputNodes = ((JSONArray) jsonNetwork.get(0)).length();
-        int numberOfHiddenLayers = jsonNetwork.length() - 2;
-        int numberOfHiddenLayerNodes = ((JSONArray) jsonNetwork.get(1)).length();
-        int numberOfOutputNodes = ((JSONArray) jsonNetwork.get(jsonNetwork.length()-1)).length();;
+    public NeuralNetwork(JSONObject jsonNetwork){
+
+        handleJSONWeights((JSONArray) jsonNetwork.get("weights"));
+        handleJSONErrors((JSONArray) jsonNetwork.get("realErrors"));
+
+
+
+
+    }
+
+    private void handleJSONWeights(JSONArray weightsArray){
+        System.out.println("Anzahl Layers: " + weightsArray.length());
+        int numberOfInputNodes = ((JSONArray) weightsArray.get(0)).length();
+        int numberOfHiddenLayers = weightsArray.length() - 2;
+        int numberOfHiddenLayerNodes = ((JSONArray) weightsArray.get(1)).length();
+        int numberOfOutputNodes = ((JSONArray) weightsArray.get(weightsArray.length()-1)).length();;
 
         this.inputlayer = new Inputlayer(numberOfInputNodes, this);
         Layer previousLayer = inputlayer;
@@ -48,7 +56,7 @@ public class NeuralNetwork {
         for (Layer layer : getAllLayers()){
             for (NetworkNode node : layer.getNodes()){
                 for (NetworkEdge edge : node.getOutputEdges()){
-                    JSONArray layerArray = (JSONArray) jsonNetwork.get(getAllLayers().indexOf(layer));
+                    JSONArray layerArray = (JSONArray) weightsArray.get(getAllLayers().indexOf(layer));
                     JSONArray nodeArray = (JSONArray) layerArray.get(layer.getNodes().indexOf(node));
                     double weight = Double.parseDouble(nodeArray.get(node.getOutputEdges().indexOf(edge)).toString());
                     edge.setWeight(weight);
@@ -56,6 +64,13 @@ public class NeuralNetwork {
             }
         }
     }
+
+    private void handleJSONErrors(JSONArray realErrors){
+        for (Object error : realErrors){
+            addErrorToErrorHistory(Double.parseDouble(error.toString()));
+        }
+    }
+
 
     public void startCalculations(double[] inputs){
         int inputLength = inputs.length;
@@ -207,7 +222,7 @@ public class NeuralNetwork {
 
     private void addErrorToErrorHistory(double error){
         realErrorHistoryList.add(error);
-        int limit = 200;
+        int limit = 5000;
         if (realErrorHistoryList.size() > limit){
             for (int i = limit; i < realErrorHistoryList.size(); i++){
                 realErrorHistoryList.remove(i);
@@ -313,8 +328,9 @@ public class NeuralNetwork {
         return smallestErrorHistoryList;
     }
 
-    public void saveNetworkAsJsonInFile() {
-        JSONArray jsonNeuralNetwork = new JSONArray();
+    public JSONObject getNetWorkAsJSONObject() {
+        JSONObject jsonNetwork = new JSONObject();
+        JSONArray jsonNetworkWeights = new JSONArray();
 
         for (int layer = 0; layer < getAllLayers().size(); layer++){
 
@@ -332,15 +348,27 @@ public class NeuralNetwork {
 
             }
 
-            jsonNeuralNetwork.put(jsonLayer);
+            jsonNetworkWeights.put(jsonLayer);
         }
 
-        // Schreibe das JSON-Objekt in eine Datei
-        try (FileWriter file = new FileWriter("neural_net_settings.json")) {
-            file.write(jsonNeuralNetwork.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
+        jsonNetwork.put("weights", jsonNetworkWeights);
+
+        JSONArray realErrors = new JSONArray();
+        for (Double error : realErrorHistoryList){
+            realErrors.put(error);
         }
+        jsonNetwork.put("realErrors", realErrors);
+
+        /*JSONArray smallestErrors = new JSONArray();
+        for (Double error : smallestErrorHistoryList){
+            smallestErrors.put(error);
+        }
+        jsonNetwork.put("smallestErrors", smallestErrors);*/
+
+
+        return jsonNetwork;
+
+
     }
 
 }

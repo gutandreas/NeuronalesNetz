@@ -246,7 +246,7 @@
                                  <HBox prefHeight="100.0">
                                     <children>
                                        <Label text="Dateiname:" />
-                                       <TextField />
+                                       <TextField fx:id="exportNameTextfield" />
                                        <Button fx:id="exportButton" mnemonicParsing="false" onAction="#exportNetwork" text="Exportieren" />
                                     </children>
                                  </HBox>
