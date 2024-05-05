@@ -436,7 +436,7 @@ public class HelloController {
         trainingGridPane.getChildren().clear();
         for (int i = 0; i < repetitions; i++){
             //neuralNetwork.trainEvolutionary(selectedDirectoryForTraining);
-            neuralNetwork.trainWithGradientDescent(selectedDirectoryForTraining, 0.01);
+            neuralNetwork.trainWithGradientDescent(selectedDirectoryForTraining, 0.05);
             selectRandomEdges();
         }
         //addErrorToTrainingGridPane(repetitions);
