@@ -22,7 +22,6 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -436,10 +435,11 @@ public class HelloController {
         int repetitions = (int) repetitionsSlider.getValue();
         trainingGridPane.getChildren().clear();
         for (int i = 0; i < repetitions; i++){
-            neuralNetwork.train(selectedDirectoryForTraining);
+            //neuralNetwork.trainEvolutionary(selectedDirectoryForTraining);
+            neuralNetwork.trainWithGradientDescent(selectedDirectoryForTraining, 0.01);
             selectRandomEdges();
         }
-        addErrorToTrainingGridPane(repetitions);
+        //addErrorToTrainingGridPane(repetitions);
         SourceImage sourceImage = new SourceImage("/images/default/default1.png", (int) Math.sqrt(neuralNetwork.getInputlayer().getNumberOfNodes()));
         showImageInAnchorPane(sourceImage);
         neuralNetwork.startCalculations(sourceImage.getImageAs1DArray());

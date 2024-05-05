@@ -3,6 +3,7 @@ package edu.andreasgut.neuronalesnetzwerkfx.core;
 import edu.andreasgut.neuronalesnetzwerkfx.imagetools.SourceImage;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.w3c.dom.Node;
 
 import java.io.File;
 import java.util.*;
@@ -171,19 +172,8 @@ public class NeuralNetwork {
     }
 
     public void calculateError(File directory){
-        List<File> files = new ArrayList<>();
-        File[] fileArray = directory.listFiles();
 
-        if (fileArray != null) {
-            Arrays.sort(fileArray, Comparator.comparing(File::getName));
-            for (File file : fileArray) {
-                if (file.isFile()) {
-                    files.add(file);
-                }
-            }
-            System.out.println(files.size());
-            //Arrays.sort(fileArray, Comparator.comparing(File::getName));
-        }
+        List<File> files = transformFilesToArrayList(directory);
 
         double error = 0;
 
@@ -204,11 +194,8 @@ public class NeuralNetwork {
                     }
                     double output = getOutputlayer().getNodes().get(i).getOutput();
 
-
-                    double errorForThisOutput = Math.abs(output - target);
-                    System.out.println("Error für diesen Output: " + errorForThisOutput);
-                    double squaredErrorForThisOutput = Math.pow(errorForThisOutput, 2);
-                    error += squaredErrorForThisOutput;
+                    //error += calculateSquaredError(output, target);
+                    error += calculateCrossEntropy(output, target);
 
                 }
             }
@@ -220,6 +207,38 @@ public class NeuralNetwork {
 
         addErrorToErrorHistory(error);
 
+    }
+
+    private double calculateSquaredError(double output, double target){
+        double errorForThisOutput = Math.abs(output - target);
+        System.out.println("Quadrierter Error für diesen Output: " + errorForThisOutput);
+        return Math.pow(errorForThisOutput, 2);
+    }
+
+    private double calculateCrossEntropy(double output, double target) {
+        double crossEntropy = target * Math.log(output);
+
+        System.out.println("Kreuzentropie für diesen Output: " + crossEntropy);
+
+        return -crossEntropy;
+    }
+
+    private List<File> transformFilesToArrayList(File directory){
+        List<File> files = new ArrayList<>();
+        File[] fileArray = directory.listFiles();
+
+        if (fileArray != null) {
+            Arrays.sort(fileArray, Comparator.comparing(File::getName));
+            for (File file : fileArray) {
+                if (file.isFile()) {
+                    files.add(file);
+                }
+            }
+            System.out.println(files.size());
+            //Arrays.sort(fileArray, Comparator.comparing(File::getName));
+        }
+
+        return files;
     }
 
 
@@ -250,8 +269,56 @@ public class NeuralNetwork {
         }
     }
 
+    public void trainWithGradientDescent(File directory, double learningrate) {
+        List<File> files = transformFilesToArrayList(directory);
 
-    public void train(File directory){
+        for (File file : files) {
+            char firstSymbol = file.getName().charAt(0);
+            if (Character.isDigit(firstSymbol)) {
+                int indexOfCorrectOutput = firstSymbol - '0';
+                System.out.println(indexOfCorrectOutput + " bei Datei " + file.getName());
+                SourceImage sourceImage = new SourceImage(file.toURI().toString(), (int) Math.sqrt(getInputlayer().getNumberOfNodes()));
+                startCalculations(sourceImage.getImageAs1DArray());
+
+                // Gradientenabstieg im Output-Layer
+                for (int i = 0; i < getOutputlayer().getNumberOfNodes(); i++) {
+                    NetworkNode node = getOutputlayer().getNodes().get(i);
+                    double target = (i == indexOfCorrectOutput) ? 1 : 0;
+                    double output = node.getOutput();
+                    double error = target - output;
+                    for (NetworkEdge edge : node.getInputEdges()) {
+                        double input = edge.getFrom().getOutput();
+                        double deltaWeight = -learningrate * error * output * (1 - output) * input;
+                        double oldWeight = edge.getWeight();
+                        edge.setWeight(oldWeight - deltaWeight);
+                    }
+                }
+
+                // Rückpropagiere den Fehler durch die versteckten Schichten
+                Layer currentLayer = getPreviousLayer(outputlayer);
+                while (!(currentLayer instanceof Inputlayer)) {
+                    for (NetworkNode node : currentLayer.getNodes()) {
+                        double sum = 0;
+                        for (NetworkEdge edge : node.getOutputEdges()) {
+                            sum += edge.getTo().getDelta() * edge.getWeight();
+                        }
+                        double delta = node.getOutput() * (1 - node.getOutput()) * sum;
+                        node.setDelta(delta);
+                        for (NetworkEdge edge : node.getInputEdges()) {
+                            double input = edge.getFrom().getOutput();
+                            double deltaWeight = -learningrate * delta * input;
+                            double oldWeight = edge.getWeight();
+                            edge.setWeight(oldWeight - deltaWeight);
+                        }
+                    }
+                    currentLayer = getPreviousLayer(currentLayer);
+                }
+            }
+        }
+    }
+
+
+    public void trainEvolutionary(File directory){
         if (realErrorHistoryList.size() == 0){
             calculateError(directory);
         }
