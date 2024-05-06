@@ -194,8 +194,8 @@ public class NeuralNetwork {
                     }
                     double output = getOutputlayer().getNodes().get(i).getOutput();
 
-                    //error += calculateSquaredError(output, target);
-                    error += calculateCrossEntropy(output, target);
+                    error += calculateSquaredError(output, target);
+                    //error += calculateCrossEntropy(output, target);
 
                 }
             }
@@ -315,6 +315,8 @@ public class NeuralNetwork {
                 }
             }
         }
+
+        calculateError(directory);
     }
 
 

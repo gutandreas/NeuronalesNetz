@@ -25,7 +25,7 @@ tasks.withType(JavaCompile) {
 
 application {
     mainModule = 'edu.andreasgut.neuronalesnetzwerkfx'
-    mainClass = 'edu.andreasgut.neuronalesnetzwerkfx.HelloApplication'
+    mainClass = 'edu.andreasgut.neuronalesnetzwerkfx.NeuralNetworkApplication'
 }
 
 javafx {

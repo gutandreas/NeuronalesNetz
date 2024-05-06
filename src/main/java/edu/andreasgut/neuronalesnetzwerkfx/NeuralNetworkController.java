@@ -34,7 +34,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 
-public class HelloController {
+public class NeuralNetworkController {
     @FXML
     private Label welcomeText;
 
@@ -110,10 +110,16 @@ public class HelloController {
     private TextField exportNameTextfield;
 
     @FXML
-    private XYChart errorChart;
+    private XYChart evolutionaryErrorChart;
 
     @FXML
-    private XYChart errorChartAll;
+    private XYChart evolutionaryErrorChartAll;
+
+    @FXML
+    private XYChart gradientErrorChart;
+
+    @FXML
+    private XYChart gradientErrorChartAll;
 
     @FXML
     private PieChart correctnessChart;
@@ -445,7 +451,7 @@ public class HelloController {
 
             selectRandomEdges();
         }
-        addErrorToTrainingGridPane(repetitions);
+        addErrorToTrainingGridPane(evolutionaryErrorChart, evolutionaryErrorChartAll, repetitions, true);
         SourceImage sourceImage = new SourceImage("/images/default/default1.png", (int) Math.sqrt(neuralNetwork.getInputlayer().getNumberOfNodes()));
         showImageInAnchorPane(sourceImage);
         neuralNetwork.startCalculations(sourceImage.getImageAs1DArray());
@@ -459,12 +465,18 @@ public class HelloController {
         for (int i = 0; i < repetitions; i++) {
             neuralNetwork.trainWithGradientDescent(selectedDirectoryForTraining, learningRate);
         }
+        addErrorToTrainingGridPane(gradientErrorChart, gradientErrorChartAll, repetitions, false);
+        SourceImage sourceImage = new SourceImage("/images/default/default1.png", (int) Math.sqrt(neuralNetwork.getInputlayer().getNumberOfNodes()));
+        showImageInAnchorPane(sourceImage);
+        neuralNetwork.startCalculations(sourceImage.getImageAs1DArray());
+        updateGUI();
+
     }
 
-    private void addErrorToTrainingGridPane(int repetitions){
+    private void addErrorToTrainingGridPane(XYChart trainingChart, XYChart allChart, int repetitions, boolean smallestErrorToo){
 
-        errorChart.setTitle("Trainingsdurchgang von " + LocalDateTime.now().format(DateTimeFormatter.ISO_TIME));
-        errorChart.getData().clear();
+        trainingChart.setTitle("Trainingsdurchgang von " + LocalDateTime.now().format(DateTimeFormatter.ISO_TIME));
+        trainingChart.getData().clear();
         XYChart.Series<Number, Double> dataSeriesReal = new XYChart.Series<>();
         XYChart.Series<Number, Double> dataSeriesSmallest = new XYChart.Series<>();
 
@@ -477,14 +489,17 @@ public class HelloController {
 
 
             dataSeriesReal.getData().add(new XYChart.Data<>(repetitions-i, realErrorList.get(realErrorList.size()-i-1)));
-            dataSeriesSmallest.getData().add(new XYChart.Data<>(repetitions-i, smallestErrorList.get(smallestErrorList.size()-i-1)));
+            dataSeriesSmallest.getData().add(new XYChart.Data<>(repetitions - i, smallestErrorList.get(smallestErrorList.size() - i - 1)));
         }
 
-        Platform.runLater(() -> errorChart.getData().add(dataSeriesReal));
-        Platform.runLater(() -> errorChart.getData().add(dataSeriesSmallest));
+        Platform.runLater(() -> trainingChart.getData().add(dataSeriesReal));
 
-        errorChartAll.setTitle("Gesamtverlauf von " + LocalDateTime.now().format(DateTimeFormatter.ISO_TIME));
-        errorChartAll.getData().clear();
+        if (smallestErrorToo){
+            Platform.runLater(() -> trainingChart.getData().add(dataSeriesSmallest));
+        }
+
+        allChart.setTitle("Gesamtverlauf von " + LocalDateTime.now().format(DateTimeFormatter.ISO_TIME));
+        allChart.getData().clear();
         XYChart.Series<Number, Double> dataSeriesRealAll = new XYChart.Series<>();
         XYChart.Series<Number, Double> dataSeriesSmallestAll = new XYChart.Series<>();
 
@@ -501,8 +516,10 @@ public class HelloController {
             dataSeriesSmallestAll.getData().add(new XYChart.Data<>(numberOfAllErrors-i, smallestErrorList.get(smallestErrorList.size()-i-1)));
         }
 
-        Platform.runLater(() -> errorChartAll.getData().add(dataSeriesRealAll));
-        Platform.runLater(() -> errorChartAll.getData().add(dataSeriesSmallestAll));
+        Platform.runLater(() -> allChart.getData().add(dataSeriesRealAll));
+        if (smallestErrorToo) {
+            Platform.runLater(() -> allChart.getData().add(dataSeriesSmallestAll));
+        }
 
     }
 

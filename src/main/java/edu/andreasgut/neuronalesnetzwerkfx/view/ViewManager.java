@@ -1,6 +1,6 @@
 package edu.andreasgut.neuronalesnetzwerkfx.view;
 
-import edu.andreasgut.neuronalesnetzwerkfx.HelloApplication;
+import edu.andreasgut.neuronalesnetzwerkfx.NeuralNetworkApplication;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -29,12 +29,12 @@ public class ViewManager {
     }
 
     public static FXMLLoader addStageWithFXML(String stageTitle, String stageName, String fxmlFileName){
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource(fxmlFileName));
+        FXMLLoader fxmlLoader = new FXMLLoader(NeuralNetworkApplication.class.getResource(fxmlFileName));
         Stage stage = new Stage();
         stage.setTitle(stageTitle);
         stageMap.put(stageName, stage);
         try {
-            Scene scene = new Scene(fxmlLoader.load(), 1000, 800);
+            Scene scene = new Scene(fxmlLoader.load(), 1200, 800);
             scene.getStylesheets().add(ViewManager.class.getResource("/styles/style.css").toExternalForm());
             stage.setScene(scene);
             sceneFXMLLoaderMap.put(scene, fxmlLoader);
@@ -51,7 +51,7 @@ public class ViewManager {
     }
 
     public static FXMLLoader changeSceneInCurrentStageWithFXML(String fxmlFileName){
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource(fxmlFileName));
+        FXMLLoader fxmlLoader = new FXMLLoader(NeuralNetworkApplication.class.getResource(fxmlFileName));
         try {
             Scene scene = new Scene(fxmlLoader.load(), 1000, 800);
             scene.getStylesheets().add(ViewManager.class.getResource("/styles/style.css").toExternalForm());

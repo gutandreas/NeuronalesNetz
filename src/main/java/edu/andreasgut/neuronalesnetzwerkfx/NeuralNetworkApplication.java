@@ -8,13 +8,13 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class HelloApplication extends Application {
+public class NeuralNetworkApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
 
 
-        //HelloController helloController = ViewManager.addStageWithFXML("Neuronales Netz", "mainStage", "hello-view.fxml").getController();
-        HelloController controller = ViewManager.addStageWithFXML("Neuronales Netz", "mainStage", "hello-view.fxml").getController();
+        //NeuralNetworkController helloController = ViewManager.addStageWithFXML("Neuronales Netz", "mainStage", "view.fxml").getController();
+        NeuralNetworkController controller = ViewManager.addStageWithFXML("Neuronales Netz", "mainStage", "view.fxml").getController();
 
         SourceImage sourceImage = new SourceImage("/images/default/default1.png", 6);
         controller.showImageInAnchorPane(sourceImage);

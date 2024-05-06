@@ -17,13 +17,13 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="windowVBox" alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.andreasgut.neuronalesnetzwerkfx.HelloController">
+<VBox fx:id="windowVBox" alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.andreasgut.neuronalesnetzwerkfx.NeuralNetworkController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
    <HBox fx:id="mainHBox">
       <children>
-         <TabPane prefHeight="500.0" prefWidth="500.0" tabClosingPolicy="UNAVAILABLE">
+         <TabPane prefHeight="500.0" tabClosingPolicy="UNAVAILABLE">
            <tabs>
                <Tab text="Neues Netz">
                  <content>
@@ -152,7 +152,7 @@
                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                     </padding>
                                  </HBox>
-                                 <LineChart fx:id="errorChart" prefHeight="162.0" prefWidth="500.0">
+                                 <LineChart fx:id="evolutionaryErrorChart" prefHeight="162.0" prefWidth="500.0">
                                    <xAxis>
                                      <NumberAxis side="BOTTOM" />
                                    </xAxis>
@@ -160,7 +160,7 @@
                                      <NumberAxis side="LEFT" />
                                    </yAxis>
                                  </LineChart>
-                                 <LineChart fx:id="errorChartAll" prefHeight="180.0" prefWidth="500.0">
+                                 <LineChart fx:id="evolutionaryErrorChartAll" prefHeight="180.0" prefWidth="500.0">
                                    <xAxis>
                                      <NumberAxis side="BOTTOM" />
                                    </xAxis>
@@ -244,7 +244,7 @@
                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                     </padding>
                                  </HBox>
-                                 <LineChart fx:id="errorChart1" prefHeight="162.0" prefWidth="500.0">
+                                 <LineChart fx:id="gradientErrorChart" prefHeight="162.0" prefWidth="500.0">
                                     <xAxis>
                                        <NumberAxis side="BOTTOM" />
                                     </xAxis>
@@ -252,7 +252,7 @@
                                        <NumberAxis side="LEFT" />
                                     </yAxis>
                                  </LineChart>
-                                 <LineChart fx:id="errorChartAll1" prefHeight="180.0" prefWidth="500.0">
+                                 <LineChart fx:id="gradientErrorChartAll" prefHeight="180.0" prefWidth="500.0">
                                     <xAxis>
                                        <NumberAxis side="BOTTOM" />
                                     </xAxis>
@@ -354,22 +354,8 @@
          <VBox prefHeight="200.0" prefWidth="100.0">
             <children>
                <AnchorPane fx:id="layerAnchorPane" onMouseEntered="#highlightMaxOutput" onMouseExited="#stopHilghlitingMaxOutput" prefHeight="600.0" prefWidth="400.0" />
-               <GridPane fx:id="layerGridPane" alignment="CENTER">
-                 <columnConstraints>
-                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                 </columnConstraints>
-                 <rowConstraints>
-                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                 </rowConstraints>
-               </GridPane>
-            
-                <Label fx:id="welcomeText" />
             </children>
          </VBox>
-         <VBox prefHeight="200.0" prefWidth="100.0" />
       </children>
    </HBox>
 </VBox>
