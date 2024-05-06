@@ -70,7 +70,7 @@ public class NeuralNetworkController {
     private VBox outputLayerVBox;
 
     @FXML
-    private GridPane layerGridPane;
+    private GridPane drawGridPane;
 
     @FXML
     private AnchorPane layerAnchorPane;
@@ -174,7 +174,29 @@ public class NeuralNetworkController {
         this.neuralNetwork = neuralNetwork;
         initializeLayerAnchorPane(neuralNetwork);
         initializeLines(neuralNetwork);
+        initializeDrawGridPane();
         updateGUI();
+    }
+
+    public void initializeDrawGridPane(){
+
+        int dimension = (int) Math.sqrt(neuralNetwork.getInputlayer().getNumberOfNodes());
+        drawGridPane.getChildren().clear();
+
+        for (int i = 0; i < dimension ; i++){
+            for (int j = 0; j < dimension; j++) {
+                Pane square = createSquare();
+                drawGridPane.add(square, i, j);
+                square.setOnMousePressed((event) -> square.setStyle("-fx-background-color: " + "white" + ";"));
+            }
+        }
+    }
+
+    private Pane createSquare() {
+        Pane square = new Pane();
+        square.setStyle("-fx-background-color: " + "black" + ";");
+        square.setMinSize(50, 50); // Größe des Quadrats anpassen
+        return square;
     }
 
     public void highlightSelectedEdges(){
@@ -451,7 +473,7 @@ public class NeuralNetworkController {
 
             selectRandomEdges();
         }
-        addErrorToTrainingGridPane(evolutionaryErrorChart, evolutionaryErrorChartAll, repetitions, true);
+        addErrorToErrorChart(evolutionaryErrorChart, evolutionaryErrorChartAll, repetitions, true);
         SourceImage sourceImage = new SourceImage("/images/default/default1.png", (int) Math.sqrt(neuralNetwork.getInputlayer().getNumberOfNodes()));
         showImageInAnchorPane(sourceImage);
         neuralNetwork.startCalculations(sourceImage.getImageAs1DArray());
@@ -465,7 +487,7 @@ public class NeuralNetworkController {
         for (int i = 0; i < repetitions; i++) {
             neuralNetwork.trainWithGradientDescent(selectedDirectoryForTraining, learningRate);
         }
-        addErrorToTrainingGridPane(gradientErrorChart, gradientErrorChartAll, repetitions, false);
+        addErrorToErrorChart(gradientErrorChart, gradientErrorChartAll, repetitions, false);
         SourceImage sourceImage = new SourceImage("/images/default/default1.png", (int) Math.sqrt(neuralNetwork.getInputlayer().getNumberOfNodes()));
         showImageInAnchorPane(sourceImage);
         neuralNetwork.startCalculations(sourceImage.getImageAs1DArray());
@@ -473,7 +495,7 @@ public class NeuralNetworkController {
 
     }
 
-    private void addErrorToTrainingGridPane(XYChart trainingChart, XYChart allChart, int repetitions, boolean smallestErrorToo){
+    private void addErrorToErrorChart(XYChart trainingChart, XYChart allChart, int repetitions, boolean smallestErrorToo){
 
         trainingChart.setTitle("Trainingsdurchgang von " + LocalDateTime.now().format(DateTimeFormatter.ISO_TIME));
         trainingChart.getData().clear();
