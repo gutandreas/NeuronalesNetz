@@ -25,7 +25,7 @@
       <children>
          <TabPane prefHeight="500.0" prefWidth="500.0" tabClosingPolicy="UNAVAILABLE">
            <tabs>
-               <Tab text="Neues Netz laden">
+               <Tab text="Neues Netz">
                  <content>
                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                         <children>
@@ -113,7 +113,7 @@
                         </children></AnchorPane>
                </content>
              </Tab>
-             <Tab text="Trainieren">
+             <Tab text="Evolutionäres Trainieren">
                <content>
                  <AnchorPane minHeight="0.0" minWidth="0.0">
                         <children>
@@ -138,7 +138,7 @@
                                              <VBox>
                                                 <children>
                                                    <Label text="Durchgänge" />
-                                                   <Slider fx:id="repetitionsSlider" blockIncrement="1.0" majorTickUnit="4.0" max="60.0" min="1.0" minorTickCount="0" prefHeight="38.0" prefWidth="76.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="10.0" />
+                                                   <Slider fx:id="repetitionsEvolutionarySlider" blockIncrement="1.0" majorTickUnit="4.0" max="60.0" min="1.0" minorTickCount="0" prefHeight="38.0" prefWidth="76.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="10.0" />
                                                 </children>
                                              </VBox>
                                           </children>
@@ -146,7 +146,7 @@
                                              <Insets />
                                           </HBox.margin>
                                        </VBox>
-                                       <Button mnemonicParsing="false" onAction="#startTrainingMultipleTimes" text="Trainieren" />
+                                       <Button mnemonicParsing="false" onAction="#startEvolutionaryTraining" text="Trainieren" />
                                     </children>
                                     <padding>
                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -205,6 +205,99 @@
                         </children></AnchorPane>
                </content>
              </Tab>
+               <Tab text="Trainieren mit Gradient Descent">
+                  <content>
+                     <AnchorPane minHeight="0.0" minWidth="0.0">
+                        <children>
+                           <VBox>
+                              <children>
+                                 <HBox prefHeight="75.0" prefWidth="500.0" spacing="10.0">
+                                    <children>
+                                       <VBox prefHeight="200.0" prefWidth="100.0">
+                                          <children>
+                                             <Button mnemonicParsing="false" onAction="#selectDirectoryForTraining" text="Ordner laden" />
+                                             <Label fx:id="directoryLabelTraining1" text="Geladener Ordner..." />
+                                          </children>
+                                       </VBox>
+                                       <VBox>
+                                          <children>
+                                             <Label prefHeight="17.0" prefWidth="169.0" text="Lernrate" />
+                                             <Slider fx:id="learningRateSlider" majorTickUnit="0.2" max="1.0" minorTickCount="5" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="0.001" />
+                                          </children>
+                                       </VBox>
+                                       <VBox prefHeight="200.0" spacing="10.0">
+                                          <children>
+                                             <VBox>
+                                                <children>
+                                                   <Label text="Durchgänge" />
+                                                   <Slider fx:id="repetitionsGradientSlider" blockIncrement="1.0" majorTickUnit="4.0" max="60.0" min="1.0" minorTickCount="0" prefHeight="38.0" prefWidth="76.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="10.0" />
+                                                </children>
+                                             </VBox>
+                                          </children>
+                                          <HBox.margin>
+                                             <Insets />
+                                          </HBox.margin>
+                                       </VBox>
+                                       <Button mnemonicParsing="false" onAction="#startGradientDescentTraining" text="Trainieren" />
+                                    </children>
+                                    <padding>
+                                       <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                    </padding>
+                                 </HBox>
+                                 <LineChart fx:id="errorChart1" prefHeight="162.0" prefWidth="500.0">
+                                    <xAxis>
+                                       <NumberAxis side="BOTTOM" />
+                                    </xAxis>
+                                    <yAxis>
+                                       <NumberAxis side="LEFT" />
+                                    </yAxis>
+                                 </LineChart>
+                                 <LineChart fx:id="errorChartAll1" prefHeight="180.0" prefWidth="500.0">
+                                    <xAxis>
+                                       <NumberAxis side="BOTTOM" />
+                                    </xAxis>
+                                    <yAxis>
+                                       <NumberAxis side="LEFT" />
+                                    </yAxis>
+                                 </LineChart>
+                                 <HBox>
+                                    <children>
+                                       <GridPane fx:id="trainingGridPane1">
+                                          <columnConstraints>
+                                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                                          </columnConstraints>
+                                          <rowConstraints>
+                                             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                          </rowConstraints>
+                                       </GridPane>
+                                    </children>
+                                 </HBox>
+                              </children>
+                           </VBox>
+                        </children>
+                     </AnchorPane>
+                  </content>
+               </Tab>
                <Tab text="Testen">
                  <content>
                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
@@ -276,16 +369,7 @@
                 <Label fx:id="welcomeText" />
             </children>
          </VBox>
-         <VBox prefHeight="200.0" prefWidth="100.0">
-            <children>
-               <HBox prefHeight="100.0" prefWidth="200.0">
-                  <children>
-                     <Label text="Vermutetes Resultat:" />
-                     <Label />
-                  </children>
-               </HBox>
-            </children>
-         </VBox>
+         <VBox prefHeight="200.0" prefWidth="100.0" />
       </children>
    </HBox>
 </VBox>

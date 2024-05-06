@@ -132,10 +132,16 @@ public class HelloController {
     private Slider outputSlider;
 
     @FXML
-    private Slider repetitionsSlider;
+    private Slider repetitionsEvolutionarySlider;
+
+    @FXML
+    private Slider repetitionsGradientSlider;
 
     @FXML
     private Slider percentSlider;
+
+    @FXML
+    private Slider learningRateSlider;
 
     @FXML
     private Button randomlyChangeButton;
@@ -431,20 +437,28 @@ public class HelloController {
         directoryLabelTesting.setText(selectedDirectoryForTesting.getName());
     }
 
-    public void startTrainingMultipleTimes(){
-        int repetitions = (int) repetitionsSlider.getValue();
+    public void startEvolutionaryTraining(){
+        int repetitions = (int) repetitionsEvolutionarySlider.getValue();
         trainingGridPane.getChildren().clear();
         for (int i = 0; i < repetitions; i++){
-            //neuralNetwork.trainEvolutionary(selectedDirectoryForTraining);
-            neuralNetwork.trainWithGradientDescent(selectedDirectoryForTraining, 0.05);
+            neuralNetwork.trainEvolutionary(selectedDirectoryForTraining);
+
             selectRandomEdges();
         }
-        //addErrorToTrainingGridPane(repetitions);
+        addErrorToTrainingGridPane(repetitions);
         SourceImage sourceImage = new SourceImage("/images/default/default1.png", (int) Math.sqrt(neuralNetwork.getInputlayer().getNumberOfNodes()));
         showImageInAnchorPane(sourceImage);
         neuralNetwork.startCalculations(sourceImage.getImageAs1DArray());
         updateGUI();
 
+    }
+
+    public void startGradientDescentTraining(){
+        int repetitions = (int) repetitionsGradientSlider.getValue();
+        double learningRate = learningRateSlider.getValue();
+        for (int i = 0; i < repetitions; i++) {
+            neuralNetwork.trainWithGradientDescent(selectedDirectoryForTraining, learningRate);
+        }
     }
 
     private void addErrorToTrainingGridPane(int repetitions){
