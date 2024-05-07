@@ -108,6 +108,8 @@ public class NeuralNetworkController {
 
     private int selectedCorrectOutput;
 
+    double[][] drawGridPaneAsArray;
+
     @FXML
     private TextField exportNameTextfield;
 
@@ -184,7 +186,7 @@ public class NeuralNetworkController {
 
         int dimension = (int) Math.sqrt(neuralNetwork.getInputlayer().getNumberOfNodes());
         drawGridPane.getChildren().clear();
-        double[][] whiteSquares = new double[dimension][dimension];
+        drawGridPaneAsArray = new double[dimension][dimension];
 
         for (int i = 0; i < dimension ; i++){
             for (int j = 0; j < dimension; j++) {
@@ -194,12 +196,12 @@ public class NeuralNetworkController {
                 int finalI = i;
                 square.setOnMousePressed((MouseEvent event) -> {
                         square.setStyle("-fx-background-color: " + "white" + ";");
-                        whiteSquares[finalI][finalJ] = 1;
-                        Arrays.stream(whiteSquares)
+                        drawGridPaneAsArray[finalI][finalJ] = 1;
+                        Arrays.stream(drawGridPaneAsArray)
                                 .flatMapToDouble(Arrays::stream)
                                 .toArray();
 
-                        neuralNetwork.startCalculations(Arrays.stream(whiteSquares)
+                        neuralNetwork.startCalculations(Arrays.stream(drawGridPaneAsArray)
                                 .flatMapToDouble(Arrays::stream)
                                 .toArray());
                         updateGUI();
@@ -207,6 +209,15 @@ public class NeuralNetworkController {
             }
         }
     }
+
+    public void resetDrawGridPane(){
+        initializeDrawGridPane();
+        neuralNetwork.startCalculations(Arrays.stream(drawGridPaneAsArray)
+                .flatMapToDouble(Arrays::stream)
+                .toArray());
+        updateGUI();
+    }
+
 
     private Pane createSquare(int numberOfSquaresInDimension) {
         Pane square = new Pane();

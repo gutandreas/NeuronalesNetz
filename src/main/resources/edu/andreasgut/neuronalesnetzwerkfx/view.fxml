@@ -120,6 +120,7 @@
                                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                          </columnConstraints>
                                        </GridPane>
+                                       <Button mnemonicParsing="false" onAction="#resetDrawGridPane" text="Löschen" />
                                     </children>
                                  </VBox>
                               </children>
