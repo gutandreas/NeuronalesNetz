@@ -13,6 +13,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -32,6 +33,7 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.LinkedList;
 
 public class NeuralNetworkController {
@@ -182,20 +184,34 @@ public class NeuralNetworkController {
 
         int dimension = (int) Math.sqrt(neuralNetwork.getInputlayer().getNumberOfNodes());
         drawGridPane.getChildren().clear();
+        double[][] whiteSquares = new double[dimension][dimension];
 
         for (int i = 0; i < dimension ; i++){
             for (int j = 0; j < dimension; j++) {
-                Pane square = createSquare();
+                Pane square = createSquare(dimension);
                 drawGridPane.add(square, i, j);
-                square.setOnMousePressed((event) -> square.setStyle("-fx-background-color: " + "white" + ";"));
+                int finalJ = j;
+                int finalI = i;
+                square.setOnMousePressed((MouseEvent event) -> {
+                        square.setStyle("-fx-background-color: " + "white" + ";");
+                        whiteSquares[finalI][finalJ] = 1;
+                        Arrays.stream(whiteSquares)
+                                .flatMapToDouble(Arrays::stream)
+                                .toArray();
+
+                        neuralNetwork.startCalculations(Arrays.stream(whiteSquares)
+                                .flatMapToDouble(Arrays::stream)
+                                .toArray());
+                        updateGUI();
+                });
             }
         }
     }
 
-    private Pane createSquare() {
+    private Pane createSquare(int numberOfSquaresInDimension) {
         Pane square = new Pane();
         square.setStyle("-fx-background-color: " + "black" + ";");
-        square.setMinSize(50, 50); // Größe des Quadrats anpassen
+        square.setMinSize(500./numberOfSquaresInDimension, 500./numberOfSquaresInDimension); // Größe des Quadrats anpassen
         return square;
     }
 
