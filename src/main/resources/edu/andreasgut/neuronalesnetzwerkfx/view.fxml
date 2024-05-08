@@ -116,8 +116,6 @@
                                     <children>
                                        <GridPane fx:id="drawGridPane">
                                          <columnConstraints>
-                                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                          </columnConstraints>
                                        </GridPane>
                                        <Button mnemonicParsing="false" onAction="#resetDrawGridPane" text="Löschen" />

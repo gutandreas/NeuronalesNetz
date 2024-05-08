@@ -188,24 +188,28 @@ public class NeuralNetworkController {
         drawGridPane.getChildren().clear();
         drawGridPaneAsArray = new double[dimension][dimension];
 
+        drawGridPane.setOnMouseDragged(event -> {
+            if (event.isPrimaryButtonDown()) {
+                int colIndex = (int) (event.getY() / (500./dimension));
+                int rowIndex = (int) (event.getX() / (500./dimension));
+
+                if (colIndex >= 0 && colIndex < dimension && rowIndex >= 0 && rowIndex < dimension) {
+                    Pane pane = (Pane) drawGridPane.getChildren().get(rowIndex * dimension + colIndex);
+                    pane.setStyle("-fx-background-color: " + "white" + ";");
+                }
+                drawGridPaneAsArray[colIndex][rowIndex] = 1;
+                neuralNetwork.startCalculations(Arrays.stream(drawGridPaneAsArray)
+                        .flatMapToDouble(Arrays::stream)
+                        .toArray());
+
+                updateGUI();
+            }
+        });
+
         for (int i = 0; i < dimension ; i++){
             for (int j = 0; j < dimension; j++) {
                 Pane square = createSquare(dimension);
                 drawGridPane.add(square, i, j);
-                int finalJ = j;
-                int finalI = i;
-                square.setOnMousePressed((MouseEvent event) -> {
-                        square.setStyle("-fx-background-color: " + "white" + ";");
-                        drawGridPaneAsArray[finalI][finalJ] = 1;
-                        Arrays.stream(drawGridPaneAsArray)
-                                .flatMapToDouble(Arrays::stream)
-                                .toArray();
-
-                        neuralNetwork.startCalculations(Arrays.stream(drawGridPaneAsArray)
-                                .flatMapToDouble(Arrays::stream)
-                                .toArray());
-                        updateGUI();
-                });
             }
         }
     }
