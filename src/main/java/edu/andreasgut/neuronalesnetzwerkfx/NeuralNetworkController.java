@@ -190,19 +190,22 @@ public class NeuralNetworkController {
 
         drawGridPane.setOnMouseDragged(event -> {
             if (event.isPrimaryButtonDown()) {
-                int colIndex = (int) (event.getY() / (500./dimension));
-                int rowIndex = (int) (event.getX() / (500./dimension));
+                int colIndex = (int) (event.getY() / (200./dimension));
+                int rowIndex = (int) (event.getX() / (200./dimension));
 
-                if (colIndex >= 0 && colIndex < dimension && rowIndex >= 0 && rowIndex < dimension) {
+
+                if (colIndex >= 0 && colIndex < dimension && rowIndex >= 0 && rowIndex < dimension && drawGridPaneAsArray[colIndex][rowIndex] == 0) {
                     Pane pane = (Pane) drawGridPane.getChildren().get(rowIndex * dimension + colIndex);
                     pane.setStyle("-fx-background-color: " + "white" + ";");
-                }
-                drawGridPaneAsArray[colIndex][rowIndex] = 1;
-                neuralNetwork.startCalculations(Arrays.stream(drawGridPaneAsArray)
-                        .flatMapToDouble(Arrays::stream)
-                        .toArray());
+                    drawGridPaneAsArray[colIndex][rowIndex] = 1;
+                    neuralNetwork.startCalculations(Arrays.stream(drawGridPaneAsArray)
+                            .flatMapToDouble(Arrays::stream)
+                            .toArray());
 
-                updateGUI();
+                    resultLabel.setText("" + neuralNetwork.getIndexOfHighestOutputNode());
+                    updateGUI();
+                }
+
             }
         });
 
@@ -226,7 +229,7 @@ public class NeuralNetworkController {
     private Pane createSquare(int numberOfSquaresInDimension) {
         Pane square = new Pane();
         square.setStyle("-fx-background-color: " + "black" + ";");
-        square.setMinSize(500./numberOfSquaresInDimension, 500./numberOfSquaresInDimension); // Größe des Quadrats anpassen
+        square.setMinSize(200./numberOfSquaresInDimension, 200./numberOfSquaresInDimension); // Größe des Quadrats anpassen
         return square;
     }
 

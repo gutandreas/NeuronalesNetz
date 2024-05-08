@@ -16,6 +16,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <VBox fx:id="windowVBox" alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.andreasgut.neuronalesnetzwerkfx.NeuralNetworkController">
     <padding>
@@ -73,56 +74,71 @@
                <content>
                  <AnchorPane minHeight="0.0" minWidth="0.0">
                         <children>
-                           <HBox prefHeight="100.0" prefWidth="200.0">
+                           <VBox>
                               <children>
-                                 <VBox spacing="10.0">
+                                 <HBox>
                                     <children>
-                                       <AnchorPane fx:id="imageAnchorPane" />
-                                       <HBox>
+                                       <VBox spacing="10.0">
                                           <children>
-                                             <VBox prefHeight="200.0" spacing="10.0">
+                                             <AnchorPane fx:id="imageAnchorPane" />
+                                             <HBox>
                                                 <children>
-                                                   <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                                                   <VBox prefHeight="200.0" spacing="10.0">
                                                       <children>
-                                                       <Button fx:id="einzelbildButton" mnemonicParsing="false" onAction="#selectFile" text="Einzelbild">
+                                                         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                                                            <children>
+                                                             <Button fx:id="einzelbildButton" mnemonicParsing="false" onAction="#selectFile" text="Einzelbild">
+                                                                  <padding>
+                                                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                                  </padding>
+                                                               </Button>
+                                                               <Label fx:id="fileNameLabel" text="Geladene Datei..." textAlignment="CENTER" />
+                                                            </children>
+                                                         </HBox>
+                                                         <Button mnemonicParsing="false" onAction="#loadImage" text="Laden">
                                                             <padding>
                                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                                             </padding>
                                                          </Button>
-                                                         <Label fx:id="fileNameLabel" text="Geladene Datei..." textAlignment="CENTER" />
                                                       </children>
-                                                   </HBox>
-                                                   <Button mnemonicParsing="false" onAction="#loadImage" text="Laden">
-                                                      <padding>
-                                                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                                      </padding>
-                                                   </Button>
-                                                   <HBox prefHeight="100.0" prefWidth="200.0">
-                                                      <children>
-                                                         <Label text="Vermutetes Resultat: " />
-                                                         <Label fx:id="resultLabel" text="---" />
-                                                      </children>
-                                                   </HBox>
+                                                   </VBox>
                                                 </children>
-                                             </VBox>
+                                             </HBox>
                                           </children>
-                                       </HBox>
+                                          <padding>
+                                             <Insets top="10.0" />
+                                          </padding>
+                                       </VBox>
+                                       <VBox spacing="10.0">
+                                          <children>
+                                             <GridPane fx:id="drawGridPane">
+                                                <padding>
+                                                   <Insets top="10.0" />
+                                                </padding>
+                                             </GridPane>
+                                             <Button mnemonicParsing="false" onAction="#resetDrawGridPane" text="Löschen" />
+                                          </children>
+                                          <padding>
+                                             <Insets top="10.0" />
+                                          </padding>
+                                       </VBox>
                                     </children>
-                                    <padding>
-                                       <Insets top="10.0" />
-                                    </padding>
-                                 </VBox>
-                                 <VBox>
+                                 </HBox>
+                                 <HBox prefHeight="100.0" prefWidth="200.0">
                                     <children>
-                                       <GridPane fx:id="drawGridPane">
-                                         <columnConstraints>
-                                         </columnConstraints>
-                                       </GridPane>
-                                       <Button mnemonicParsing="false" onAction="#resetDrawGridPane" text="Löschen" />
+                                       <Label text="Vermutetes Resultat: ">
+                                          <font>
+                                             <Font size="24.0" />
+                                          </font>
+                                       </Label>
+                                       <Label fx:id="resultLabel" text="---">
+                                          <font>
+                                             <Font size="24.0" />
+                                          </font></Label>
                                     </children>
-                                 </VBox>
+                                 </HBox>
                               </children>
-                           </HBox>
+                           </VBox>
                         </children></AnchorPane>
                </content>
              </Tab>
