@@ -197,7 +197,7 @@ public class NeuralNetworkController {
                     Pane pane = (Pane) drawGridPane.getChildren().get(rowIndex * dimension + colIndex);
                     pane.setStyle("-fx-background-color: " + "white" + ";");
                     drawGridPaneAsArray[colIndex][rowIndex] = 1;
-                    resultLabel.setText("" + neuralNetwork.getIndexOfHighestOutputNode());
+
                 }
 
             }
@@ -209,7 +209,7 @@ public class NeuralNetworkController {
                     .flatMapToDouble(Arrays::stream)
                     .toArray());
             updateGUI();
-
+            resultLabel.setText("" + neuralNetwork.getIndexOfHighestOutputNode());
         });
 
 
