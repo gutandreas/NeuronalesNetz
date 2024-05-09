@@ -4,9 +4,9 @@ import edu.andreasgut.neuronalesnetzwerkfx.core.*;
 
 import edu.andreasgut.neuronalesnetzwerkfx.imagetools.SourceImage;
 import edu.andreasgut.neuronalesnetzwerkfx.view.TimelineManager;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
@@ -22,7 +22,6 @@ import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -63,7 +62,7 @@ public class NeuralNetworkController {
     private HBox mainHBox;
 
     @FXML
-    private VBox inputLayerVBox;
+    private HBox pieChartHBox;
 
     @FXML
     private HBox hiddenLayersHBox;
@@ -190,7 +189,7 @@ public class NeuralNetworkController {
 
         drawGridPane.setOnMouseDragged(event -> {
             if (event.isPrimaryButtonDown()) {
-                int colIndex = (int) (event.getY() / (200./dimension));
+                int colIndex = (int) ((event.getY()-10) / (200./dimension));
                 int rowIndex = (int) (event.getX() / (200./dimension));
 
 
@@ -198,16 +197,21 @@ public class NeuralNetworkController {
                     Pane pane = (Pane) drawGridPane.getChildren().get(rowIndex * dimension + colIndex);
                     pane.setStyle("-fx-background-color: " + "white" + ";");
                     drawGridPaneAsArray[colIndex][rowIndex] = 1;
-                    neuralNetwork.startCalculations(Arrays.stream(drawGridPaneAsArray)
-                            .flatMapToDouble(Arrays::stream)
-                            .toArray());
-
                     resultLabel.setText("" + neuralNetwork.getIndexOfHighestOutputNode());
-                    updateGUI();
                 }
 
             }
         });
+
+
+        drawGridPane.setOnMouseReleased(event -> {
+            neuralNetwork.startCalculations(Arrays.stream(drawGridPaneAsArray)
+                    .flatMapToDouble(Arrays::stream)
+                    .toArray());
+            updateGUI();
+
+        });
+
 
         for (int i = 0; i < dimension ; i++){
             for (int j = 0; j < dimension; j++) {
@@ -240,8 +244,8 @@ public class NeuralNetworkController {
             TimelineManager.stopAllTimelines();
             for (NetworkEdge edge : neuralNetwork.getSelectedEdges()) {
 
-                edge.getLine().setStroke(Color.BLUE);
-                Timeline timeline = new Timeline(
+                edge.getLine().setStroke(Color.WHITE);
+                /*Timeline timeline = new Timeline(
                         new KeyFrame(Duration.ZERO, e -> edge.getLine().setStroke(Color.WHITE)),
                         new KeyFrame(Duration.seconds(0.3), e -> edge.resetLineColor()),
                         new KeyFrame(Duration.seconds(0.6), e -> edge.getLine().setStroke(Color.WHITE))
@@ -249,7 +253,7 @@ public class NeuralNetworkController {
                 );
                 timeline.setCycleCount(Timeline.INDEFINITE); // Wiederholen der Animation unendlich oft
                 timeline.play();
-                TimelineManager.addTimeline(timeline);
+                TimelineManager.addTimeline(timeline);*/
 
             }
 
@@ -293,7 +297,7 @@ public class NeuralNetworkController {
         }
     }
 
-    public void stopHilghlitingMaxOutput(){
+    public void stopHighlightMaxOutput(){
         for (NetworkNode networkNode : neuralNetwork.getOutputlayer().getNodes()){
             networkNode.getGraphicGroup();
             for (Node node : networkNode.getGraphicGroup().getChildren()) {
@@ -584,9 +588,18 @@ public class NeuralNetworkController {
         double percentageOfCorrectAnswers = neuralNetwork.getPercentageOfCorrectGuesses(selectedDirectoryForTesting);
         correctnessChart.getData().clear();
         System.out.println("Anteil korrekter Antworten: " + percentageOfCorrectAnswers);
-        PieChart.Data dataTrue = new PieChart.Data("Korrekt", percentageOfCorrectAnswers);
-        PieChart.Data dataFalse = new PieChart.Data("Falsch", 1-percentageOfCorrectAnswers);
-        correctnessChart.getData().addAll(dataTrue, dataFalse);
+
+        ObservableList<PieChart.Data> valueList = FXCollections.observableArrayList(
+                new PieChart.Data("Korrekt", percentageOfCorrectAnswers * 100),
+                new PieChart.Data("Falsch", (1-percentageOfCorrectAnswers) * 100));
+        correctnessChart.setData(valueList);
+        correctnessChart.getData().forEach(data -> {
+            String percentage = String.format("%.2f%%", (data.getPieValue()));
+            Tooltip toolTip = new Tooltip(percentage);
+            Tooltip.install(data.getNode(), toolTip);
+        });
+
+
 
     }
 

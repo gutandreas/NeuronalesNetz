@@ -333,7 +333,7 @@
                         <children>
                            <VBox>
                               <children>
-                                 <HBox prefHeight="138.0" prefWidth="500.0" spacing="10.0">
+                                 <HBox fx:id="pieChartHBox" prefHeight="138.0" prefWidth="500.0" spacing="10.0">
                                     <children>
                                        <VBox prefHeight="200.0" prefWidth="100.0">
                                           <children>
@@ -382,7 +382,7 @@
          </TabPane>
          <VBox prefHeight="200.0" prefWidth="100.0">
             <children>
-               <AnchorPane fx:id="layerAnchorPane" onMouseEntered="#highlightMaxOutput" onMouseExited="#stopHilghlitingMaxOutput" prefHeight="600.0" prefWidth="400.0" />
+               <AnchorPane fx:id="layerAnchorPane" onMouseEntered="#highlightMaxOutput" onMouseExited="#stopHighlightMaxOutput" prefHeight="600.0" prefWidth="400.0" />
             </children>
          </VBox>
       </children>
