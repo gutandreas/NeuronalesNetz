@@ -74,18 +74,18 @@
                <content>
                  <AnchorPane minHeight="0.0" minWidth="0.0">
                         <children>
-                           <VBox>
+                           <VBox spacing="10.0">
                               <children>
-                                 <HBox>
+                                 <HBox spacing="10.0">
                                     <children>
                                        <VBox spacing="10.0">
                                           <children>
                                              <AnchorPane fx:id="imageAnchorPane" />
-                                             <HBox>
+                                             <HBox spacing="5.0">
                                                 <children>
                                                    <VBox prefHeight="200.0" spacing="10.0">
                                                       <children>
-                                                         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                                                         <HBox alignment="CENTER_LEFT">
                                                             <children>
                                                              <Button fx:id="einzelbildButton" mnemonicParsing="false" onAction="#selectFile" text="Einzelbild">
                                                                   <padding>
@@ -111,11 +111,7 @@
                                        </VBox>
                                        <VBox spacing="10.0">
                                           <children>
-                                             <GridPane fx:id="drawGridPane">
-                                                <padding>
-                                                   <Insets top="10.0" />
-                                                </padding>
-                                             </GridPane>
+                                             <GridPane fx:id="drawGridPane" />
                                              <Button mnemonicParsing="false" onAction="#resetDrawGridPane" text="Löschen" />
                                           </children>
                                           <padding>
@@ -124,7 +120,7 @@
                                        </VBox>
                                     </children>
                                  </HBox>
-                                 <HBox prefHeight="100.0" prefWidth="200.0">
+                                 <HBox spacing="10.0">
                                     <children>
                                        <Label text="Vermutetes Resultat: ">
                                           <font>
