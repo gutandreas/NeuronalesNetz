@@ -18,7 +18,7 @@ public class NeuralNetworkApplication extends Application {
 
         SourceImage sourceImage = new SourceImage("/images/default/default1.png", 6);
         controller.showImageInAnchorPane(sourceImage);
-        NeuralNetwork neuralNetwork = new NeuralNetwork(sourceImage.getNumberOfPixelForNeuralNetwork(), 4, 6, 10);
+        NeuralNetwork neuralNetwork = new NeuralNetwork(sourceImage.getNumberOfPixelForNeuralNetwork(), 2, 15, 10);
         neuralNetwork.startCalculations(sourceImage.getImageAs1DArray());
         controller.initializeGUI(neuralNetwork);
 
