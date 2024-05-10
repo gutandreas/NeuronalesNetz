@@ -224,7 +224,8 @@ public class NeuralNetworkController {
         for (Node node : highestNode.getGraphicGroup().getChildren()) {
             if (node instanceof Circle) {
                 Circle circle = (Circle) node;
-                circle.setFill(Color.WHITE);
+                circle.setFill(Color.ORANGE);
+                circle.setStroke(Color.RED);
             }
         }
     }
@@ -236,6 +237,7 @@ public class NeuralNetworkController {
                 if (node instanceof Circle) {
                     Circle circle = (Circle) node;
                     circle.setFill(Color.rgb(0, 255, 0, networkNode.getOutput()));
+                    circle.setStroke(Color.GRAY);
                 }
             }
         }
