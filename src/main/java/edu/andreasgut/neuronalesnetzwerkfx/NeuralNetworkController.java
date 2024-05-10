@@ -1,9 +1,7 @@
 package edu.andreasgut.neuronalesnetzwerkfx;
 
 import edu.andreasgut.neuronalesnetzwerkfx.core.*;
-
 import edu.andreasgut.neuronalesnetzwerkfx.imagetools.SourceImage;
-import edu.andreasgut.neuronalesnetzwerkfx.view.TimelineManager;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,7 +11,6 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -24,7 +21,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -36,147 +32,85 @@ import java.util.Arrays;
 import java.util.LinkedList;
 
 public class NeuralNetworkController {
-    @FXML
-    private Label welcomeText;
 
-    @FXML
-    private VBox windowVBox;
-
-
-    @FXML
-    private Label fileNameLabel;
-
-    @FXML
-    private Label directoryLabelTrainingEvolutionary;
-
-    @FXML
-    private Label directoryLabelTesting;
-
-    @FXML
-    private Label directoryLabelTrainingGradientDescent;
-
-    @FXML
-    private Label resultLabel;
-
-    @FXML
-    private GridPane trainingGridPane;
-
-    @FXML
-    private HBox mainHBox;
-
-    @FXML
-    private HBox pieChartHBox;
-
-    @FXML
-    private HBox hiddenLayersHBox;
-
-    @FXML
-    private VBox outputLayerVBox;
-
-    @FXML
-    private GridPane drawGridPane;
-
-    @FXML
-    private AnchorPane layerAnchorPane;
-
-    @FXML
-    private AnchorPane imageAnchorPane;
-
-    @FXML
-    private AnchorPane neuralNetworkElementInfoAnchorPane;
-
-    @FXML
-    private GridPane newNetworkSettingGridPane;
-
-    @FXML
-    private ToggleGroup newNetworkGroup;
-
-    @FXML
-    private RadioButton newNetworkRadio;
-
-
-    @FXML
-    private Button einzelbildButton;
-
-    @FXML
-    private Button testButton;
-
-    @FXML
-    private Button evolutionaryTrainingButton;
-
-    @FXML
-    private Button gradientDescentTrainingButton;
-
-
-    @FXML
-    private MenuButton correctOutputMenu;
-
-    private int circleRadius = 10;
-
-    private NeuralNetwork neuralNetwork;
-
-    private File currentSelectedFile;
-
-    private File selectedDirectoryForTraining;
-
-    private File selectedDirectoryForTesting;
-
-    private int selectedCorrectOutput;
 
     double[][] drawGridPaneAsArray;
-
+    @FXML
+    private VBox windowVBox;
+    @FXML
+    private Label fileNameLabel;
+    @FXML
+    private Label directoryLabelTrainingEvolutionary;
+    @FXML
+    private Label directoryLabelTesting;
+    @FXML
+    private Label directoryLabelTrainingGradientDescent;
+    @FXML
+    private Label resultLabel;
+    @FXML
+    private GridPane trainingGridPane;
+    @FXML
+    private HBox mainHBox;
+    @FXML
+    private HBox pieChartHBox;
+    @FXML
+    private GridPane drawGridPane;
+    @FXML
+    private AnchorPane layerAnchorPane;
+    @FXML
+    private AnchorPane imageAnchorPane;
+    @FXML
+    private AnchorPane neuralNetworkElementInfoAnchorPane;
+    @FXML
+    private GridPane newNetworkSettingGridPane;
+    @FXML
+    private Button einzelbildButton;
+    @FXML
+    private Button testButton;
+    @FXML
+    private Button evolutionaryTrainingButton;
+    @FXML
+    private Button gradientDescentTrainingButton;
     @FXML
     private TextField exportNameTextfield;
-
     @FXML
     private XYChart evolutionaryErrorChart;
-
     @FXML
     private XYChart evolutionaryErrorChartAll;
-
     @FXML
     private XYChart gradientErrorChart;
-
     @FXML
     private XYChart gradientErrorChartAll;
-
     @FXML
     private PieChart correctnessChart;
-
-
     @FXML
     private Slider widthSlider;
-
     @FXML
     private Slider layerSlider;
-
     @FXML
     private Slider neuronsSlider;
-
     @FXML
     private Slider outputSlider;
-
     @FXML
     private Slider repetitionsEvolutionarySlider;
-
     @FXML
     private Slider repetitionsGradientSlider;
-
     @FXML
     private Slider percentSlider;
-
     @FXML
     private Slider learningRateSlider;
-
     @FXML
     private Button randomlyChangeButton;
-
     @FXML
     private Button exportButton;
-
     @FXML
     private Button importButton;
-
+    private int circleRadius = 10;
+    private NeuralNetwork neuralNetwork;
+    private File currentSelectedFile;
+    private File selectedDirectoryForTraining;
+    private File selectedDirectoryForTesting;
+    private int selectedCorrectOutput;
 
     public void initialize() {
 
@@ -188,7 +122,7 @@ public class NeuralNetworkController {
 
     }
 
-    public void initializeGUI(NeuralNetwork neuralNetwork){
+    public void initializeGUI(NeuralNetwork neuralNetwork) {
         layerAnchorPane.getChildren().clear();
         this.neuralNetwork = neuralNetwork;
         initializeLayerAnchorPane(neuralNetwork);
@@ -197,7 +131,7 @@ public class NeuralNetworkController {
         updateGUI();
     }
 
-    public void initializeDrawGridPane(){
+    public void initializeDrawGridPane() {
 
         int dimension = (int) Math.sqrt(neuralNetwork.getInputlayer().getNumberOfNodes());
         drawGridPane.getChildren().clear();
@@ -205,8 +139,8 @@ public class NeuralNetworkController {
 
         drawGridPane.setOnMouseDragged(event -> {
             if (event.isPrimaryButtonDown()) {
-                int colIndex = (int) ((event.getY()-10) / (200./dimension));
-                int rowIndex = (int) (event.getX() / (200./dimension));
+                int colIndex = (int) ((event.getY() - 10) / (200. / dimension));
+                int rowIndex = (int) (event.getX() / (200. / dimension));
 
 
                 if (colIndex >= 0 && colIndex < dimension && rowIndex >= 0 && rowIndex < dimension && drawGridPaneAsArray[colIndex][rowIndex] == 0) {
@@ -229,7 +163,7 @@ public class NeuralNetworkController {
         });
 
 
-        for (int i = 0; i < dimension ; i++){
+        for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
                 Pane square = createSquare(dimension);
                 drawGridPane.add(square, i, j);
@@ -237,7 +171,7 @@ public class NeuralNetworkController {
         }
     }
 
-    public void resetDrawGridPane(){
+    public void resetDrawGridPane() {
         initializeDrawGridPane();
         neuralNetwork.startCalculations(Arrays.stream(drawGridPaneAsArray)
                 .flatMapToDouble(Arrays::stream)
@@ -249,13 +183,13 @@ public class NeuralNetworkController {
     private Pane createSquare(int numberOfSquaresInDimension) {
         Pane square = new Pane();
         square.setStyle("-fx-background-color: " + "black" + ";");
-        square.setMinSize(200./numberOfSquaresInDimension, 200./numberOfSquaresInDimension); // Größe des Quadrats anpassen
+        square.setMinSize(200. / numberOfSquaresInDimension, 200. / numberOfSquaresInDimension); // Größe des Quadrats anpassen
         return square;
     }
 
-    public void highlightSelectedEdges(){
+    public void highlightSelectedEdges() {
 
-        Platform.runLater(()->{
+        Platform.runLater(() -> {
             for (NetworkEdge edge : neuralNetwork.getSelectedEdges()) {
                 edge.getLine().setStroke(Color.WHITE);
             }
@@ -263,23 +197,19 @@ public class NeuralNetworkController {
         });
     }
 
-    public void stopHighlightingSelectedEdges(){
+    public void stopHighlightingSelectedEdges() {
         for (NetworkEdge edge : neuralNetwork.getSelectedEdges()) {
             edge.resetLineColor();
         }
 
     }
 
-
-
-    public void updateGUI(){
+    public void updateGUI() {
         initializeLayerAnchorPane(neuralNetwork);
         neuralNetwork.updateLineGraphicOfAllEdges();
-
-
     }
 
-    public void showImageInAnchorPane(SourceImage sourceImage){
+    public void showImageInAnchorPane(SourceImage sourceImage) {
         Canvas canvas = sourceImage.getImageAsCanvas();
         imageAnchorPane.getChildren().add(canvas);
         sourceImage.getImageAsCanvas().setOnMouseClicked(event -> {
@@ -289,7 +219,7 @@ public class NeuralNetworkController {
         });
     }
 
-    public void highlightMaxOutput(){
+    public void highlightMaxOutput() {
         NetworkNode highestNode = neuralNetwork.getOutputlayer().getNodes().get(neuralNetwork.getIndexOfHighestOutputNode());
         for (Node node : highestNode.getGraphicGroup().getChildren()) {
             if (node instanceof Circle) {
@@ -299,8 +229,8 @@ public class NeuralNetworkController {
         }
     }
 
-    public void stopHighlightMaxOutput(){
-        for (NetworkNode networkNode : neuralNetwork.getOutputlayer().getNodes()){
+    public void stopHighlightMaxOutput() {
+        for (NetworkNode networkNode : neuralNetwork.getOutputlayer().getNodes()) {
             networkNode.getGraphicGroup();
             for (Node node : networkNode.getGraphicGroup().getChildren()) {
                 if (node instanceof Circle) {
@@ -313,15 +243,14 @@ public class NeuralNetworkController {
     }
 
 
-    private void initializeLayerAnchorPane(NeuralNetwork neuralNetwork){
+    private void initializeLayerAnchorPane(NeuralNetwork neuralNetwork) {
 
         int layerNumber = 0;
 
-
-        initializeLayerInAnchorPane(neuralNetwork, neuralNetwork.getInputlayer(), layerNumber,0, 0, 255, false);
+        initializeLayerInAnchorPane(neuralNetwork, neuralNetwork.getInputlayer(), layerNumber, 0, 0, 255, false);
         layerNumber++;
 
-        for (Hiddenlayer hiddenlayer : neuralNetwork.getHiddenlayers()){
+        for (Hiddenlayer hiddenlayer : neuralNetwork.getHiddenlayers()) {
 
             initializeLayerInAnchorPane(neuralNetwork, hiddenlayer, layerNumber, 255, 0, 0, false);
             layerNumber++;
@@ -332,11 +261,11 @@ public class NeuralNetworkController {
 
     }
 
-    private void initializeLayerInAnchorPane(NeuralNetwork neuralNetwork, Layer layer, int layerNumber, int red, int green, int blue, boolean outputLayer){
+    private void initializeLayerInAnchorPane(NeuralNetwork neuralNetwork, Layer layer, int layerNumber, int red, int green, int blue, boolean outputLayer) {
 
         double circleRadius;
 
-        if (layer.getNumberOfNodes() > 40){
+        if (layer.getNumberOfNodes() > 40) {
             circleRadius = 3;
         } else if (layer.getNumberOfNodes() > 30) {
             circleRadius = 5;
@@ -344,16 +273,16 @@ public class NeuralNetworkController {
             circleRadius = 10;
         }
 
-        double deltaY = layerAnchorPane.getPrefHeight() / (layer.getNumberOfNodes()+1);
+        double deltaY = layerAnchorPane.getPrefHeight() / (layer.getNumberOfNodes() + 1);
         double deltaX = layerAnchorPane.getPrefWidth() / neuralNetwork.getNumberOfLayers();
         double x = deltaX * layerNumber + circleRadius;
         double y = deltaY + circleRadius;
 
 
-        for (NetworkNode node : layer.getNodes()){
+        for (NetworkNode node : layer.getNodes()) {
             DecimalFormat df = new DecimalFormat("#.0" + "0".repeat(2 - 1));
             String roundedValue = df.format(node.getOutput());
-            if (node.getGraphicGroup() != null){
+            if (node.getGraphicGroup() != null) {
                 layerAnchorPane.getChildren().remove(node.getGraphicGroup());
             }
             Circle circle = new Circle(circleRadius, Color.rgb(red, green, blue, node.getOutput()));
@@ -383,19 +312,19 @@ public class NeuralNetworkController {
     }
 
 
-    private void initializeLines(NeuralNetwork neuralNetwork){
+    private void initializeLines(NeuralNetwork neuralNetwork) {
 
         LinkedList<LinkedList<NetworkNode>> completeList = new LinkedList<>();
 
         completeList.add(neuralNetwork.getInputlayer().getNodes());
-        for (int i = 0; i < neuralNetwork.getHiddenlayers().size(); i++){
+        for (int i = 0; i < neuralNetwork.getHiddenlayers().size(); i++) {
             completeList.add(neuralNetwork.getHiddenlayers().get(i).getNodes());
         }
         completeList.add(neuralNetwork.getOutputlayer().getNodes());
 
-        for (int i = 0; i < completeList.size()-1; i++){
-            for (NetworkNode startNode : completeList.get(i)){
-                for (NetworkNode endNode : completeList.get(i+1)){
+        for (int i = 0; i < completeList.size() - 1; i++) {
+            for (NetworkNode startNode : completeList.get(i)) {
+                for (NetworkNode endNode : completeList.get(i + 1)) {
                     double startX = AnchorPane.getLeftAnchor(startNode.getGraphicGroup()) + startNode.getGraphicGroup().getTranslateX() + circleRadius;
                     double startY = AnchorPane.getTopAnchor(startNode.getGraphicGroup()) + startNode.getGraphicGroup().getTranslateY() + circleRadius;
                     double endX = AnchorPane.getLeftAnchor(endNode.getGraphicGroup()) + endNode.getGraphicGroup().getTranslateX() + circleRadius;
@@ -403,7 +332,7 @@ public class NeuralNetworkController {
 
                     Line line = new Line(startX, startY, endX, endY);
 
-                    int indexOfEdge = completeList.get(i+1).indexOf(endNode);
+                    int indexOfEdge = completeList.get(i + 1).indexOf(endNode);
                     NetworkEdge edge = startNode.getOutputEdges().get(indexOfEdge);
                     edge.setLine(line);
                     edge.updateLineWeightGraphic();
@@ -429,14 +358,14 @@ public class NeuralNetworkController {
 
                     layerAnchorPane.getChildren().add(line);
                 }
-            };
+            }
+            ;
         }
 
     }
 
 
-
-    public void selectFile(){
+    public void selectFile() {
 
         FileChooser fileChooser = new FileChooser();
 
@@ -448,21 +377,19 @@ public class NeuralNetworkController {
         //System.out.println(SourceImage.getPathFromResourceFolder(currentSelectedFile.getAbsolutePath()));
         fileNameLabel.setText(currentSelectedFile.getName());
 
-
     }
 
-    public void loadImage(){
+    public void loadImage() {
 
-        if (currentSelectedFile != null){
+        if (currentSelectedFile != null) {
             SourceImage sourceImage;
             int width = (int) Math.sqrt(neuralNetwork.getInputlayer().getNumberOfNodes());
-            sourceImage  = new SourceImage(currentSelectedFile.toURI().toString(), width);
+            sourceImage = new SourceImage(currentSelectedFile.toURI().toString(), width);
             showImageInAnchorPane(sourceImage);
             neuralNetwork.startCalculations(sourceImage.getImageAs1DArray());
             resultLabel.setText(neuralNetwork.getIndexOfHighestOutputNode() + "");
             updateGUI();
-        }
-        else {
+        } else {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Keine Datei ausgewählt!");
             alert.setHeaderText("Keine Datei ausgewählt!");
@@ -473,26 +400,26 @@ public class NeuralNetworkController {
 
     }
 
-    public void loadNetwork(){
+    public void loadNetwork() {
 
         int width = (int) widthSlider.getValue();
         int hiddenLayers = (int) layerSlider.getValue() - 2;
         int nodesInHiddenLayer = (int) neuronsSlider.getValue();
         int numberOfOutputs = (int) outputSlider.getValue();
-        neuralNetwork = new NeuralNetwork(width*width, hiddenLayers, nodesInHiddenLayer, numberOfOutputs);
+        neuralNetwork = new NeuralNetwork(width * width, hiddenLayers, nodesInHiddenLayer, numberOfOutputs);
         SourceImage sourceImage = new SourceImage("/images/default/default1.png", width);
         showImageInAnchorPane(sourceImage);
         neuralNetwork.startCalculations(sourceImage.getImageAs1DArray());
         initializeGUI(neuralNetwork);
     }
 
-    public void selectDirectoryForTraining(){
+    public void selectDirectoryForTraining() {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Select Folder");
 
         selectedDirectoryForTraining = directoryChooser.showDialog(new Stage());
 
-        if (selectedDirectoryForTraining != null){
+        if (selectedDirectoryForTraining != null) {
             evolutionaryTrainingButton.setDisable(false);
             gradientDescentTrainingButton.setDisable(false);
             System.out.println(selectedDirectoryForTraining.toURI());
@@ -503,26 +430,25 @@ public class NeuralNetworkController {
 
     }
 
-    public void selectDirectoryForTesting(){
+    public void selectDirectoryForTesting() {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Select Folder");
 
         selectedDirectoryForTesting = directoryChooser.showDialog(new Stage());
 
-        if (selectedDirectoryForTesting != null){
+        if (selectedDirectoryForTesting != null) {
             testButton.setDisable(false);
             System.out.println(selectedDirectoryForTesting.toURI());
             directoryLabelTesting.setText(selectedDirectoryForTesting.getName());
         }
 
 
-
     }
 
-    public void startEvolutionaryTraining(){
+    public void startEvolutionaryTraining() {
         int repetitions = (int) repetitionsEvolutionarySlider.getValue();
         trainingGridPane.getChildren().clear();
-        for (int i = 0; i < repetitions; i++){
+        for (int i = 0; i < repetitions; i++) {
             neuralNetwork.trainEvolutionary(selectedDirectoryForTraining);
 
             selectRandomEdges();
@@ -535,7 +461,7 @@ public class NeuralNetworkController {
 
     }
 
-    public void startGradientDescentTraining(){
+    public void startGradientDescentTraining() {
         int repetitions = (int) repetitionsGradientSlider.getValue();
         double learningRate = learningRateSlider.getValue();
         for (int i = 0; i < repetitions; i++) {
@@ -549,7 +475,7 @@ public class NeuralNetworkController {
 
     }
 
-    private void addErrorToErrorChart(XYChart trainingChart, XYChart allChart, int repetitions, boolean smallestErrorToo){
+    private void addErrorToErrorChart(XYChart trainingChart, XYChart allChart, int repetitions, boolean smallestErrorToo) {
 
         trainingChart.setTitle("Trainingsdurchgang von " + LocalDateTime.now().format(DateTimeFormatter.ISO_TIME));
         trainingChart.getData().clear();
@@ -564,13 +490,13 @@ public class NeuralNetworkController {
             LinkedList<Double> smallestErrorList = neuralNetwork.getSmallestErrorHistoryList();
 
 
-            dataSeriesReal.getData().add(new XYChart.Data<>(repetitions-i, realErrorList.get(realErrorList.size()-i-1)));
+            dataSeriesReal.getData().add(new XYChart.Data<>(repetitions - i, realErrorList.get(realErrorList.size() - i - 1)));
             dataSeriesSmallest.getData().add(new XYChart.Data<>(repetitions - i, smallestErrorList.get(smallestErrorList.size() - i - 1)));
         }
 
         Platform.runLater(() -> trainingChart.getData().add(dataSeriesReal));
 
-        if (smallestErrorToo){
+        if (smallestErrorToo) {
             Platform.runLater(() -> trainingChart.getData().add(dataSeriesSmallest));
         }
 
@@ -588,8 +514,8 @@ public class NeuralNetworkController {
             LinkedList<Double> smallestErrorList = neuralNetwork.getSmallestErrorHistoryList();
 
 
-            dataSeriesRealAll.getData().add(new XYChart.Data<>(numberOfAllErrors-i, realErrorList.get(realErrorList.size()-i-1)));
-            dataSeriesSmallestAll.getData().add(new XYChart.Data<>(numberOfAllErrors-i, smallestErrorList.get(smallestErrorList.size()-i-1)));
+            dataSeriesRealAll.getData().add(new XYChart.Data<>(numberOfAllErrors - i, realErrorList.get(realErrorList.size() - i - 1)));
+            dataSeriesSmallestAll.getData().add(new XYChart.Data<>(numberOfAllErrors - i, smallestErrorList.get(smallestErrorList.size() - i - 1)));
         }
 
         Platform.runLater(() -> allChart.getData().add(dataSeriesRealAll));
@@ -599,7 +525,7 @@ public class NeuralNetworkController {
 
     }
 
-    public void testNetworkWithSelectedDirectory(){
+    public void testNetworkWithSelectedDirectory() {
 
         double percentageOfCorrectAnswers = neuralNetwork.getPercentageOfCorrectGuesses(selectedDirectoryForTesting);
         correctnessChart.getData().clear();
@@ -607,7 +533,7 @@ public class NeuralNetworkController {
 
         ObservableList<PieChart.Data> valueList = FXCollections.observableArrayList(
                 new PieChart.Data("Korrekt", percentageOfCorrectAnswers * 100),
-                new PieChart.Data("Falsch", (1-percentageOfCorrectAnswers) * 100));
+                new PieChart.Data("Falsch", (1 - percentageOfCorrectAnswers) * 100));
         correctnessChart.setData(valueList);
         correctnessChart.getData().forEach(data -> {
             String percentage = String.format("%.2f%%", (data.getPieValue()));
@@ -616,32 +542,30 @@ public class NeuralNetworkController {
         });
 
 
-
     }
 
 
-
-    public void randomlyChange(){
+    public void randomlyChange() {
         neuralNetwork.adjustWeightsOfSelectedEdgesRandomly();
         updateGUI();
     }
 
-    public void selectRandomEdges(){
+    public void selectRandomEdges() {
         neuralNetwork.selectRandomEdges(percentSlider.getValue());
         updateGUI();
 
     }
 
 
-    public void showNewNetworkSettings(){
+    public void showNewNetworkSettings() {
         newNetworkSettingGridPane.setVisible(true);
     }
 
-    public void hideNewNetworkSettings(){
+    public void hideNewNetworkSettings() {
         newNetworkSettingGridPane.setVisible(false);
     }
 
-    public void exportNetwork(){
+    public void exportNetwork() {
         JSONObject jsonNeuralNetwork = neuralNetwork.getNetWorkAsJSONObject();
 
         // Schreibe das JSON-Objekt in eine Datei
@@ -654,8 +578,7 @@ public class NeuralNetworkController {
 
     }
 
-    public void importNetwork(){
-
+    public void importNetwork() {
 
 
         FileChooser fileChooser = new FileChooser();
@@ -678,7 +601,7 @@ public class NeuralNetworkController {
             JSONTokener tokener = new JSONTokener(reader);
             Object obj = tokener.nextValue();
 
-           if (obj instanceof JSONObject) {
+            if (obj instanceof JSONObject) {
                 JSONObject jsonObject = (JSONObject) obj;
                 neuralNetwork = new NeuralNetwork(jsonObject);
                 initializeGUI(neuralNetwork);
@@ -691,10 +614,7 @@ public class NeuralNetworkController {
         }
 
         loadImage();
-
-
     }
-
 
 
 }

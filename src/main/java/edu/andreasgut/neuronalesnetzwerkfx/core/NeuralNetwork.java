@@ -29,13 +29,8 @@ public class NeuralNetwork {
     }
 
     public NeuralNetwork(JSONObject jsonNetwork){
-
         handleJSONWeights((JSONArray) jsonNetwork.get("weights"));
         handleJSONErrors((JSONArray) jsonNetwork.get("realErrors"));
-
-
-
-
     }
 
     private void handleJSONWeights(JSONArray weightsArray){
