@@ -431,12 +431,6 @@ public class NeuralNetwork {
         }
         jsonNetwork.put("realErrors", realErrors);
 
-        /*JSONArray smallestErrors = new JSONArray();
-        for (Double error : smallestErrorHistoryList){
-            smallestErrors.put(error);
-        }
-        jsonNetwork.put("smallestErrors", smallestErrors);*/
-
 
         return jsonNetwork;
 

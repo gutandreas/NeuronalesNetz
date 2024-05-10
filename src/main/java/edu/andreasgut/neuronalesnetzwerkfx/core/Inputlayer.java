@@ -1,6 +1,5 @@
 package edu.andreasgut.neuronalesnetzwerkfx.core;
 
-import edu.andreasgut.neuronalesnetzwerkfx.imagetools.SourceImage;
 
 public class Inputlayer extends Layer {
 
