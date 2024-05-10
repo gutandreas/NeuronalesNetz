@@ -256,28 +256,14 @@ public class NeuralNetworkController {
     public void highlightSelectedEdges(){
 
         Platform.runLater(()->{
-
-            TimelineManager.stopAllTimelines();
             for (NetworkEdge edge : neuralNetwork.getSelectedEdges()) {
-
                 edge.getLine().setStroke(Color.WHITE);
-                /*Timeline timeline = new Timeline(
-                        new KeyFrame(Duration.ZERO, e -> edge.getLine().setStroke(Color.WHITE)),
-                        new KeyFrame(Duration.seconds(0.3), e -> edge.resetLineColor()),
-                        new KeyFrame(Duration.seconds(0.6), e -> edge.getLine().setStroke(Color.WHITE))
-
-                );
-                timeline.setCycleCount(Timeline.INDEFINITE); // Wiederholen der Animation unendlich oft
-                timeline.play();
-                TimelineManager.addTimeline(timeline);*/
-
             }
 
         });
     }
 
     public void stopHighlightingSelectedEdges(){
-        TimelineManager.stopAllTimelines();
         for (NetworkEdge edge : neuralNetwork.getSelectedEdges()) {
             edge.resetLineColor();
         }
