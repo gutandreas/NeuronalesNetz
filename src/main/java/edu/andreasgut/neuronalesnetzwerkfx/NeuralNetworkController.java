@@ -47,10 +47,13 @@ public class NeuralNetworkController {
     private Label fileNameLabel;
 
     @FXML
-    private Label directoryLabelTraining;
+    private Label directoryLabelTrainingEvolutionary;
 
     @FXML
     private Label directoryLabelTesting;
+
+    @FXML
+    private Label directoryLabelTrainingGradientDescent;
 
     @FXML
     private Label resultLabel;
@@ -80,6 +83,9 @@ public class NeuralNetworkController {
     private AnchorPane imageAnchorPane;
 
     @FXML
+    private AnchorPane neuralNetworkElementInfoAnchorPane;
+
+    @FXML
     private GridPane newNetworkSettingGridPane;
 
     @FXML
@@ -91,6 +97,16 @@ public class NeuralNetworkController {
 
     @FXML
     private Button einzelbildButton;
+
+    @FXML
+    private Button testButton;
+
+    @FXML
+    private Button evolutionaryTrainingButton;
+
+    @FXML
+    private Button gradientDescentTrainingButton;
+
 
     @FXML
     private MenuButton correctOutputMenu;
@@ -411,9 +427,10 @@ public class NeuralNetworkController {
 
                     if (line.getOnMouseEntered() == null) {
                         line.setOnMouseEntered(event -> {
+
                             line.setStrokeWidth(line.getStrokeWidth() * 3);
                             line.setStroke(Color.rgb(0, 255, 255));
-                            textWeight.setText("Gewicht:" + edge.getWeight() + "\nOutput: " + edge.getFrom().getOutput());
+                            textWeight.setText("Gewicht: " + edge.getWeight() + "\nOutput: " + edge.getFrom().getOutput());
                             layerAnchorPane.getChildren().add(textWeight);
                         });
                         line.setOnMouseExited(event -> {
@@ -489,8 +506,15 @@ public class NeuralNetworkController {
 
         selectedDirectoryForTraining = directoryChooser.showDialog(new Stage());
 
-        System.out.println(selectedDirectoryForTraining.toURI());
-        directoryLabelTraining.setText(selectedDirectoryForTraining.getName());
+        if (selectedDirectoryForTraining != null){
+            evolutionaryTrainingButton.setDisable(false);
+            gradientDescentTrainingButton.setDisable(false);
+            System.out.println(selectedDirectoryForTraining.toURI());
+            directoryLabelTrainingEvolutionary.setText(selectedDirectoryForTraining.getName());
+            directoryLabelTrainingGradientDescent.setText(selectedDirectoryForTraining.getName());
+        }
+
+
     }
 
     public void selectDirectoryForTesting(){
@@ -499,8 +523,14 @@ public class NeuralNetworkController {
 
         selectedDirectoryForTesting = directoryChooser.showDialog(new Stage());
 
-        System.out.println(selectedDirectoryForTesting.toURI());
-        directoryLabelTesting.setText(selectedDirectoryForTesting.getName());
+        if (selectedDirectoryForTesting != null){
+            testButton.setDisable(false);
+            System.out.println(selectedDirectoryForTesting.toURI());
+            directoryLabelTesting.setText(selectedDirectoryForTesting.getName());
+        }
+
+
+
     }
 
     public void startEvolutionaryTraining(){
