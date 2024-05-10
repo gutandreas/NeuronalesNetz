@@ -280,7 +280,7 @@ public class NeuralNetworkController {
 
 
         for (NetworkNode node : layer.getNodes()) {
-            DecimalFormat df = new DecimalFormat("#.0" + "0".repeat(2 - 1));
+            DecimalFormat df = new DecimalFormat("0.0" + "0".repeat(2 - 1));
             String roundedValue = df.format(node.getOutput());
             if (node.getGraphicGroup() != null) {
                 layerAnchorPane.getChildren().remove(node.getGraphicGroup());
@@ -302,6 +302,7 @@ public class NeuralNetworkController {
                 circle.setStroke(Color.GRAY);
             });
             Text text = new Text(roundedValue);
+            text.setFill(Color.WHITE);
             node.updateNodeGraphic(circle, text);
             layerAnchorPane.getChildren().add(node.getGraphicGroup());
             AnchorPane.setTopAnchor(node.getGraphicGroup(), y);
